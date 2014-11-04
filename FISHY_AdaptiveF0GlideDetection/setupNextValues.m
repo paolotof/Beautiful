@@ -135,8 +135,10 @@ function [options, phase, expe, results, difference, decision_vector, nturns, st
     % If we're out of the loop because the phase is finished, tell the subject
     if mean([expe.( phase ).conditions.done])==1
         %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
-        questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
-        return
+%         questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
+%         return
+        uiwait(msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),...
+            '','modal'));
     end
     
 end

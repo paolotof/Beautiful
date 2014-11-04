@@ -134,7 +134,7 @@ function [options, phase] = setUpGame(options, phase, expe, results)
 
     %  ---- Adaptive Procedure ----  %
 
-    difference = condition.starting_glide_size;
+    difference = [condition.starting_glide_size];
     step_size  = options.(phase).initial_step_size;
     steps = [];
     
@@ -193,7 +193,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
             [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
                 response_correct, decision_vector, nturns, step_size, steps);
 
-            [proceed.onsetTime, proceed.i_correct] = nextTrial(options, phase, expe);
+            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
+            playSound(player, isi);
         end
 
         if (locClick(1) >= rFish.clickL) && (locClick(1) <= rFish.clickR) && ...
@@ -211,7 +212,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
             
             [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
                 response_correct, decision_vector, nturns, step_size, steps);
-            [proceed.onsetTime, proceed.i_correct] = nextTrial(options, phase, expe);
+            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
+            playSound(player, isi);
         end
         
         if (locClick(1) >= yFish.clickL) && (locClick(1) <= yFish.clickR) && ...
@@ -229,13 +231,14 @@ function [options, phase] = setUpGame(options, phase, expe, results)
             
             [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
                 response_correct, decision_vector, nturns, step_size, steps);
-            [proceed.onsetTime, proceed.i_correct] = nextTrial(options, phase, expe);
-
+            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
+            playSound(player, isi);
         end
         
         if (locClick(1) >= proceed.clickL) && (locClick(1) <= proceed.clickR) && ...
                 (locClick(2) >= proceed.clickD) && (locClick(2) <= proceed.clickU)
-            [proceed.onsetTime, proceed.i_correct] = nextTrial(options, phase, expe);
+            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
+            playSound(player, isi);
 %             proceed.i_correct
         end
                
@@ -248,7 +251,24 @@ function [options, phase] = setUpGame(options, phase, expe, results)
        
     end % end of buttonupfcn function 
 
-
+    function playSound(player, isi)
+        % Play the stimuli
+        tFish.Scale = 1.5;
+        playblocking(player{1});
+        tFish.Scale = 1;
+        playblocking(isi);
+        yFish.Scale = 1.5;
+        playblocking(player{2});
+        yFish.Scale = 1;
+        playblocking(isi);
+        rFish.Scale = 1.5;
+        playblocking(player{3});
+        rFish.Scale = 1;
+%         playblocking(isi);
+        proceed.onsetTime = now();
+    end
+%     startTime = now();
+%     startTime = tic();% Collect the response
         
 
     
