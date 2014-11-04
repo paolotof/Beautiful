@@ -1,0 +1,56 @@
+function str = flatten_tree(tree, basename)
+
+if nargin==1
+    basename = '';
+    basenamed = '';
+else
+    basenamed = [basename '.'];
+end
+
+k = fieldnames(tree);
+
+str = '';
+for i=1:length(k)
+    disp([basenamed k{i}])
+    branch = tree.(k{i});
+    if isstruct(branch)
+        str = [str basenamed flatten_tree(branch, [basenamed k{i}]) '\r\n'];
+    else
+        if isnumeric(branch)
+            str = [str basenamed k{i} '=' num2str(branch) '\r\n'];
+        elseif ischar(branch)
+            str = [str basenamed k{i} '="' branch '"' '\r\n'];
+        else
+            warning(['Unhandled type in ' basenamed k{i}]);
+        end
+    end
+end
+
+%=
+
+function str = var2str(v)
+
+str = '';
+
+if isnumeric(v)
+    if prod(size(v))>1
+        str = '[';
+        for i=1:size(v,1)
+            for j=1:size(v,2)
+                str = [str ', ' num2str(v(i,j))];
+            end
+            if i~=size(v,1) 
+                str = [str, ' ; '];
+            end
+        end
+        str = [str ']'];
+    end
+elseif ischar(v)
+    str = v;
+else
+    v
+    warning('Unhandled type.');
+end
+    
+            
+            

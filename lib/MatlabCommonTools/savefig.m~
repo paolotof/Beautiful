@@ -1,0 +1,13 @@
+function savefig(h, format, filename)
+%SAVEFIG Saves a figure to a picture
+%   savefig(h, format, filename)
+%       h: is the handle of a figure
+%       format: is 'png' or 'eps'
+%       filename: is the output filename
+
+print(
+
+
+
+
+end

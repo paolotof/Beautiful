@@ -1,0 +1,30 @@
+function y = gliding_windows(x, win, callback, params)
+
+if isstr(callback)
+    callback = str2func(callback);
+end
+
+Sx = size(x);
+Lx = length(x);
+Lw = length(win);
+
+if floor(Lw/2)*2~=Lw
+    error(['The length of the window should be even (is ' int2str(Lw) ')']);
+end
+
+Nw = ceil( Lw / Lx );
+
+x = [x(:) ; zeros(Nw*Lw-Lx, 1)];
+y = zeros(Nw*Lw, 1);
+
+y(1:Lw/2) = callback(x(1:Lw/2), params);
+
+for i=1:(Nw*2-1)
+    i1 = Lw/2*(i-1)+1;
+    i2 = i1 + Lw;
+    
+    params.iteration = i;
+    y(i1:i2) = y(i1:i2) + callback(x(i1:i2), params);
+end
+
+y(Lx-Lw/2+1:end) = 

@@ -1,0 +1,28 @@
+function aimC(filename, task, output, options)
+
+exe = 'aimcng';
+[pathstr, fname, ext, version] = fileparts(filename);
+
+if nargin<=2
+    output = 'rtaim';
+end
+
+if output == 'rtaim'
+    fileout = [fname '.rtaim'];
+    out = [' -d ' fileout];
+elseif output == 'mov'
+    fileout = [fname '.mov'];
+    out = [' -o ' fileout];
+end
+
+if nargin<=3
+    optionstr = ' ';
+else
+    options = flatten_tree(options);
+    options = explode(sprintf('\n'), options);
+    optionstr = implode(' -c ', options, 1);
+end
+
+command = sprintf('%s -p %s%s -i %s %s', exe, task, optionstr, filename, out);
+
+system(command)
