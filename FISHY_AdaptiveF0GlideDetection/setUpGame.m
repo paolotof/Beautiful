@@ -4,20 +4,20 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     %% introduce the animation bit
     % Start a new Game
     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
-%     bkg = SpriteKit.Background('/home/paolot/Downloads/SpriteKit/tryFish/img/fishTankBackground.jpg');
+%     bkg = SpriteKit.Background('img/fishTankBackground.jpg');
 %     bkg.Scale = 1;
 
     addBorders(G);
     % Setup the SpriteS
     s = SpriteKit.Sprite('fishOne');
-    s.initState('swimLeft1','/home/paolot/Downloads/SpriteKit/tryFish/img/L_fish_a.png',true);
-    s.initState('swimLeft2','/home/paolot/Downloads/SpriteKit/tryFish/img/L_fish_b.png',true);
-    s.initState('swimLeft3','/home/paolot/Downloads/SpriteKit/tryFish/img/L_fish_a.png',true);
-    s.initState('swimLeft4','/home/paolot/Downloads/SpriteKit/tryFish/img/L_fish_c.png',true);
-    s.initState('swimRight1','/home/paolot/Downloads/SpriteKit/tryFish/img/R_fish_a.png',true);
-    s.initState('swimRight2','/home/paolot/Downloads/SpriteKit/tryFish/img/R_fish_b.png',true);
-    s.initState('swimRight3','/home/paolot/Downloads/SpriteKit/tryFish/img/R_fish_a.png',true);
-    s.initState('swimRight4','/home/paolot/Downloads/SpriteKit/tryFish/img/R_fish_c.png',true);
+    s.initState('swimLeft1','img/L_fish_a.png',true);
+    s.initState('swimLeft2','img/L_fish_b.png',true);
+    s.initState('swimLeft3','img/L_fish_a.png',true);
+    s.initState('swimLeft4','img/L_fish_c.png',true);
+    s.initState('swimRight1','img/R_fish_a.png',true);
+    s.initState('swimRight2','img/R_fish_b.png',true);
+    s.initState('swimRight3','img/R_fish_a.png',true);
+    s.initState('swimRight4','img/R_fish_c.png',true);
     s.Scale = 1;
     s.State = 'swimRight1';
     % Add pertinent properties to the Sprite handle
@@ -29,8 +29,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     
     % 3 CHOICES FISHES
     tFish = SpriteKit.Sprite('tFish');
-    tFish.initState('on','/home/paolot/Downloads/SpriteKit/tryFish/img/half_fishyTorquoise.png',true);
-    clickArea = size(imread('/home/paolot/Downloads/SpriteKit/tryFish/img/half_fishyTorquoise.png'));
+    tFish.initState('on','img/half_fishyTorquoise.png',true);
+    clickArea = size(imread('img/half_fishyTorquoise.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(tFish,'clickL');
@@ -47,8 +47,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     tFish.key = 1;
     %
     yFish = SpriteKit.Sprite('yFish');
-    yFish.initState('on','/home/paolot/Downloads/SpriteKit/tryFish/img/half_FishyEllow.png',true);
-    clickArea = size(imread('/home/paolot/Downloads/SpriteKit/tryFish/img/half_FishyEllow.png'));
+    yFish.initState('on','img/half_FishyEllow.png',true);
+    clickArea = size(imread('img/half_FishyEllow.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(yFish,'clickL');
@@ -65,8 +65,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     yFish.key = 2;
     %
     rFish = SpriteKit.Sprite('rFish');
-    rFish.initState('on','/home/paolot/Downloads/SpriteKit/tryFish/img/half_FishyRed.png',true);
-    clickArea = size(imread('/home/paolot/Downloads/SpriteKit/tryFish/img/half_FishyRed.png'));
+    rFish.initState('on','img/half_FishyRed.png',true);
+    clickArea = size(imread('img/half_FishyRed.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(rFish,'clickL');
@@ -83,8 +83,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     rFish.key = 3;
     
     proceed =  SpriteKit.Sprite('proceed');
-    proceed.initState('on','/home/paolot/Downloads/SpriteKit/tryFish/img/continue.png',true);
-    clickArea = size(imread('/home/paolot/Downloads/SpriteKit/tryFish/img/continue.png'));
+    proceed.initState('on','img/continue.png',true);
+    clickArea = size(imread('img/continue.png'));
     width = clickArea(1)/7;
     heigth = clickArea(2)/7;
     addprop(proceed, 'clickL'); 
@@ -102,8 +102,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     addprop(proceed, 'i_correct');
     
     terminate =  SpriteKit.Sprite('terminate');
-    terminate.initState('on','/home/paolot/Downloads/SpriteKit/tryFish/img/break.png',true);
-    clickArea = size(imread('/home/paolot/Downloads/SpriteKit/tryFish/img/break.png'));
+    terminate.initState('on','img/break.png',true);
+    clickArea = size(imread('img/break.png'));
     width = clickArea(1)/7;
     heigth = clickArea(2)/7;
     addprop(terminate, 'clickL');
