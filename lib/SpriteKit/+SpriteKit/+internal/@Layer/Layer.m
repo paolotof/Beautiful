@@ -73,9 +73,13 @@ classdef Layer < matlab.mixin.Copyable
             narginchk(2,2)
             
             if ischar(in)
-                % filename
-                [data,map,alpha] = imread(in);
-                if ~isempty(map) % want true-color
+		% handle png
+		if strfind(in, 'png')
+		  [data, map, alpha] = imread(in, 'PNG');
+		else
+		  [data,map] = imread(in);
+		end
+		if ~isempty(map) % want true-color
                     data = ind2rgb(data,map);
                 end
                 % double format in [0,1] range
@@ -100,13 +104,7 @@ classdef Layer < matlab.mixin.Copyable
             [obj.XData,obj.YData] = meshgrid(-xy(2):xy(2),xy(1):-1:-xy(1));
             if trans
                 % all ones in CData map to zeros
-                if isempty(alpha)
-                    binmask = ~floor(sum(data,3)/3);
-                else
-                    binmask = alpha;
-                    binmask(end+1,:) = 0;
-                    binmask(:,end+1) = 0;
-                end
+                binmask = ~floor(sum(data,3)/3);
             else
                 % solid rectangle
                 binmask = ones(sd(1:2));

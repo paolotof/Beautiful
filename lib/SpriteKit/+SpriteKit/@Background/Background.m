@@ -122,8 +122,13 @@ function data = getTrueColorCData(in)
 %GETTRUECOLORCDATA Guaranteed to return a NxMx3 TrueColor matrix.
 
 if ischar(in)
-    % filename
-    [data,map] = imread(in);
+    % handle png
+    if strfind(in, 'png')
+      [data, map, alpha] = imread(in, 'PNG');
+    else
+      [data,map] = imread(in);
+    end
+      
     if ~isempty(map) % want true-color
         data = ind2rgb(data,map);
     end

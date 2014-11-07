@@ -90,6 +90,11 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         % See also ONMOUSEPRESS.
         onMouseRelease
         
+        %DATA STORAGE of the current trial
+        time
+        keyPushed
+        correctKey
+        
     end
     
     properties (AbortSet)
@@ -247,6 +252,33 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         % -----------------------------------------------------------------
         function val = get.Title(obj)
             val = get(obj.FigureHandle,'Name');
+        end
+        
+        % -----------------------------------------------------------------
+        function set.time(obj,val)        
+            set(obj.FigureHandle,'Time',val);
+        end
+        % -----------------------------------------------------------------
+        function val = get.time(obj)
+            val = get(obj.FigureHandle,'Time');
+        end
+        
+        % -----------------------------------------------------------------
+        function set.keyPushed(obj,val)  
+            set(obj.FigureHandle,'Key',val);
+        end
+        % -----------------------------------------------------------------
+        function val = get.keyPushed(obj)
+            val = get(obj.FigureHandle,'Key');
+        end
+        
+        % -----------------------------------------------------------------
+        function set.correctKey(obj,val)  
+            set(obj.FigureHandle,'cKey',val);
+        end
+        % -----------------------------------------------------------------
+        function val = get.correctKey(obj)
+            val = get(obj.FigureHandle,'cKey');
         end
         
         % -----------------------------------------------------------------
