@@ -3,8 +3,10 @@ function [options, phase] = setUpGame(options, phase, expe, results)
 
     %% introduce the animation bit
     % Start a new Game
-    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
+%     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
+    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[1378 886]);
 %     bkg = SpriteKit.Background('img/fishTankBackground.jpg');
+    bkg = SpriteKit.Background('img/BACKGROUND.png');
 %     bkg.Scale = 1;
 
     addBorders(G);
