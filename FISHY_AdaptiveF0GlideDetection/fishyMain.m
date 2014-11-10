@@ -11,5 +11,7 @@ function fishyMain(options, phase)
 
     DisplayInstructions(options, phase);
     setUpGame(options, phase, expe, results);
+%     playGame(options, phase, expe, results);
+    
 
 end % end main function

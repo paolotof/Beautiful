@@ -1,0 +1,11 @@
+function testTicTocInNested
+    startTime = tic;
+    disp('hello');
+    dosomething(startTime);
+    function dosomething(startTime)
+%         fprintf('%f\n', startTime - toc);
+%         toc() - startTime
+        endtime = toc();
+    end
+%     toc
+end

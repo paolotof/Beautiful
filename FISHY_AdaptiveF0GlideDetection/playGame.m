@@ -1,4 +1,4 @@
-function [options, phase] = setUpGame(options, phase, expe, results)
+function [options, phase] = playGame(options, phase, expe, results)
 
 
     %% introduce the animation bit
@@ -84,42 +84,6 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     addprop(rFish, 'key');
     rFish.key = 3;
     
-    proceed =  SpriteKit.Sprite('proceed');
-    proceed.initState('on','img/continue.png',true);
-    clickArea = size(imread('img/continue.png'));
-    width = clickArea(1)/7;
-    heigth = clickArea(2)/7;
-    addprop(proceed, 'clickL'); 
-    addprop(proceed, 'clickR'); 
-    addprop(proceed, 'clickU');
-    addprop(proceed, 'clickD');
-    proceed.Location = [500 500];
-    proceed.clickL = round(proceed.Location(1) - width);
-    proceed.clickR = round(proceed.Location(1) + width);
-    proceed.clickD = round(proceed.Location(2) - heigth);
-    proceed.clickU = round(proceed.Location(2) + heigth);
-    proceed.State = 'on';
-    proceed.Scale = .3;
-    addprop(proceed, 'onsetTime');
-    addprop(proceed, 'i_correct');
-    
-    terminate =  SpriteKit.Sprite('terminate');
-    terminate.initState('on','img/break.png',true);
-    clickArea = size(imread('img/break.png'));
-    width = clickArea(1)/7;
-    heigth = clickArea(2)/7;
-    addprop(terminate, 'clickL');
-    addprop(terminate, 'clickR');
-    addprop(terminate, 'clickU');
-    addprop(terminate, 'clickD');
-    terminate.Location = [600 500];
-    terminate.clickL = round(terminate.Location(1) - width);
-    terminate.clickR = round(terminate.Location(1) + width);
-    terminate.clickD = round(terminate.Location(2) - heigth);
-    terminate.clickU = round(terminate.Location(2) + heigth);
-    terminate.State = 'on';
-    terminate.Scale = .3;
-
 
     %% Setup KeyPressFcn and others
 %     G.onKeyPress = @keypressfcn;
@@ -169,7 +133,8 @@ function [options, phase] = setUpGame(options, phase, expe, results)
         
 %         mole.Angle = mole.Angle-1;
         tFish.Angle = tFish.Angle-1;
-        bkg.scroll('right',1);
+        
+%         bkg.scroll('right',0.1);
     end % end of action function
 
 
@@ -197,6 +162,13 @@ function [options, phase] = setUpGame(options, phase, expe, results)
 
             [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
             playSound(player, isi);
+
+            tFish.Scale = 1.5;
+%         playblocking(player{1});
+%         tFish.Scale = 1;
+            
+            
+            
         end
 
         if (locClick(1) >= rFish.clickL) && (locClick(1) <= rFish.clickR) && ...
@@ -237,38 +209,32 @@ function [options, phase] = setUpGame(options, phase, expe, results)
             playSound(player, isi);
         end
         
-        if (locClick(1) >= proceed.clickL) && (locClick(1) <= proceed.clickR) && ...
-                (locClick(2) >= proceed.clickD) && (locClick(2) <= proceed.clickU)
-            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
-            playSound(player, isi);
-%             proceed.i_correct
-        end
-               
-        if (locClick(1) >= terminate.clickL) && (locClick(1) <= terminate.clickR) && ...
-                (locClick(2) >= terminate.clickD) && (locClick(2) <= terminate.clickU)
-            fprintf('We shall stop, OK! ciaociao\n');
-            stop(G);
-            close gcf;
-        end
+        % if all trials have been performed close up everything and greet
+%         if (locClick(1) >= terminate.clickL) && (locClick(1) <= terminate.clickR) && ...
+%                 (locClick(2) >= terminate.clickD) && (locClick(2) <= terminate.clickU)
+%             fprintf('We shall stop, OK! ciaociao\n');
+%             stop(G);
+%             close gcf;
+%         end
        
     end % end of buttonupfcn function 
 
-    function playSound(player, isi)
-        % Play the stimuli
-        tFish.Scale = 1.5;
-        playblocking(player{1});
-        tFish.Scale = 1;
-        playblocking(isi);
-        yFish.Scale = 1.5;
-        playblocking(player{2});
-        yFish.Scale = 1;
-        playblocking(isi);
-        rFish.Scale = 1.5;
-        playblocking(player{3});
-        rFish.Scale = 1;
+%     function playSound(player, isi)
+%         % Play the stimuli
+%         tFish.Scale = 1.5;
+%         playblocking(player{1});
+%         tFish.Scale = 1;
 %         playblocking(isi);
-        proceed.onsetTime = now();
-    end
+%         yFish.Scale = 1.5;
+%         playblocking(player{2});
+%         yFish.Scale = 1;
+%         playblocking(isi);
+%         rFish.Scale = 1.5;
+%         playblocking(player{3});
+%         rFish.Scale = 1;
+% %         playblocking(isi);
+%         proceed.onsetTime = now();
+%     end
 %     startTime = now();
 %     startTime = tic();% Collect the response
         
