@@ -13,11 +13,11 @@ fs = options.fs;
 
 %t = (0:round(options.fs*options.duration))/options.fs;
 
-for i=1:options.n_intervals
+for i = 1 : options.n_intervals
     
     if i==1 % This is the one with a glide
         f = trial.glide_size*[-1, 1]/2+trial.base_freq;
-    else
+    else % this is the default (flat)
         f = trial.base_freq*[1 1];
     end
     
