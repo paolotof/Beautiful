@@ -3,7 +3,7 @@ function playSounds(varargin)
     play(varargin{1})
     while true
         if nargin == 2
-            varargin{2}.Angle = varargin{2}.Angle + 15;
+            varargin{2}.Angle = varargin{2}.Angle + randi([0, 360],1);
         end
         if ~isplaying(varargin{1})
             break;

@@ -1,4 +1,4 @@
-function [difference, differences, decision_vector, step_size, steps] = setNextTrial(options, difference, differences, decision_vector, step_size, steps)
+function [difference, differences, decision_vector, step_size, steps] = setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase)
 
     if length(decision_vector)>=options.(phase).down_up(1) && all(decision_vector(end-(options.(phase).down_up(2)-1):end)==1)
         % The last n_down responses were correct -> Reduce

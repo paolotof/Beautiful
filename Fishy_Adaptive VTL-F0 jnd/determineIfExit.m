@@ -1,4 +1,4 @@
-function [results, expe, terminate] = determineIfExit(results, expe, steps, differences)
+function [results, expe, terminate] = determineIfExit(results, expe, steps, differences, phase, options, response_correct)
 
     nturns = sum(diff(sign(steps(steps~=0)))~=0);
     
@@ -48,7 +48,7 @@ function [results, expe, terminate] = determineIfExit(results, expe, steps, diff
 
         terminate = false;
     elseif length(response_correct) >= options.(phase).change_step_size_n_trials ...
-            && all(response_correct(end-(options.(phase).change_step_size_n_trials-1):end)==0)
+            && all(response_correct(end - (options.(phase).change_step_size_n_trials-1) : end)==0)
         % All last n trials are incorrect
 
         fprintf('====> END OF RUN because too many wrong answers\n');

@@ -61,7 +61,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     bkg = SpriteKit.Background('img/BACKGROUND.png');
     addBorders(G);
     [G, bigFish, tFish, yFish, rFish] = setUpGame;
-
+    
+    G.onMouseRelease = @buttonupfcn;
+    
     %% continue with experiment
     oldimage = get(0,'DefaultImageVisible');
     set(0, 'DefaultImageVisible','off')
@@ -78,7 +80,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         fprintf('\n------------------------------------ Trial\n');
         
         % Prepare the stimulus
-        [i_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
+        [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
                        
         % pause(.5);
         
@@ -116,7 +118,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %         end
 
         tic();
-
+        uiwait();
         % Collect the response
 %         ok = false;
 %         while ~ok
@@ -133,10 +135,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
 %     set(h.f, 'UserData', h);
 
-
+        
         % Fill the response structure
-        response.button_correct = i_correct;
-        response.button_clicked = i_clicked;
+%         response.button_correct = i_correct;
+%         response.button_clicked = i_clicked;
+        
         response.correct = (response.button_clicked == response.button_correct);
         response_correct = [response_correct, response.correct]; % these are used for the plotting in DEBUG
         decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG
@@ -145,11 +148,13 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %         response.trial.v = difference*u;
         
         fprintf('Difference    : %.1f st (%.1f st GPR, %.1f st VTL)\n', difference, difference*u(1), difference*u(2));
-        fprintf('Correct button: %d\n', i_correct);
-        fprintf('Clicked button: %d\n', i_clicked);
+%         fprintf('Correct button: %d\n', i_correct);
+        fprintf('Correct button: %d\n', response.button_correct);
+%         fprintf('Clicked button: %d\n', i_clicked);
+        fprintf('Clicked button: %d\n', response.button_clicked);
         fprintf('Response time : %d ms\n', round(response.response_time*1000));
-        fprintf('Time since beginning of run    : %s\n', datestr(response.timestamp-beginning_of_run, 'HH:MM:SS.FFF'));
-        fprintf('Time since beginning of session: %s\n', datestr(response.timestamp-beginning_of_session, 'HH:MM:SS.FFF'));
+        fprintf('Time since beginning of run    : %s\n', datestr(response.timestamp - beginning_of_run, 'HH:MM:SS.FFF'));
+        fprintf('Time since beginning of session: %s\n', datestr(response.timestamp - beginning_of_session, 'HH:MM:SS.FFF'));
 
 %         % Visual feedback
 %         if condition.visual_feedback == 1
@@ -180,8 +185,10 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             results.( phase ).conditions(i_condition).att(n_attempt).responses(end+1) = orderfields( response );
         end
         
-        [difference, differences, decision_vector, step_size, steps] = setNextTrial(options, difference, differences, decision_vector, step_size, steps);
-        [results, expe, terminate] = determineIfExit(results, expe, steps, differences);
+        [difference, differences, decision_vector, step_size, steps] = ...
+            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
+        [results, expe, terminate] = ...
+            determineIfExit(results, expe, steps, differences, phase, options, response_correct);
         if terminate
             break;
         end
@@ -295,6 +302,32 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
 end
 
+    function buttonupfcn(hObject,callbackdata)
+        
+        locClick = get(hObject,'CurrentPoint');
+        response.timestamp = now();
+        response.response_time = toc();
+        response.button_clicked = 0; % default in case they click somewhere else
+        if (locClick(1) >= tFish.clickL) && (locClick(1) <= tFish.clickR) && ...
+                (locClick(2) >= tFish.clickD) && (locClick(2) <= tFish.clickU)
+            response.button_clicked = 1;
+%             fprintf('click blue\n')
+        end
+        if (locClick(1) >= yFish.clickL) && (locClick(1) <= yFish.clickR) && ...
+                (locClick(2) >= yFish.clickD) && (locClick(2) <= yFish.clickU)
+            response.button_clicked = 2;
+%             fprintf('click yellow\n')
+        end
+        if (locClick(1) >= rFish.clickL) && (locClick(1) <= rFish.clickR) && ...
+                (locClick(2) >= rFish.clickD) && (locClick(2) <= rFish.clickU)
+            response.button_clicked = 3;
+%             fprintf('click red\n')
+        end
+        uiresume();
+    end
+
+
+
 % If we're out of the loop because the phase is finished, tell the subject
 if mean([expe.( phase ).conditions.done])==1
     %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
@@ -302,14 +335,15 @@ if mean([expe.( phase ).conditions.done])==1
 end
 
 % close(h.f);
+end
 
 %--------------------------------------------------------------------------
 function report_status(subj, phase, i, n, logFile)
-
-try
-    fd = fopen(logFile, 'w');
-    fprintf(fd, '%s : %s : %d/%d\r\n', subj, phase, i, n);
-    fclose(fd);
-catch ME
-    % Stay silent if it failed
+    try
+        fd = fopen(logFile, 'w');
+        fprintf(fd, '%s : %s : %d/%d\r\n', subj, phase, i, n);
+        fclose(fd);
+    catch ME
+        % Stay silent if it failed
+    end
 end
