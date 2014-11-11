@@ -1,5 +1,5 @@
 function testTicTocInNested
-%     startTime = tic;
+    startTime = tic;
     tic;
 %     disp('hello');
 %     dosomething(startTime);
@@ -9,9 +9,14 @@ function testTicTocInNested
 % %         endtime = toc();
 %     end
     dosomething;
-    
+%     dosomethingElse(startTime);
     function dosomething
+        dosomethingElse(startTime);
         fprintf('%f\n', toc());
+    end
+
+    function dosomethingElse(startTime)
+        fprintf('%f\n', toc(startTime));
     end
 %     toc
 % toc

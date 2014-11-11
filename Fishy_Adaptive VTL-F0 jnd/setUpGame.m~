@@ -1,10 +1,10 @@
-function [options, phase] = setUpGame(options, phase, expe, results)
+function [options, phase] = setUpGame(options, phase)
 
 
     %% introduce the animation bit
     % Start a new Game
-%     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
-    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[1378 886]);
+    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
+%     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[1378 886]);
 %     bkg = SpriteKit.Background('img/fishTankBackground.jpg');
     bkg = SpriteKit.Background('img/BACKGROUND.png');
 %     bkg.Scale = 1;
@@ -84,121 +84,24 @@ function [options, phase] = setUpGame(options, phase, expe, results)
     addprop(rFish, 'key');
     rFish.key = 3;
     
+%% VTL-F0 JND --- adaptive procedure
+    results = struct();
+    [options, expe, results] = load(options.res_filename); % options, expe, results
+    nbreak = 0;
+    starting = 1;
+    beginning_of_session = now();
 
+
+    
     %% Setup KeyPressFcn and others
 %     G.onKeyPress = @keypressfcn;
     G.onMouseRelease = @buttonupfcn;
-    
-    
-    
-    
+        
     %% ------   start the GAME
     iter = 0;
+%     G.play(@()action(argin));
     G.play(@action);
-    
 
-%% GAME functions, to be called on each tic/toc of gameplay
- 
-%% Functions for user interactions
-    function action
-        
-        iter = iter+1;
-        
-        % decay to [0 0] accel
-        s.accel = s.accel*0.97; % lose %3 of its acceleration
-        L = s.Location;
-        L = L + s.accel;
-        s.Location = L;
-        
-%         mole.Angle = mole.Angle-1;
-        tFish.Angle = tFish.Angle-1;
-%         bkg.scroll('right',0.1);
-    end % end of action function
-
-
-    function buttonupfcn(hObject,callbackdata)
-
-        locClick = get(hObject,'CurrentPoint');
-        
-        if (locClick(1) >= tFish.clickL) && (locClick(1) <= tFish.clickR) && ...
-                (locClick(2) >= tFish.clickD) && (locClick(2) <= tFish.clickU)
-            % disp('blue clicked') - THIS IS 1
-            % add a click option on each fish
-            
-            response.response_time = now - proceed.onsetTime;
-            response.timestamp = now();
-            % Fill the response structure
-            response.button_correct = proceed.i_correct;
-            response.button_clicked = tFish.key;
-            response.correct = (proceed.i_correct == tFish.key);
-            response_correct = [response_correct, response.correct];
-            decision_vector  = [decision_vector,  response.correct];
-            response.condition = condition;
-            
-            [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
-                response_correct, decision_vector, nturns, step_size, steps);
-
-            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
-            playSound(player, isi);
-        end
-
-        if (locClick(1) >= rFish.clickL) && (locClick(1) <= rFish.clickR) && ...
-                (locClick(2) >= rFish.clickD) && (locClick(2) <= rFish.clickU)
-            
-            response.response_time = now - proceed.onsetTime;
-            response.timestamp = now();
-            % Fill the response structure
-            response.button_correct = proceed.i_correct;
-            response.button_clicked = rFish.key;
-            response.correct = (proceed.i_correct == rFish.key);
-            response_correct = [response_correct, response.correct];
-            decision_vector  = [decision_vector,  response.correct];
-            response.condition = condition;
-            
-            [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
-                response_correct, decision_vector, nturns, step_size, steps);
-            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
-            playSound(player, isi);
-        end
-        
-        if (locClick(1) >= yFish.clickL) && (locClick(1) <= yFish.clickR) && ...
-                (locClick(2) >= yFish.clickD) && (locClick(2) <= yFish.clickU)
-            
-            response.response_time = now - proceed.onsetTime;
-            response.timestamp = now();
-            % Fill the response structure
-            response.button_correct = proceed.i_correct;
-            response.button_clicked = yFish.key;
-            response.correct = (proceed.i_correct == yFish.key);
-            response_correct = [response_correct, response.correct];
-            decision_vector  = [decision_vector,  response.correct];
-            response.condition = condition;
-            
-            [options, phase, expe, results, difference, decision_vector, nturns, step_size, steps] = setupNextValues(options, phase, expe, results, response, difference, ...
-                response_correct, decision_vector, nturns, step_size, steps);
-            [player, isi, proceed.i_correct] = nextTrial(options, phase, expe);
-            playSound(player, isi);
-        end
-        
-       
-    end % end of buttonupfcn function 
-
-    function playSound(player, isi)
-        % Play the stimuli
-        tFish.Scale = 1.5;
-        play(player{1});
-        tFish.Scale = 1;
-        play(isi);
-        yFish.Scale = 1.5;
-        play(player{2});
-        yFish.Scale = 1;
-        play(isi);
-        rFish.Scale = 1.5;
-        play(player{3});
-        rFish.Scale = 1;
-%         playblocking(isi);
-        proceed.onsetTime = now();
-    end
 
     
 end % end of the setUpGame function 

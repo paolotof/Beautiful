@@ -27,9 +27,4 @@ function startMessages(options)
     uiwait(msg.w);
     close(msg.w);
     
-    opt = char(questdlg2(sprintf('Ready to start?'),h,'Go','Cancel','Go'));
-    switch lower(opt)
-        case 'cancel'
-            break
-    end
 end
