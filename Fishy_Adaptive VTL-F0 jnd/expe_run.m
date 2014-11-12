@@ -19,6 +19,12 @@ options.subject_name  = subject;
 current_dir = fileparts(mfilename('fullpath'));
 added_path  = {};
 
+added_path{end+1} = '../lib/SpriteKit';
+
+for i=1:length(added_path)
+    addpath(added_path{i});
+end
+
 %-------------------------------------------------
 
 % Create result dir if necessary
