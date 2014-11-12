@@ -6,20 +6,20 @@ function [G, bigFish, tFish, yFish, rFish] = setUpGame
     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
 %     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[1378 886]);
 %     bkg = SpriteKit.Background('img/fishTankBackground.jpg');
-    bkg = SpriteKit.Background('img/BACKGROUND.png');
+    bkg = SpriteKit.Background('../img/BACKGROUND.png');
 %     bkg.Scale = 1;
 
     addBorders(G);
     % Setup the SpriteS
     bigFish = SpriteKit.Sprite('fishOne');
-    bigFish.initState('swimLeft1','img/L_fish_a.png',true);
-    bigFish.initState('swimLeft2','img/L_fish_b.png',true);
-    bigFish.initState('swimLeft3','img/L_fish_a.png',true);
-    bigFish.initState('swimLeft4','img/L_fish_c.png',true);
-    bigFish.initState('swimRight1','img/R_fish_a.png',true);
-    bigFish.initState('swimRight2','img/R_fish_b.png',true);
-    bigFish.initState('swimRight3','img/R_fish_a.png',true);
-    bigFish.initState('swimRight4','img/R_fish_c.png',true);
+%     bigFish.initState('swimLeft1','../img/L_fish_a.png',true);
+%     bigFish.initState('swimLeft2','../img/L_fish_b.png',true);
+%     bigFish.initState('swimLeft3','../img/L_fish_a.png',true);
+%     bigFish.initState('swimLeft4','../img/L_fish_c.png',true);
+    bigFish.initState('swimRight1','../img/R_fish_a.png',true);
+%     bigFish.initState('swimRight2','../img/R_fish_b.png',true);
+%     bigFish.initState('swimRight3','../img/R_fish_a.png',true);
+%     bigFish.initState('swimRight4','../img/R_fish_c.png',true);
     bigFish.Scale = 1;
     bigFish.State = 'swimRight1';
     % Add pertinent properties to the Sprite handle
@@ -31,8 +31,8 @@ function [G, bigFish, tFish, yFish, rFish] = setUpGame
     
     % 3 CHOICES FISHES
     tFish = SpriteKit.Sprite('tFish');
-    tFish.initState('on','img/half_fishyTorquoise.png',true);
-    clickArea = size(imread('img/half_fishyTorquoise.png'));
+    tFish.initState('on','../img/half_fishyTorquoise.png',true);
+    clickArea = size(imread('../img/half_fishyTorquoise.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(tFish,'clickL');
@@ -49,8 +49,8 @@ function [G, bigFish, tFish, yFish, rFish] = setUpGame
     tFish.key = 1;
     %
     yFish = SpriteKit.Sprite('yFish');
-    yFish.initState('on','img/half_FishyEllow.png',true);
-    clickArea = size(imread('img/half_FishyEllow.png'));
+    yFish.initState('on','../img/half_FishyEllow.png',true);
+    clickArea = size(imread('../img/half_FishyEllow.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(yFish,'clickL');
@@ -67,8 +67,8 @@ function [G, bigFish, tFish, yFish, rFish] = setUpGame
     yFish.key = 2;
     %
     rFish = SpriteKit.Sprite('rFish');
-    rFish.initState('on','img/half_FishyRed.png',true);
-    clickArea = size(imread('img/half_FishyRed.png'));
+    rFish.initState('on','../img/half_FishyRed.png',true);
+    clickArea = size(imread('../img/half_FishyRed.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(rFish,'clickL');

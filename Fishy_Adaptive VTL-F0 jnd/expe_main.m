@@ -57,9 +57,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
-    bkg = SpriteKit.Background('img/BACKGROUND.png');
-    addBorders(G);
+%     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
+%     bkg = SpriteKit.Background('../img/BACKGROUND.png');
+%     addBorders(G);
     [G, bigFish, tFish, yFish, rFish] = setUpGame;
     
     G.onMouseRelease = @buttonupfcn;
@@ -188,7 +188,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         [difference, differences, decision_vector, step_size, steps] = ...
             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
         [results, expe, terminate] = ...
-            determineIfExit(results, expe, steps, differences, phase, options, response_correct);
+            determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
         if terminate
             break;
         end

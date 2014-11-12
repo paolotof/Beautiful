@@ -1,4 +1,5 @@
-function [results, expe, terminate] = determineIfExit(results, expe, steps, differences, phase, options, response_correct)
+function [results, expe, terminate] = determineIfExit(results, expe, steps, ...
+    differences, phase, options, response_correct, n_attempt, i_condition)
 
     nturns = sum(diff(sign(steps(steps~=0)))~=0);
     
