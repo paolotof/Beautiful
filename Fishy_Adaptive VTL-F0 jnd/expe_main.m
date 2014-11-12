@@ -57,24 +57,14 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-%     G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
-%     bkg = SpriteKit.Background('../img/BACKGROUND.png');
-%     addBorders(G);
     [G, bigFish, tFish, yFish, rFish] = setUpGame;
-    
     G.onMouseRelease = @buttonupfcn;
     
-    %% continue with experiment
-    oldimage = get(0,'DefaultImageVisible');
-    set(0, 'DefaultImageVisible','off')
-    button = questdlg('Ready to Start?','START','Yes','No','Yes');
-    set(0,'DefaultImageVisible',oldimage) 
-   
-    if strcmp(button, 'No')
-        msgbox('OK, ciaociao')
+    %% continue with the experiment
+    % test subject willingness to continue
+    if ~ ready2start(G);
         return;
     end
-    
     while true
         
         fprintf('\n------------------------------------ Trial\n');
