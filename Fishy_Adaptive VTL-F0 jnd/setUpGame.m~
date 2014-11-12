@@ -1,9 +1,9 @@
-function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
+function [G, bigFish, elOne, elTwo, elThree] = setUpGame
 
 
     %% introduce the animation bit
     % Start a new Game
-    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[800 600]);
+    G = SpriteKit.Game.instance('Title','Interactive Demo','Size',[800 600]);
     bkg = SpriteKit.Background('../img/BACKGROUND.png');
 %     bkg.Scale = 1;
 
@@ -34,12 +34,12 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 
     % 3 CHOICES FISHES
     elOne = SpriteKit.Sprite('elOne');
-    elOne.initState('state1', ['../img/' friend ' a.png'], true);
-    elOne.initState('state2', ['../img/' friend ' b.png'], true);
-    elOne.initState('state3', ['../img/' friend ' a.png'], true);
-    elOne.initState('state4', ['../img/' friend ' c.png'], true);
+    elOne.initState('state1', ['../img/' figure ' a.png'], true);
+    elOne.initState('state2', ['../img/' first ' b.png'], true);
+    elOne.initState('state3', ['../img/' first ' a.png'], true);
+    elOne.initState('state4', ['../img/' first ' c.png'], true);
     
-    clickArea = size(imread(['../img/' friend ' a.png']));
+    clickArea = size(imread('../img/half_fishyTorquoise.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(elOne,'clickL');
@@ -51,15 +51,11 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elOne.clickR = round(elOne.Location(1) + width);
     elOne.clickD = round(elOne.Location(2) - heigth);
     elOne.clickU = round(elOne.Location(2) + heigth);
-    elOne.State = 'state1';
+    elOne.State = 'on';
     addprop(elOne, 'key');
     elOne.key = 1;
     %
     elTwo = SpriteKit.Sprite('elTwo');
-    elTwo.initState('state1', ['../img/' friend ' a.png'], true);
-    elTwo.initState('state2', ['../img/' friend ' b.png'], true);
-    elTwo.initState('state3', ['../img/' friend ' a.png'], true);
-    elTwo.initState('state4', ['../img/' friend ' c.png'], true);
 
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
@@ -72,16 +68,12 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elTwo.clickR = round(elTwo.Location(1) + width);
     elTwo.clickD = round(elTwo.Location(2) - heigth);
     elTwo.clickU = round(elTwo.Location(2) + heigth);
-    elTwo.State = 'state1';
+    elTwo.State = 'on';
     addprop(elTwo, 'key');
     elTwo.key = 2;
     %
     elThree = SpriteKit.Sprite('elThree');
-    elThree.initState('state1', ['../img/' friend ' a.png'], true);
-    elThree.initState('state2', ['../img/' friend ' b.png'], true);
-    elThree.initState('state3', ['../img/' friend ' a.png'], true);
-    elThree.initState('state4', ['../img/' friend ' c.png'], true);
-
+    elThree.initState('on','../img/half_FishyRed.png',true);
     clickArea = size(imread('../img/half_FishyRed.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
@@ -94,7 +86,7 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elThree.clickR = round(elThree.Location(1) + width);
     elThree.clickD = round(elThree.Location(2) - heigth);
     elThree.clickU = round(elThree.Location(2) + heigth);
-    elThree.State = 'state1';
+    elThree.State = 'on';
     addprop(elThree, 'key');
     elThree.key = 3;
     
@@ -109,7 +101,7 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 %     iter = 0;
 %     G.play(@()action(argin));
 %     G.play(@action);
-%     pause(1);
+
 
     
 end % end of the setUpGame function 

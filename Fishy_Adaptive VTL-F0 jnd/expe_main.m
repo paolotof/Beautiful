@@ -25,11 +25,12 @@ beginning_of_session = now();
 while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are some conditions to do
     
 
+%     instr = strrep(options.instructions.(phase), '\n', sprintf('\n'));
+%     if ~isempty(instr) && starting
+%         startMessages(options);
+%     end
+    
     starting = 0;
-    instr = strrep(options.instructions.(phase), '\n', sprintf('\n'));
-    if ~isempty(instr) && starting
-        startMessages(options);
-    end
     
     % Find first condition not done
     i_condition = find([expe.( phase ).conditions.done]==0, 1);
@@ -57,14 +58,16 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-    [G, bigFish, tFish, yFish, rFish] = setUpGame;
+%     [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
+    [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('seahorse');
     G.onMouseRelease = @buttonupfcn;
     
     %% continue with the experiment
-    % test subject willingness to continue
+    % test subjects willingness to continue
     if ~ ready2start(G);
         return;
     end
+    
     while true
         
         fprintf('\n------------------------------------ Trial\n');
@@ -74,73 +77,25 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                        
         % pause(.5);
         
-        % Play the stimuli
-%         nStim = length(player);
-%         for i = 1 : nStim
-%             tFish.Scale = 2;
-%             playblocking(player{i});
-%             tFish.Scale = 1;
-% 
-%             if i ~= nStim
-%                 playblocking(isi);
-%             end
-%         end
-        %% tFish
-        playSounds(player{1}, tFish)
+        %% leftEl
+        playSounds(player{1}, elOne)
         playSounds(isi)
-        playSounds(player{2}, yFish)
+        playSounds(player{2}, elTwo)
         playSounds(isi)
-        playSounds(player{3}, rFish)
+        playSounds(player{3}, elThree)
         
-%         %% yFish
-%         play(player{2})
-%         while isplaying(player{2})
-%             yFish.Angle = yFish.Angle-1;
-%         end
-%         
-%         play(isi)
-%         while isplaying(isi)
-%         end
-%         
-%         play(player{3})
-%         while isplaying(player{3})
-%             rFish.Angle = rFish.Angle-1;
-%         end
-
         tic();
-        uiwait();
         % Collect the response
-%         ok = false;
-%         while ~ok
-%             uiwait();
-%             response.response_time = toc();
-%             response.timestamp = now();
-%             h = get(h.f, 'UserData');
-%             i_clicked = h.last_clicked;
-%             if ~isnan(i_clicked)
-%                 ok = true;
-%                 fprintf('Click!\n');
-%             end
-%         end
+        uiwait();
     
-%     set(h.f, 'UserData', h);
-
-        
-        % Fill the response structure
-%         response.button_correct = i_correct;
-%         response.button_clicked = i_clicked;
-        
         response.correct = (response.button_clicked == response.button_correct);
         response_correct = [response_correct, response.correct]; % these are used for the plotting in DEBUG
         decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG
         response.condition = condition;
         response.condition.u = u;
-%         response.trial.v = difference*u;
         
         fprintf('Difference    : %.1f st (%.1f st GPR, %.1f st VTL)\n', difference, difference*u(1), difference*u(2));
-%         fprintf('Correct button: %d\n', i_correct);
         fprintf('Correct button: %d\n', response.button_correct);
-%         fprintf('Clicked button: %d\n', i_clicked);
         fprintf('Clicked button: %d\n', response.button_clicked);
         fprintf('Response time : %d ms\n', round(response.response_time*1000));
         fprintf('Time since beginning of run    : %s\n', datestr(response.timestamp - beginning_of_run, 'HH:MM:SS.FFF'));
@@ -290,28 +245,26 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %     pause(1);
 %     %starting = true;
     
-end
+end % end of the 'conditions' while 
 
-    function buttonupfcn(hObject,callbackdata)
-        
+%% nested functions for the game
+    function buttonupfcn(hObject, callbackdata)
+    
         locClick = get(hObject,'CurrentPoint');
         response.timestamp = now();
         response.response_time = toc();
         response.button_clicked = 0; % default in case they click somewhere else
-        if (locClick(1) >= tFish.clickL) && (locClick(1) <= tFish.clickR) && ...
-                (locClick(2) >= tFish.clickD) && (locClick(2) <= tFish.clickU)
+        if (locClick(1) >= elOne.clickL) && (locClick(1) <= elOne.clickR) && ...
+                (locClick(2) >= elOne.clickD) && (locClick(2) <= elOne.clickU)
             response.button_clicked = 1;
-%             fprintf('click blue\n')
         end
-        if (locClick(1) >= yFish.clickL) && (locClick(1) <= yFish.clickR) && ...
-                (locClick(2) >= yFish.clickD) && (locClick(2) <= yFish.clickU)
+        if (locClick(1) >= elTwo.clickL) && (locClick(1) <= elTwo.clickR) && ...
+                (locClick(2) >= elTwo.clickD) && (locClick(2) <= elTwo.clickU)
             response.button_clicked = 2;
-%             fprintf('click yellow\n')
         end
-        if (locClick(1) >= rFish.clickL) && (locClick(1) <= rFish.clickR) && ...
-                (locClick(2) >= rFish.clickD) && (locClick(2) <= rFish.clickU)
+        if (locClick(1) >= elThree.clickL) && (locClick(1) <= elThree.clickR) && ...
+                (locClick(2) >= elThree.clickD) && (locClick(2) <= elThree.clickU)
             response.button_clicked = 3;
-%             fprintf('click red\n')
         end
         uiresume();
     end
@@ -321,8 +274,10 @@ end
 % If we're out of the loop because the phase is finished, tell the subject
 if mean([expe.( phase ).conditions.done])==1
     %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
-    questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
+%     questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
+    ready2start(phase);
 end
+
 
 % close(h.f);
 end
