@@ -4,20 +4,20 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     %% introduce the animation bit
     % Start a new Game
     G = SpriteKit.Game.instance('Title','Fishy Game','Size',[800 600]);
-    bkg = SpriteKit.Background('../img/BACKGROUND.png');
+    bkg = SpriteKit.Background('../img/fixed/BACKGROUND.png');
 %     bkg.Scale = 1;
 
     addBorders(G);
     % Setup the SpriteS
     bigFish = SpriteKit.Sprite('fishOne');
-%     bigFish.initState('swimLeft1','../img/L_fish_a.png',true);
-%     bigFish.initState('swimLeft2','../img/L_fish_b.png',true);
-%     bigFish.initState('swimLeft3','../img/L_fish_a.png',true);
-%     bigFish.initState('swimLeft4','../img/L_fish_c.png',true);
-    bigFish.initState('swimRight1','../img/R_fish_a.png',true);
-%     bigFish.initState('swimRight2','../img/R_fish_b.png',true);
-%     bigFish.initState('swimRight3','../img/R_fish_a.png',true);
-%     bigFish.initState('swimRight4','../img/R_fish_c.png',true);
+%     bigFish.initState('swimLeft1','../img/fixed/L_fish_a.png',true);
+%     bigFish.initState('swimLeft2','../img/fixed/L_fish_b.png',true);
+%     bigFish.initState('swimLeft3','../img/fixed/L_fish_a.png',true);
+%     bigFish.initState('swimLeft4','../img/fixed/L_fish_c.png',true);
+    bigFish.initState('swimRight1','../img/fixed/FISHY_colour.png',true);
+%     bigFish.initState('swimRight2','../img/fixed/R_fish_b.png',true);
+%     bigFish.initState('swimRight3','../img/fixed/R_fish_a.png',true);
+%     bigFish.initState('swimRight4','../img/fixed/R_fish_c.png',true);
     bigFish.Scale = 1;
     bigFish.State = 'swimRight1';
     % Add pertinent properties to the Sprite handle
@@ -28,18 +28,18 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 %     
 %     for k=1:24
 %         spritename = sprintf('membrane%d',k);
-%         pngFile = ['/home/paolot/Downloads/SpriteKit/demo/img/' spritename '.png'];
+%         pngFile = ['/home/paolot/Downloads/SpriteKit/demo/img/fixed/' spritename '.png'];
 %         s.initState(spritename,pngFile,true);
 %     end
 
     % 3 CHOICES FISHES
     elOne = SpriteKit.Sprite('elOne');
-    elOne.initState('state1', ['../img/' friend ' a.png'], true);
-    elOne.initState('state2', ['../img/' friend ' b.png'], true);
-    elOne.initState('state3', ['../img/' friend ' a.png'], true);
-    elOne.initState('state4', ['../img/' friend ' c.png'], true);
+    elOne.initState('state1', ['../img/fixed/' friend '_a.png'], true);
+    elOne.initState('state2', ['../img/fixed/' friend '_b.png'], true);
+    elOne.initState('state3', ['../img/fixed/' friend '_a.png'], true);
+    elOne.initState('state4', ['../img/fixed/' friend '_c.png'], true);
     
-    clickArea = size(imread(['../img/' friend ' a.png']));
+    clickArea = size(imread(['../img/fixed/' friend '_a.png']));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(elOne,'clickL');
@@ -56,10 +56,10 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elOne.key = 1;
     %
     elTwo = SpriteKit.Sprite('elTwo');
-    elTwo.initState('state1', ['../img/' friend ' a.png'], true);
-    elTwo.initState('state2', ['../img/' friend ' b.png'], true);
-    elTwo.initState('state3', ['../img/' friend ' a.png'], true);
-    elTwo.initState('state4', ['../img/' friend ' c.png'], true);
+    elTwo.initState('state1', ['../img/fixed/' friend '_a.png'], true);
+    elTwo.initState('state2', ['../img/fixed/' friend '_b.png'], true);
+    elTwo.initState('state3', ['../img/fixed/' friend '_a.png'], true);
+    elTwo.initState('state4', ['../img/fixed/' friend '_c.png'], true);
 
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
@@ -77,12 +77,12 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elTwo.key = 2;
     %
     elThree = SpriteKit.Sprite('elThree');
-    elThree.initState('state1', ['../img/' friend ' a.png'], true);
-    elThree.initState('state2', ['../img/' friend ' b.png'], true);
-    elThree.initState('state3', ['../img/' friend ' a.png'], true);
-    elThree.initState('state4', ['../img/' friend ' c.png'], true);
+    elThree.initState('state1', ['../img/fixed/' friend '_a.png'], true);
+    elThree.initState('state2', ['../img/fixed/' friend '_b.png'], true);
+    elThree.initState('state3', ['../img/fixed/' friend '_a.png'], true);
+    elThree.initState('state4', ['../img/fixed/' friend '_c.png'], true);
 
-    clickArea = size(imread('../img/half_FishyRed.png'));
+    clickArea = size(imread('../img/fixed/half_FishyRed.png'));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(elThree,'clickL');
