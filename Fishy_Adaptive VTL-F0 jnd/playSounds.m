@@ -6,7 +6,11 @@ function playSounds(varargin)
         if nargin == 2
 %             varargin{2}.Angle = varargin{2}.Angle + randi([0, 360],1);
 %             varargin{2}.State = ['state' sprintf('%i', mod(iter,4)+1)];
-            varargin{2}.State = ['state' sprintf('%i', mod(floor(iter/10), 4))+1];
+
+              varargin{2}.State = ['state' sprintf('%i', mod(floor(iter/10), 4))+1];
+
+%             cycleNext(varargin{2}); % this goes to fast.
+
             iter = iter + 1;
         end
         if ~isplaying(varargin{1})

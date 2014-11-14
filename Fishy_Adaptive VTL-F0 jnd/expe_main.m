@@ -68,9 +68,25 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         return;
     end
     
+    countTrials = 0;
+    
     while true
-        
+        countTrials = countTrials + 1;
         fprintf('\n------------------------------------ Trial\n');
+        
+%         if mod(countTrials, 2)
+        if countTrials > 1
+    
+            updateFriend(G.Size(1), elOne, elTwo, elThree, 'octopus');
+            
+%             [elOne, elTwo, elThree] = updateFriend(G.Size(1), elOne, elTwo, elThree, 'octopus');
+%             elOne
+%             elOne.State = 'state1';
+%             elTwo.State = 'state1';
+%             elThree.State = 'state1';
+%             pause(1);
+        end
+
         
         % Prepare the stimulus
         [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
@@ -269,6 +285,8 @@ end % end of the 'conditions' while
         uiresume();
     end
 
+%     
+%     function updateFriend(gameWidth, elOne, elTwo, elThree, friend)
 
 
 % If we're out of the loop because the phase is finished, tell the subject
