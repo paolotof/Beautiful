@@ -14,15 +14,20 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 %     bigFish.initState('swimLeft2','../img/fixed/L_fish_b.png',true);
 %     bigFish.initState('swimLeft3','../img/fixed/L_fish_a.png',true);
 %     bigFish.initState('swimLeft4','../img/fixed/L_fish_c.png',true);
-    bigFish.initState('swimRight1','../img/fixed/FISHY_colour.png',true);
-%     bigFish.initState('swimRight2','../img/fixed/R_fish_b.png',true);
+%     bigFish.initState('swimRight1','../img/fixed/FISHY_colour.png',true);
+    initState(bigFish,'fishOne','../img/FISHY_colour.png',true);
+    %     bigFish.initState('swimRight2','../img/fixed/R_fish_b.png',true);
 %     bigFish.initState('swimRight3','../img/fixed/R_fish_a.png',true);
 %     bigFish.initState('swimRight4','../img/fixed/R_fish_c.png',true);
     bigFish.Scale = 1;
-    bigFish.State = 'swimRight1';
+    bigFish.State = 'fishOne';
     % Add pertinent properties to the Sprite handle
     addprop(bigFish,'accel');
     bigFish.accel = [0 0];
+    [tmp, tmp2, alpha] = imread('../img/FISHY_colour.png');
+%     set(bigFish.AlphaData, alpha);
+    addprop(bigFish,'AlphaData')
+    bigFish.AlphaData = alpha;
 %     addprop(s,'i_correct');
 %     addprop(s,'begTime');
 %     
@@ -53,6 +58,7 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elOne.clickU = round(elOne.Location(2) + heigth);
     elOne.State = 'state1';
     addprop(elOne, 'key');
+    
     elOne.key = 1;
     %
     elTwo = SpriteKit.Sprite('elTwo');

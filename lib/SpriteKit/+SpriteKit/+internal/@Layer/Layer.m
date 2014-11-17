@@ -54,6 +54,8 @@ classdef Layer < matlab.mixin.Copyable
         % points, respectively.
         ZData
         
+        AlphaData
+        
     end
     
     %%
@@ -73,13 +75,13 @@ classdef Layer < matlab.mixin.Copyable
             narginchk(2,2)
             
             if ischar(in)
-		% handle png
-		if strfind(in, 'png')
-		  [data, map, alpha] = imread(in, 'PNG');
-		else
-		  [data,map] = imread(in);
-		end
-		if ~isempty(map) % want true-color
+                % handle png
+                if strfind(in, 'png')
+                    [data, map, alpha] = imread(in, 'PNG');
+                else
+                    [data,map] = imread(in);
+                end
+                if ~isempty(map) % want true-color
                     data = ind2rgb(data,map);
                 end
                 % double format in [0,1] range
@@ -112,6 +114,15 @@ classdef Layer < matlab.mixin.Copyable
             
             obj.CData = data;
             
+            % the object does not manage transparency
+%             if ischar(in) && strfind(in, 'png')
+%                 obj.AlphaData = alpha;
+%             end
+            % this does not solve the problem. Where is the image created?
+
+            alphaMask = im2double(alpha); %// To make between 0 and 1
+            img_composite = im2uint8(double(img_background).*(1-alphaMask) + double(img_overlay).*alphaMask);
+
             % bwboundaries is part of the Image Processing Toolbox. Use
             % graceful degradation if this isn't available.
             if isempty(which('bwboundaries'))
