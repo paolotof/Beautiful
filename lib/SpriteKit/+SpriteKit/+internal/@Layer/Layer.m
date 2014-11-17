@@ -80,6 +80,7 @@ classdef Layer < matlab.mixin.Copyable
                     [data, map, alpha] = imread(in, 'PNG');
                 else
                     [data,map] = imread(in);
+                    alpha = [];
                 end
                 if ~isempty(map) % want true-color
                     data = ind2rgb(data,map);
@@ -87,13 +88,19 @@ classdef Layer < matlab.mixin.Copyable
                 % double format in [0,1] range
                 data = double(data)./255;
             else
-                % raw data
-                if ~(isnumeric(in) && ndims(in)==3 && size(in,3)==3)
+                % raw data, if 4 dims
+                if ~(isnumeric(in) && ndims(in)==3 && (size(in,3)==3 || size(in,3)==4))
                     error('MATLAB:SpriteKit:BadCData',...
-                        'Raw data must be a numeric NxMx3 matrix, or provide an existing filename.');
+                        'Raw data must be a numeric NxMx3 or NxMx4 matrix, or provide an existing filename.');
                 end
                 % ensure double
-                data = double(in);
+                if size(in,3)==3
+                    data = double(in);
+                    alpha = [];
+                elseif size(in,3)==4
+                    data = double(in(:,:,1:3));
+                    alpha = double(in(:,:,1:3));
+                end
             end
             
             % an NxM surface has NxM grids and only (N-1)x(M-1) rectangles.
@@ -101,10 +108,17 @@ classdef Layer < matlab.mixin.Copyable
             data(end+1,:,:) = 1;
             data(:,end+1,:) = 1;
             
+            if ~isempty(alpha)
+                alpha(end+1,:,:) = 1;
+                alpha(:,end+1,:) = 1;
+            end
+            
             sd = size(data);
             xy = (sd-1)/2; % centered at (0,0), with a Y-flip
             [obj.XData,obj.YData] = meshgrid(-xy(2):xy(2),xy(1):-1:-xy(1));
-            if trans
+            if ~isempty(alpha)
+                binmask = alpha>.5;
+            elseif trans
                 % all ones in CData map to zeros
                 binmask = ~floor(sum(data,3)/3);
             else
@@ -113,16 +127,20 @@ classdef Layer < matlab.mixin.Copyable
             end
             
             obj.CData = data;
-            
+
+%{
+%-------- Not necessary anymore
             % the object does not manage transparency
 %             if ischar(in) && strfind(in, 'png')
 %                 obj.AlphaData = alpha;
 %             end
             % this does not solve the problem. Where is the image created?
-
+            
             alphaMask = im2double(alpha); %// To make between 0 and 1
             img_composite = im2uint8(double(img_background).*(1-alphaMask) + double(img_overlay).*alphaMask);
-
+%------------------------------
+%}
+            
             % bwboundaries is part of the Image Processing Toolbox. Use
             % graceful degradation if this isn't available.
             if isempty(which('bwboundaries'))
