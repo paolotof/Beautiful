@@ -1,43 +1,41 @@
-function [elOne, elTwo, elThree] = updateFriend(gameWidth, elOne, elTwo, elThree, friend)
+function friends = updateFriend(gameWidth, friend)
+    
+    friends = {};
 
-    elOne.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
-    elOne.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
-    elOne.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
-    elOne.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
-    clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
-    width = clickArea(1)/2;
-    heigth = clickArea(2)/2;
-    elOne.Location = [round(gameWidth * 2/5 - width)  heigth + 50];
-    elOne.clickL = round(elOne.Location(1) - width);
-    elOne.clickR = round(elOne.Location(1) + width);
-    elOne.clickD = round(elOne.Location(2) - heigth);
-    elOne.clickU = round(elOne.Location(2) + heigth);
-    elOne.State = 'state1';
-    cycleNext(elOne)
-
-    elTwo.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
-    elTwo.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
-    elTwo.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
-    elTwo.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
-    % No need to update image size here since images have all same size
-    elTwo.Location = [round(gameWidth * 3/5 - width)  heigth + 50];
-    elTwo.clickL = round(elTwo.Location(1) - width);
-    elTwo.clickR = round(elTwo.Location(1) + width);
-    elTwo.clickD = round(elTwo.Location(2) - heigth);
-    elTwo.clickU = round(elTwo.Location(2) + heigth);
-    elTwo.State = 'state1';
-    cycleNext(elTwo)
-
-    elThree.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
-    elThree.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
-    elThree.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
-    elThree.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
-    elThree.Location = [round(gameWidth * 4/5 - width)  heigth + 50];
-    elThree.clickL = round(elThree.Location(1) - width);
-    elThree.clickR = round(elThree.Location(1) + width);
-    elThree.clickD = round(elThree.Location(2) - heigth);
-    elThree.clickU = round(elThree.Location(2) + heigth);
-    elThree.State = 'state1';
-    cycleNext(elThree)
-
+    for i=1:3
+        el = SpriteKit.Sprite(sprintf('friend%d', i));
+        
+        el.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
+        el.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
+        el.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
+        el.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
+        clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
+        width = clickArea(1)/2;
+        heigth = clickArea(2)/2;
+        el.Location = [round(gameWidth * (i+1)/5 - width)  heigth + 50];
+        addprop(el, 'clickL');
+        addprop(el, 'clickR');
+        addprop(el, 'clickD');
+        addprop(el, 'clickU');
+        el.clickL = round(el.Location(1) - width);
+        el.clickR = round(el.Location(1) + width);
+        el.clickD = round(el.Location(2) - heigth);
+        el.clickU = round(el.Location(2) + heigth);
+        el.State = 'state1';
+        cycleNext(el)
+        
+        addprop(el, 'd0');
+        addprop(el, 'trajectory');
+        addprop(el, 'iter');
+        
+        addprop(el, 'key');
+        el.key = i;
+        
+        friends{end+1} = el;
+        
+    end
+    friends{1}.d0 = [-70 70];
+    friends{2}.d0 = [5 70];
+    friends{3}.d0 = [70 70];
+    
 end

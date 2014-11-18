@@ -59,7 +59,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     %% Game STUFF
 %     [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
-    [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
+    [G, bkg, bigFish, friends] = setUpGame('octopus');
     G.onMouseRelease = @buttonupfcn;
     %% continue with the experiment
     % test subjects willingness to continue
@@ -68,15 +68,14 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     end
     
     friendsID = {'blowfish', 'clownfish', 'crab', 'octopus', 'seahorse', 'starfish'};
-    countUpdates = 0;
     countTrials = 0;
 %     G.play(@action);
-    
+    newFriend = {};
     while true
         countTrials = countTrials + 1;
         fprintf('\n------------------------------------ Trial\n');
         
-        bkg.scroll('right',0.1);
+       
         
 %         if mod(countTrials, 2)
             
@@ -95,17 +94,20 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         % pause(.5);
         
         %% leftEl
-        playSounds(player{1}, elOne)
+        playSounds(player{1}, friends{1})
         playSounds(isi)
-        playSounds(player{2}, elTwo)
+        playSounds(player{2}, friends{2})
         playSounds(isi)
-        playSounds(player{3}, elThree)
+        playSounds(player{3}, friends{3})
         
         tic();
         % Collect the response
         uiwait();
     
         response.correct = (response.button_clicked == response.button_correct);
+        
+        newFriend{end + 1} = friends{response.button_clicked};
+        
         response_correct = [response_correct, response.correct]; % these are used for the plotting in DEBUG
         decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG
         response.condition = condition;
@@ -146,37 +148,24 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         else
             results.( phase ).conditions(i_condition).att(n_attempt).responses(end+1) = orderfields( response );
         end
-        swimming = false;
-        [difference, differences, decision_vector, step_size, steps, UpdatedCountUpdates, swimming] = ...
-            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase, countUpdates);
         
-        if UpdatedCountUpdates ~= countUpdates
-
-%             if swimming 
-%                 p0 = [10 10];
-%                 v0 = [2.75 7];
-%                 a = [0 -0.077];
-%                 t = (1:180)';
-%                 P = t.^2*a/2 + t*v0 + repmat(p0,size(t));
-% %                 play(G, @()action(mySprite))
-% %                 play(G, @()action(friendsID{mod(countUpdates, length(friendsID))}));
-%                 play(G, @()action(elOne));
-% 
-%             end
-%             
-            updateFriend(G.Size(1), elOne, elTwo, elThree, friendsID{mod(UpdatedCountUpdates, length(friendsID))});
-
+        [difference, differences, decision_vector, step_size, steps, swimming] = ...
+            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
+        
+        if swimming
+            newFriend{end} = getTrajectory(newFriend{end}, [randi(1000,1), randi(609,1)], [0,0], 4, .5, 90);
+            play(G, @()action(newFriend{end}));
             
         end
         
+        friends = updateFriend(G.Size(1), friendsID{mod(countTrials, length(friendsID)) + 1});
+
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
         if terminate
             break;
         end
 
-  
-        
         results.( phase ).conditions(i_condition).att(n_attempt).differences = differences;
         results.( phase ).conditions(i_condition).att(n_attempt).steps = steps;
         
@@ -283,7 +272,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %     % Wait a bit before going to the next condition
 %     pause(1);
 %     %starting = true;
-    iter = 0;
+    
 end % end of the 'conditions' while 
     
 %     function action
@@ -291,13 +280,16 @@ end % end of the 'conditions' while
 %     end
     
     function action(s)
-        s.Location = P(iter,:);
-        s.Angle = iter;
-        
-        if iter==180 % stop processing
+        bkg.scroll('right', 0.1);
+        s.Location = s.trajectory(s.iter,1:2);
+        s.Scale = s.trajectory(s.iter,3);
+%         s.Angle
+        nIter = size(s.trajectory,1);
+        if s.iter == nIter % stop processing
             G.stop();
+            s.Angle = 0;
         end
-        iter = iter + 1;
+        s.iter = s.iter + 1;
     end
 
 %% nested functions for the game
@@ -307,17 +299,11 @@ end % end of the 'conditions' while
         response.timestamp = now();
         response.response_time = toc();
         response.button_clicked = 0; % default in case they click somewhere else
-        if (locClick(1) >= elOne.clickL) && (locClick(1) <= elOne.clickR) && ...
-                (locClick(2) >= elOne.clickD) && (locClick(2) <= elOne.clickU)
-            response.button_clicked = 1;
-        end
-        if (locClick(1) >= elTwo.clickL) && (locClick(1) <= elTwo.clickR) && ...
-                (locClick(2) >= elTwo.clickD) && (locClick(2) <= elTwo.clickU)
-            response.button_clicked = 2;
-        end
-        if (locClick(1) >= elThree.clickL) && (locClick(1) <= elThree.clickR) && ...
-                (locClick(2) >= elThree.clickD) && (locClick(2) <= elThree.clickU)
-            response.button_clicked = 3;
+        for i=1:3
+            if (locClick(1) >= friends{i}.clickL) && (locClick(1) <= friends{i}.clickR) && ...
+                    (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
+                response.button_clicked = i;
+            end
         end
         uiresume();
     end
