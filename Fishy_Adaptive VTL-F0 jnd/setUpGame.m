@@ -3,9 +3,9 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 
     %% introduce the animation bit
     % Start a new Game
-    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[900 600]);
-    bkg = SpriteKit.Background('../img/fixed/BACKGROUND.png');
-%     bkg.Scale = 1;
+    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[1280 709]);
+    bkg = SpriteKit.Background('../img/BACKGROUND.png');
+    bkg.Scale = 1;
 
     addBorders(G);
     % Setup the SpriteS
@@ -39,19 +39,19 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
 
     % 3 CHOICES FISHES
     elOne = SpriteKit.Sprite('elOne');
-    elOne.initState('state1', ['../img/fixed/' friend '_a.png'], true);
-    elOne.initState('state2', ['../img/fixed/' friend '_b.png'], true);
-    elOne.initState('state3', ['../img/fixed/' friend '_a.png'], true);
-    elOne.initState('state4', ['../img/fixed/' friend '_c.png'], true);
+    elOne.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
+    elOne.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
+    elOne.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
+    elOne.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
     
-    clickArea = size(imread(['../img/fixed/' friend '_a.png']));
+    clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
     width = clickArea(1)/2;
     heigth = clickArea(2)/2;
     addprop(elOne,'clickL');
     addprop(elOne,'clickR');
     addprop(elOne,'clickU');
     addprop(elOne,'clickD');
-    elOne.Location = [round(G.Size(1) * 2/5 - width) 100];
+    elOne.Location = [round(G.Size(1) * 2/5 - width) heigth + 50];
     elOne.clickL = round(elOne.Location(1) - width);
     elOne.clickR = round(elOne.Location(1) + width);
     elOne.clickD = round(elOne.Location(2) - heigth);
@@ -62,16 +62,16 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elOne.key = 1;
     %
     elTwo = SpriteKit.Sprite('elTwo');
-    elTwo.initState('state1', ['../img/fixed/' friend '_a.png'], true);
-    elTwo.initState('state2', ['../img/fixed/' friend '_b.png'], true);
-    elTwo.initState('state3', ['../img/fixed/' friend '_a.png'], true);
-    elTwo.initState('state4', ['../img/fixed/' friend '_c.png'], true);
+    elTwo.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
+    elTwo.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
+    elTwo.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
+    elTwo.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
 
     addprop(elTwo,'clickL');
     addprop(elTwo,'clickR');
     addprop(elTwo,'clickU');
     addprop(elTwo,'clickD');
-    elTwo.Location = [round(G.Size(1) * 3/5 - width) 100];
+    elTwo.Location = [round(G.Size(1) * 3/5 - width)  heigth + 50];
     elTwo.clickL = round(elTwo.Location(1) - width);
     elTwo.clickR = round(elTwo.Location(1) + width);
     elTwo.clickD = round(elTwo.Location(2) - heigth);
@@ -81,16 +81,16 @@ function [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame(friend)
     elTwo.key = 2;
     %
     elThree = SpriteKit.Sprite('elThree');
-    elThree.initState('state1', ['../img/fixed/' friend '_a.png'], true);
-    elThree.initState('state2', ['../img/fixed/' friend '_b.png'], true);
-    elThree.initState('state3', ['../img/fixed/' friend '_a.png'], true);
-    elThree.initState('state4', ['../img/fixed/' friend '_c.png'], true);
+    elThree.initState('state1', ['../img/fixed/' friend '_talk_a.png'], true);
+    elThree.initState('state2', ['../img/fixed/' friend '_talk_b.png'], true);
+    elThree.initState('state3', ['../img/fixed/' friend '_talk_a.png'], true);
+    elThree.initState('state4', ['../img/fixed/' friend '_talk_c.png'], true);
 
     addprop(elThree,'clickL');
     addprop(elThree,'clickR'); 
     addprop(elThree,'clickU'); 
     addprop(elThree,'clickD');
-    elThree.Location = [round(G.Size(1) * 4/5 - width) 100];
+    elThree.Location = [round(G.Size(1) * 4/5 - width)  heigth + 50];
     elThree.clickL = round(elThree.Location(1) - width);
     elThree.clickR = round(elThree.Location(1) + width);
     elThree.clickD = round(elThree.Location(2) - heigth);

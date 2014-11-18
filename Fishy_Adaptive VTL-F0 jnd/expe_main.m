@@ -59,25 +59,27 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     %% Game STUFF
 %     [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
-    [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('seahorse');
+    [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
     G.onMouseRelease = @buttonupfcn;
-    
     %% continue with the experiment
     % test subjects willingness to continue
     if ~ ready2start(G);
         return;
     end
     
+    friendsID = {'blowfish', 'clownfish', 'crab', 'octopus', 'seahorse', 'starfish'};
+    countUpdates = 0;
     countTrials = 0;
+%     G.play(@action);
     
     while true
         countTrials = countTrials + 1;
         fprintf('\n------------------------------------ Trial\n');
         
+        bkg.scroll('right',0.1);
+        
 %         if mod(countTrials, 2)
-        if countTrials > 1
-    
-            updateFriend(G.Size(1), elOne, elTwo, elThree, 'octopus');
+            
             
 %             [elOne, elTwo, elThree] = updateFriend(G.Size(1), elOne, elTwo, elThree, 'octopus');
 %             elOne
@@ -85,7 +87,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %             elTwo.State = 'state1';
 %             elThree.State = 'state1';
 %             pause(1);
-        end
 
         
         % Prepare the stimulus
@@ -145,15 +146,37 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         else
             results.( phase ).conditions(i_condition).att(n_attempt).responses(end+1) = orderfields( response );
         end
+        swimming = false;
+        [difference, differences, decision_vector, step_size, steps, UpdatedCountUpdates, swimming] = ...
+            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase, countUpdates);
         
-        [difference, differences, decision_vector, step_size, steps] = ...
-            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
+        if UpdatedCountUpdates ~= countUpdates
+
+%             if swimming 
+%                 p0 = [10 10];
+%                 v0 = [2.75 7];
+%                 a = [0 -0.077];
+%                 t = (1:180)';
+%                 P = t.^2*a/2 + t*v0 + repmat(p0,size(t));
+% %                 play(G, @()action(mySprite))
+% %                 play(G, @()action(friendsID{mod(countUpdates, length(friendsID))}));
+%                 play(G, @()action(elOne));
+% 
+%             end
+%             
+            updateFriend(G.Size(1), elOne, elTwo, elThree, friendsID{mod(UpdatedCountUpdates, length(friendsID))});
+
+            
+        end
+        
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
         if terminate
             break;
         end
 
+  
+        
         results.( phase ).conditions(i_condition).att(n_attempt).differences = differences;
         results.( phase ).conditions(i_condition).att(n_attempt).steps = steps;
         
@@ -260,8 +283,22 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %     % Wait a bit before going to the next condition
 %     pause(1);
 %     %starting = true;
-    
+    iter = 0;
 end % end of the 'conditions' while 
+    
+%     function action
+%         bkg.scroll('right',0.1);
+%     end
+    
+    function action(s)
+        s.Location = P(iter,:);
+        s.Angle = iter;
+        
+        if iter==180 % stop processing
+            G.stop();
+        end
+        iter = iter + 1;
+    end
 
 %% nested functions for the game
     function buttonupfcn(hObject, callbackdata)
