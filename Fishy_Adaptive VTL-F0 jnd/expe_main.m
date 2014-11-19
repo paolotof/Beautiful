@@ -74,20 +74,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     while true
         countTrials = countTrials + 1;
         fprintf('\n------------------------------------ Trial\n');
-        
-       
-        
-%         if mod(countTrials, 2)
-            
-            
-%             [elOne, elTwo, elThree] = updateFriend(G.Size(1), elOne, elTwo, elThree, 'octopus');
-%             elOne
-%             elOne.State = 'state1';
-%             elTwo.State = 'state1';
-%             elThree.State = 'state1';
-%             pause(1);
-
-        
         % Prepare the stimulus
         [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
                        
@@ -153,12 +139,14 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
         
         if swimming
-            newFriend{end} = getTrajectory(newFriend{end}, [randi(1000,1), randi(609,1)], [0,0], 4, .5, 90);
+%             newFriend{end} = getTrajectory(newFriend{end}, [randi(1000,1), randi(609,1)], [0,0], 4, .5, 90);
+            newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround(:,bigFish.availableLoc(countTrials))'], [0,0], 4, .5, 90);
+
             play(G, @()action(newFriend{end}));
             
         end
         
-        friends = updateFriend(G.Size(1), friendsID{mod(countTrials, length(friendsID)) + 1});
+        friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
 
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
@@ -275,12 +263,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
 end % end of the 'conditions' while 
     
-%     function action
-%         bkg.scroll('right',0.1);
-%     end
-    
     function action(s)
-        bkg.scroll('right', 0.1);
+        bkg.scroll('right', 1);
         s.Location = s.trajectory(s.iter,1:2);
         s.Scale = s.trajectory(s.iter,3);
 %         s.Angle
@@ -307,10 +291,6 @@ end % end of the 'conditions' while
         end
         uiresume();
     end
-
-%     
-%     function updateFriend(gameWidth, elOne, elTwo, elThree, friend)
-
 
 % If we're out of the loop because the phase is finished, tell the subject
 if mean([expe.( phase ).conditions.done])==1

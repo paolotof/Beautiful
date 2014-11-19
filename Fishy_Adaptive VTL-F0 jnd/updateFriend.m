@@ -1,4 +1,4 @@
-function friends = updateFriend(gameWidth, friend)
+function friends = updateFriend(gameWidth, scrsz4, friend)
     
     friends = {};
 
@@ -12,7 +12,7 @@ function friends = updateFriend(gameWidth, friend)
         clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
         width = clickArea(1)/2;
         heigth = clickArea(2)/2;
-        el.Location = [round(gameWidth * (i+1)/5 - width)  heigth + 50];
+        el.Location = [round(gameWidth * (i+1)/5 - width)  heigth + (scrsz4 - 750)];
         addprop(el, 'clickL');
         addprop(el, 'clickR');
         addprop(el, 'clickD');
@@ -34,6 +34,7 @@ function friends = updateFriend(gameWidth, friend)
         friends{end+1} = el;
         
     end
+    % we need to find a way to insert this in the loop as well... 
     friends{1}.d0 = [-70 70];
     friends{2}.d0 = [5 70];
     friends{3}.d0 = [70 70];

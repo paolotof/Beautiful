@@ -34,7 +34,7 @@ function [difference, differences, decision_vector, step_size, steps, swimming] 
         fprintf('--> STABLE\n');
         steps = [steps, 0];
         differences = [differences, difference];
-        swimming = false;
+        swimming = true;
     end
 
     % Update step_size
