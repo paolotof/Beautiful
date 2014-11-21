@@ -15,27 +15,26 @@ function [G, bkg, bigFish, friends] = setUpGame(friend)
     end
     G = SpriteKit.Game.instance('Title','Fishy Game','Size',[scrsz(3) scrsz(4)]);
 %     G = SpriteKit.Game.instance('Title','Fishy Game','Size',[1600 1200]);
-    bkg = SpriteKit.Background('../img/BACKGROUND.png');
+    bkg = SpriteKit.Background('../img/fixed/BACKGROUND.png');
     bkg.Scale = 1;
 
     addBorders(G);
     % Setup the SpriteS
     bigFish = SpriteKit.Sprite('fishOne');
-%     bigFish.initState('swimLeft1','../img/fixed/L_fish_a.png',true);
-%     bigFish.initState('swimLeft2','../img/fixed/L_fish_b.png',true);
-%     bigFish.initState('swimLeft3','../img/fixed/L_fish_a.png',true);
-%     bigFish.initState('swimLeft4','../img/fixed/L_fish_c.png',true);
-%     bigFish.initState('swimRight1','../img/fixed/FISHY_colour.png',true);
-    initState(bigFish,'fishOne','../img/FISHY_colour.png',true);
-    %     bigFish.initState('swimRight2','../img/fixed/R_fish_b.png',true);
-%     bigFish.initState('swimRight3','../img/fixed/R_fish_a.png',true);
-%     bigFish.initState('swimRight4','../img/fixed/R_fish_c.png',true);
+    initState(bigFish,'fishOne','../img/fixed/FISHY_TURN_1.png',true);
+    for k=1:10
+        spritename = sprintf('FISHY_TURN_%d',k);
+        pngFile = ['../img/fixed/' spritename '.png'];
+%         s.initState(spritename, pngFile, true);
+        initState(bigFish, ['fish_' k] , pngFile, true);
+    end
+    
     bigFish.Scale = 1;
     bigFish.State = 'fishOne';
     bigFish.Location = [scrsz(3)/2, scrsz(4)-450];
     addprop(bigFish, 'arcAround');
     nFriends = 40;
-    [x, y] = getArc(5*pi/6,pi/6, bigFish.Location(1), bigFish.Location(2), 200, nFriends);
+    [x, y] = getArc(5*pi/6,pi/6, bigFish.Location(1)-100, bigFish.Location(2)-100, 400, nFriends);
     bigFish.arcAround = [x;y];
     addprop(bigFish, 'availableLoc');
     bigFish.availableLoc = randperm(nFriends);

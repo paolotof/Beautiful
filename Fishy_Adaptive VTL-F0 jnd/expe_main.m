@@ -92,8 +92,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
         response.correct = (response.button_clicked == response.button_correct);
         
-        newFriend{end + 1} = friends{response.button_clicked};
-        
         response_correct = [response_correct, response.correct]; % these are used for the plotting in DEBUG
         decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG
         response.condition = condition;
@@ -138,12 +136,29 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         [difference, differences, decision_vector, step_size, steps, swimming] = ...
             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
         
+        availableResponses = 1:3;
+        availableResponses(response.button_clicked) = [];
         if swimming
-%             newFriend{end} = getTrajectory(newFriend{end}, [randi(1000,1), randi(609,1)], [0,0], 4, .5, 90);
+            newFriend{end + 1} = friends{response.button_clicked};
             newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround(:,bigFish.availableLoc(countTrials))'], [0,0], 4, .5, 90);
-
-            play(G, @()action(newFriend{end}));
-            
+            speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
+        else
+            speedSwim = 10; % this is 10 pixels at the time
+            friends{response.button_clicked}.trajectory = swimwOut(friends{response.button_clicked}.Location(1), friends{response.button_clicked}.Location(2), speedSwim);
+            speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
+        end
+        % these guys start a bit later (i.e., half animation of the clicked friends)
+        % This insures subjects knows what they clicked on!
+        friends{availableResponses(1)}.trajectory = swimwOut(friends{availableResponses(1)}.Location(1), ...
+            friends{availableResponses(1)}.Location(2), friends{availableResponses(2)}.width, speedSwim);
+        friends{availableResponses(1)}.iter = 1;
+        friends{availableResponses(2)}.trajectory = swimwOut(friends{availableResponses(2)}.Location(1), ...
+            friends{availableResponses(2)}.Location(2), friends{availableResponses(2)}.width, speedSwim);
+        friends{availableResponses(2)}.iter = 1;
+        if swimming
+            play(G, @()correctAnswer(newFriend{end}, friends{availableResponses(1)}, friends{availableResponses(2)}));
+        else
+            play(G, @()wrongAnswer(friends));
         end
         
         friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
@@ -263,18 +278,57 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
 end % end of the 'conditions' while 
     
-    function action(s)
+%     function action(s)
+%         bkg.scroll('right', 1);
+%         s.Location = s.trajectory(s.iter,1:2);
+%         s.Scale = s.trajectory(s.iter,3);
+% %         s.Angle
+%         nIter = size(s.trajectory,1);
+%         if s.iter == nIter % stop processing
+%             G.stop();
+%             s.Angle = 0;
+%         end
+%         s.iter = s.iter + 1;
+%     end
+
+    function wrongAnswer(s)
+        bkg.scroll('right', 1);
+        s{1}.Location = s{1}.trajectory(s{1}.iter,1:2);
+        halfIter = size(s{1}.trajectory,1) / 2;
+        if s{1}.iter > halfIter
+            s{2}.Location = s{2}.trajectory(s{2}.iter, 1:2);
+            s{3}.Location = s{3}.trajectory(s{3}.iter, 1:2);
+            s{2}.iter = s{2}.iter + 1;
+            s{3}.iter = s{3}.iter + 1;
+        end
+        nIter = size(s{1}.trajectory,1);
+        if s{1}.iter == nIter % stop processing
+            G.stop();
+            s{1}.Angle = 0;
+        end
+        s{1}.iter = s{1}.iter + 1;
+    end
+
+    function correctAnswer(s, friend1, friend2)
         bkg.scroll('right', 1);
         s.Location = s.trajectory(s.iter,1:2);
         s.Scale = s.trajectory(s.iter,3);
-%         s.Angle
+        halfIter = size(s.trajectory,1) / 2;
+        if s.iter >= halfIter
+            friend1.Location = friend1.trajectory(friend1.iter, 1:2);
+            friend2.Location = friend2.trajectory(friend2.iter, 1:2);
+            friend1.iter = friend1.iter + 1;
+            friend2.iter = friend2.iter + 1;
+        end
         nIter = size(s.trajectory,1);
         if s.iter == nIter % stop processing
             G.stop();
             s.Angle = 0;
         end
         s.iter = s.iter + 1;
+
     end
+
 
 %% nested functions for the game
     function buttonupfcn(hObject, callbackdata)
