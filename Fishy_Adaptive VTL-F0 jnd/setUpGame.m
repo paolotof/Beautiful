@@ -26,11 +26,12 @@ function [G, bkg, bigFish, friends] = setUpGame(friend)
         spritename = sprintf('FISHY_TURN_%d',k);
         pngFile = ['../img/fixed/' spritename '.png'];
 %         s.initState(spritename, pngFile, true);
-        initState(bigFish, ['fish_' k] , pngFile, true);
+        initState(bigFish, ['fish_' int2str(k)] , pngFile, true);
     end
     
     bigFish.Scale = 1;
-    bigFish.State = 'fishOne';
+%     bigFish.State = 'fishOne';
+    bigFish.State = 'fish_1';
     bigFish.Location = [scrsz(3)/2, scrsz(4)-450];
     addprop(bigFish, 'arcAround');
     nFriends = 40;
@@ -38,6 +39,8 @@ function [G, bkg, bigFish, friends] = setUpGame(friend)
     bigFish.arcAround = [x;y];
     addprop(bigFish, 'availableLoc');
     bigFish.availableLoc = randperm(nFriends);
+    addprop(bigFish, 'iter')
+    bigFish.iter = 1;
     % 3 CHOICES FISHES
     friends = updateFriend(G.Size(1), scrsz(4), friend);
     

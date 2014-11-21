@@ -12,7 +12,6 @@ for k=1:10
     pngFile = ['../img/fixed/' spritename '.png'];
     s.initState(spritename, pngFile, true);
 end
-
 iter = 1;
 
 %% Run it!
@@ -24,18 +23,20 @@ G.play(@action);
         % increase the scaling
         %     s.Scale = s.Scale+0.01;
         
-        s.cycleNext
+%         s.cycleNext
         % cycle next layer
-%         if (mod(floor(iter/10), 4) == 0)
-%             s.cycleNext;
-%         end
+        if (mod(floor(iter/10), 4) == 0)
+            s.cycleNext;
+        end
 %         s.State
-        s.State = sprintf('FISHY_TURN_%d',mod(floor(iter/2), 10) + 1);
+%         if (mod(floor(iter/10), 4) == 0)
+%             s.State = sprintf('FISHY_TURN_%d',mod(floor(iter/2), 10) + 1);
+%         end
         % update position and angle
         %     s.Location = P(iter,:);  % use dot assignment...
         %     set(s,'Angle',iter)      % or "set"
         %
-        if iter==20 % stop processing
+        if iter==40 % stop processing
             G.stop();
             
         end

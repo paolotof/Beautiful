@@ -161,6 +161,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             play(G, @()wrongAnswer(friends));
         end
         
+        play(G, @()celebrate(bigFish));
+        
         friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
 
         [results, expe, terminate] = ...
@@ -329,7 +331,21 @@ end % end of the 'conditions' while
 
     end
 
-
+    function celebrate(s)
+        countOne = 0;
+        bkg.scroll('right', 1);
+        if (mod(floor(s.iter/10), 4) == 0)
+            s.cycleNext;
+        end
+        % iteration stop needs to be checked!
+        if strcmp(s.State,'FISHY_TURN_1')
+            if countONe >= 1
+                s.iter = 1;
+                G.stop();
+            end
+            countOne = countOne + 1;
+        end
+    end
 %% nested functions for the game
     function buttonupfcn(hObject, callbackdata)
     
