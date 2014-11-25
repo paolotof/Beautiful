@@ -7,7 +7,7 @@ function playSounds(varargin)
         if nargin >= 2
             statusCounter = mod(floor(iter/10), 4) + 1;
 %             if (mod(floor(iter/10), 4) == 0)
-                varargin{2}.State = ['state' sprintf('%i', statusCounter)];
+                varargin{2}.State = ['talk' sprintf('%i', statusCounter)];
                 varargin{3}.State = sprintf('bubbles_%i', statusCounter);
                 varargin{3}.Location = [varargin{2}.bubblesX, varargin{2}.bubblesY];
 %             end
@@ -22,7 +22,7 @@ function playSounds(varargin)
     
     if nargin >= 2
 %         varargin{2}.Angle = 0;
-        varargin{2}.State = 'state1';
+        varargin{2}.State = 'talk1';
         % clear bubbles
         varargin{3}.State = 'noBubbles';
     end

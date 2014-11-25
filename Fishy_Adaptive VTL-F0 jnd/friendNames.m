@@ -6,6 +6,9 @@ function friendsID = friendNames
     files = files(cellfun('isempty', strfind({files.name}, 'BACKGROUND')));
     files = files(cellfun('isempty', strfind({files.name}, 'FISHY')));
     files = files(cellfun('isempty', strfind({files.name}, 'bubbles')));
+    % crab is not swimming yet, so remove it:
+    files = files(cellfun('isempty', strfind({files.name}, 'crab')));
+    
     
     % get unique identifier of each object: remove everything after first
     % underscore and use unique

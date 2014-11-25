@@ -1,4 +1,4 @@
-function [G, bkg, bigFish, friends, bubbles] = setUpGame(friend)
+function [G, bkg, bigFish, bubbles] = setUpGame
 
 
     %% introduce the animation bit
@@ -43,8 +43,6 @@ function [G, bkg, bigFish, friends, bubbles] = setUpGame(friend)
     bigFish.iter = 1;
     addprop(bigFish, 'countTurns');
     bigFish.countTurns = 0;
-    % 3 CHOICES FISHES
-    friends = updateFriend(G.Size(1), scrsz(4), friend);
     
     bubbles = SpriteKit.Sprite('noBubbles');
     bubbles.initState('noBubbles', ['../img/fixed/' 'bubbles_none' '.png'], true);

@@ -59,7 +59,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     %% Game STUFF
 %     [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
-    [G, bkg, bigFish, friends, bubbles] = setUpGame('octopus');
+    [G, bkg, bigFish, bubbles] = setUpGame;
     G.onMouseRelease = @buttonupfcn;
     %% continue with the experiment
     % test subjects willingness to continue
@@ -74,6 +74,15 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     newFriend = {};
     while true
         countTrials = countTrials + 1;
+                
+        friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
+        % define trajectory for fishes coming in
+        speedSwim = 100; % this is inverted, high number = slow
+        for ifriends = 1 : length(friends)
+            friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
+        end
+        G.play(@()friendsEnter(friends));
+        
         fprintf('\n------------------------------------ Trial\n');
         % Prepare the stimulus
         [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
@@ -144,14 +153,14 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround(:,bigFish.availableLoc(countTrials))'], [0,0], 4, .5, 90);
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
-            speedSwim = 10; % this is 10 pixels at the time
-            friends{response.button_clicked} = swimwOut(friends{response.button_clicked}, speedSwim);
+            speedSwim = 100; % this is 10 pixels at the time
+            friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
             speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
         end
         % these guys start a bit later (i.e., half animation of the clicked friends)
         % This insures subjects knows what they clicked on!
-        friends{availableResponses(1)} = swimwOut(friends{availableResponses(1)}, speedSwim);
-        friends{availableResponses(2)} = swimwOut(friends{availableResponses(2)}, speedSwim);
+        friends{availableResponses(1)} = swim(friends{availableResponses(1)}, speedSwim, 'out', G.Size(1));
+        friends{availableResponses(2)} = swim(friends{availableResponses(2)}, speedSwim, 'out', G.Size(1));
         
         if response.correct
             play(G, @()correctAnswer(newFriend{end}, friends{availableResponses(1)}, friends{availableResponses(2)}));
@@ -161,7 +170,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             play(G, @()wrongAnswer(friends{response.button_clicked}, friends{availableResponses(1)}, friends{availableResponses(2)}));
         end
         
-        friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
+        
 
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
@@ -290,6 +299,25 @@ end % end of the 'conditions' while
 %         end
 %         s.iter = s.iter + 1;
 %     end
+    function friendsEnter(friends)
+        
+        bkg.scroll('right', 1);
+        for iFriend = 1 : length(friends)
+            friends{iFriend}.Location = friends{iFriend}.trajectory(friends{iFriend}.iter, 1:2);
+            
+            friends{iFriend}.State = ['swim' sprintf('%i',  mod(floor(friends{iFriend}.iter/10), 4) + 1)];
+            friends{iFriend}.Scale = friends{iFriend}.trajectory(friends{iFriend}.iter, 3);
+            friends{iFriend}.iter = friends{iFriend}.iter + 1;
+        end
+        
+        nIter = size(friends{1}.trajectory,1);
+        if friends{1}.iter == nIter % stop processing
+            G.stop();
+            friends{1}.Angle = 0;
+        end
+       
+        
+    end
 
     function wrongAnswer(s, friend1, friend2)
         bkg.scroll('right', 1);
@@ -306,6 +334,10 @@ end % end of the 'conditions' while
             G.stop();
             s.Angle = 0;
         end
+        s.State = ['swim' sprintf('%i',  mod(floor(s.iter/10), 4) + 1)];
+        friend1.State = ['swim' sprintf('%i',  mod(floor(friend1.iter/10), 4) + 1)];
+        friend2.State = ['swim' sprintf('%i',  mod(floor(friend2.iter/10), 4) + 1)];
+
         s.iter = s.iter + 1;
     end
 
@@ -325,6 +357,11 @@ end % end of the 'conditions' while
             G.stop();
             s.Angle = 0;
         end
+        
+%             if (mod(floor(iter/10), 4) == 0)
+        s.State = ['swim' sprintf('%i',  mod(floor(s.iter/10), 4) + 1)];
+        friend1.State = ['swim' sprintf('%i',  mod(floor(friend1.iter/10), 4) + 1)];
+        friend2.State = ['swim' sprintf('%i',  mod(floor(friend2.iter/10), 4) + 1)];
         s.iter = s.iter + 1;
 
     end
