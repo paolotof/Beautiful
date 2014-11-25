@@ -23,8 +23,8 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
         addprop(el, 'clickU');
         el.clickL = round(el.Location(1) - el.width);
         el.clickR = round(el.Location(1) + el.width);
-        el.clickD = round(el.Location(2) - el.heigth);
-        el.clickU = round(el.Location(2) + el.heigth);
+        el.clickD = round(el.Location(2) - heigth);
+        el.clickU = round(el.Location(2) + heigth);
         % set up locations for bubbles
         addprop(el, 'bubblesX');
         el.bubblesX = round(el.Location(1) + el.width);

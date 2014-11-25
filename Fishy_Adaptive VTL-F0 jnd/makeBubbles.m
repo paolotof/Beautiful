@@ -29,5 +29,5 @@ function [nBubbles, posBubbles] = makeBubbles(friend)
         [xpos+30 ypos+180 12 12], ...
         [xpos-50 ypos+183 16 16]};
     
-
+    
 end

@@ -1,4 +1,4 @@
-function [G, bkg, bigFish, friends, bubbles] = setUpGame(friend)
+function [G, bkg, bigFish, friends] = setUpGame(friend)
 
 
     %% introduce the animation bit
@@ -47,7 +47,6 @@ function [G, bkg, bigFish, friends, bubbles] = setUpGame(friend)
     friends = updateFriend(G.Size(1), scrsz(4), friend);
     
     bubbles = SpriteKit.Sprite('noBubbles');
-    bubbles.initState('noBubbles', ['../img/fixed/' 'bubbles_none' '.png'], true);
     for k=1:4
         spritename = sprintf('bubbles_%d',k);
         pngFile = ['../img/fixed/' spritename '.png'];

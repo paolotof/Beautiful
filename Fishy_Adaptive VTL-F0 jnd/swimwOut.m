@@ -1,4 +1,4 @@
-function trajectory = swimwOut(locx, locy, sizeFriend, speedSwim)
+function [spriteObject] = swimwOut(spriteObject, speedSwim)
 % Use linspace to create a line the friends will follow to swim out of the
 % Game
 
@@ -6,8 +6,10 @@ function trajectory = swimwOut(locx, locy, sizeFriend, speedSwim)
 % fishtank
 
 %     trajectory = [linspace(locx, -50, speedSwim); repmat(locy, 1, speedSwim)];
-    trajectory = linspace(locx, -(sizeFriend + 5), speedSwim);
-    trajectory = [trajectory; repmat(locy, 1, length(trajectory))]';
+    trajectory = linspace(spriteObject.Location(1), -(spriteObject.width + 5), speedSwim);
+    trajectory = [trajectory; repmat(spriteObject.Location(2), 1, length(trajectory))]';
 %     trajectory = [repmat(locy, 1, length(trajectory)); trajectory];
-
+    spriteObject.trajectory = trajectory;
+    spriteObject.iter = 1;
+    
 end
