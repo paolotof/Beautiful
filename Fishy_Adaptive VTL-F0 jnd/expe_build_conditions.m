@@ -30,7 +30,7 @@ end
 options.ear = 'both'; % right, left or both
 
 %----------- Design specification
-options.test.n_repeat = 3; % Number of repetition per condition
+options.test.n_repeat = 2; % Number of repetition per condition
 options.test.step_size_modifier = 1/sqrt(2);
 options.test.change_step_size_condition = 2; % When difference leq than this times step-size, decrease step-size
 options.test.change_step_size_n_trials = 15; % Change step-size every...
@@ -40,7 +40,7 @@ options.test.down_up = [2, 1]; % 2-down, 1-up => 70.7%
 options.test.terminate_on_nturns = 8;
 options.test.terminate_on_ntrials = 150;
 options.test.retry = 1; % Number of retry if measure failed
-options.test.threshold_on_last_n_trials = 5;
+options.test.threshold_on_last_n_trials = 6;
 
 options.training.n_repeat = 1;
 options.training.step_size_modifier = 1/sqrt(2);
@@ -49,10 +49,10 @@ options.training.change_step_size_n_trials = 15; % Change step-size every...
 options.training.initial_step_size  = 4; % Semitones
 options.training.starting_difference = 12; % Semitones
 options.training.down_up = [2, 1]; % 2-down, 1-up => 70.7%
-options.training.terminate_on_nturns = 6;
-options.training.terminate_on_ntrials = 6;
+options.training.terminate_on_nturns = 12;
+options.training.terminate_on_ntrials = 12;
 options.training.retry = 0; % Number of retry if measure failed
-options.training.threshold_on_last_n_trials = 5;
+options.training.threshold_on_last_n_trials = 6;
 
 %----------- Stimuli options
 options.test.f0s  = [242, 121, round(242*2^(5/12))]; % 242 = average pitch of original female voice
