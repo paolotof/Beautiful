@@ -13,7 +13,7 @@ function [G, bkg, bigFish, bubbles] = setUpGame
     if scrsz(4) > 1200
         scrsz(4) = 1200;
     end
-    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[scrsz(3) scrsz(4)]);
+    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[scrsz(3) scrsz(4)], 'ShowFPS', false);
 %     G = SpriteKit.Game.instance('Title','Fishy Game','Size',[1600 1200]);
     bkg = SpriteKit.Background('../img/fixed/BACKGROUND.png');
     bkg.Scale = 1;
