@@ -30,7 +30,7 @@ end
 options.ear = 'both'; % right, left or both
 
 %----------- Design specification
-options.test.n_repeat = 2; % Number of repetition per condition
+options.test.n_repeat = 1; % Number of repetition per condition
 options.test.step_size_modifier = 1/sqrt(2);
 options.test.change_step_size_condition = 2; % When difference leq than this times step-size, decrease step-size
 options.test.change_step_size_n_trials = 15; % Change step-size every...
@@ -105,8 +105,8 @@ options.test.voice_pairs = [...
     3 7;]; % Child  -> Child VTL (is Female GPR)
 
 options.training.voice_pairs = [...
-    1 5;  % Female -> Male
-    1 7]; % Female -> Child
+    1 5;  % Female -> Male VTL
+    1 4]; % Female -> Male GPR
 
 if test_machine
     options.sound_path = '../Sounds/Dutch_CV/equalized';

@@ -1,8 +1,10 @@
-% opt = char(questdlg(sprintf('Ready to start the %s?', strrep(phase, '_', ' ')),'','Go','Cancel','Go'));
 function s = questdlg2(txt, hf, varargin)
+% txt: the message
+% hf: a struct with 'screen' containing the screen position and optionally
+%     'dlg_fntsz' to specify the fontsize (default 20)
+% ...: the various buttons, the last button is the default action
 
-
-pmw = get(hf.f, 'Position');
+pmw = hf.screen;
 c = [pmw(1)+pmw(3)/2, pmw(2)+pmw(4)/2];
 p = [c(1)-pmw(3)/4, c(2)-pmw(4)/4, pmw(3)/2, pmw(4)/2];
 f = figure('WindowStyle', 'modal', 'Position', p, 'Visible', 'off', 'KeyPressFcn', {@kb_figure, varargin{end}});

@@ -59,8 +59,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     %% Game STUFF
 %     [G, bkg, bigFish, elOne, elTwo, elThree] = setUpGame('octopus');
-    [G, bkg, bigFish, bubbles] = setUpGame;
+    [G, bkg, bigFish, bubbles, scrsz] = setUpGame();
     G.onMouseRelease = @buttonupfcn;
+    
     %% continue with the experiment
     % test subjects willingness to continue
     if ~ ready2start(G);
@@ -173,31 +174,31 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
 
         [results, expe, terminate] = ...
-            determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition);
-        if terminate
-            break;
-        end
-
-        results.( phase ).conditions(i_condition).att(n_attempt).differences = differences;
-        results.( phase ).conditions(i_condition).att(n_attempt).steps = steps;
+            determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition, u);
         
         % Save the response
         save(options.res_filename, 'options', 'expe', 'results')
         
-%         % DEBUG
-%         if DEBUG
-%             figure(98)
-%             set(gcf, 'Position', [50, 350, 500, 500]);
-%             x = 1:length(differences)-1;
-%             y = differences(1:end-1);
-%             plot(x, y, '-b')
-%             hold on
-%             plot(length(differences)+[-1 0], differences(end-1:end), '--b')
-%             plot(x(response_correct==1), y(response_correct==1), 'ob')
-%             plot(x(response_correct==0), y(response_correct==0), 'xb')
-%             
-%             hold off
-%         end
+        if terminate
+            break;
+        end
+        
+        % DEBUG
+        %{
+        if DEBUG
+            figure(98)
+            set(gcf, 'Position', [50, 350, 500, 500]);
+            x = 1:length(differences)-1;
+            y = differences(1:end-1);
+            plot(x, y, '-b')
+            hold on
+            plot(length(differences)+[-1 0], differences(end-1:end), '--b')
+            plot(x(response_correct==1), y(response_correct==1), 'ob')
+            plot(x(response_correct==0), y(response_correct==0), 'xb')
+            
+            hold off
+        end
+        %}
         
     end
     %---------- End of adaptive loop
@@ -214,69 +215,71 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     
     %============================== DEBUG
-%     if DEBUG && strcmp(phase, 'training')==0
-%         figure()
-%         set(gcf, 'Position', [550, 350, 700, 500]);
-%         subplot(1, 2, 1)
-%         x = 1:length(differences)-1;
-%         y = differences(1:end-1);
-%         plot(x, y, '-b')
-%         hold on
-%         plot(length(differences)+[-1 0], differences(end-1:end), '--b')
-%         plot(x(response_correct==1), y(response_correct==1), 'ob')
-%         plot(x(response_correct==0), y(response_correct==0), 'xb')
-%         
-%         plot(i_tp, differences(i_tp), 'sr')
-%         
-%         plot([i_tp(1), i_tp(end)], [1 1]*thr, '--k');
-% 
-%         hold off
-%         title(sprintf('Condition %d', i_condition));
-%         
-%         subplot(1, 2, 2)
-%         plot([options.test.voices(condition.ref_voice).f0, options.test.voices(condition.dir_voice).f0], ...
-%                 [options.test.voices(condition.ref_voice).ser, options.test.voices(condition.dir_voice).ser], '--b')
-%         hold on
-%         plot(options.test.voices(condition.ref_voice).f0, options.test.voices(condition.ref_voice).ser, 'ob')
-%         plot(options.test.voices(condition.dir_voice).f0, options.test.voices(condition.dir_voice).ser, 'sr')
-%         for i_resp=1:length(results.( phase ).conditions(i_condition).att(n_attempt).responses)
-%             if results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).correct
-%                 plot(results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.f0(2), ...
-%                     results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.ser(2), 'xk')
-%             else
-%                 plot(results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.f0(2), ...
-%                     results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.ser(2), '+', 'Color', [1 1 1]*.5)
-%             end
-%         end
-%         
-%         for i_sp=1:length(options.test.voices)
-%             plot(options.test.voices(i_sp).f0, options.test.voices(i_sp).ser, '+g');
-%         end
-%         
-%         hold off
-%         
-%     end 
-%         
-    % Save the response
+    %{
+    if DEBUG && strcmp(phase, 'training')==0
+        figure()
+        set(gcf, 'Position', [550, 350, 700, 500]);
+        subplot(1, 2, 1)
+        x = 1:length(differences)-1;
+        y = differences(1:end-1);
+        plot(x, y, '-b')
+        hold on
+        plot(length(differences)+[-1 0], differences(end-1:end), '--b')
+        plot(x(response_correct==1), y(response_correct==1), 'ob')
+        plot(x(response_correct==0), y(response_correct==0), 'xb')
+        
+        plot(i_tp, differences(i_tp), 'sr')
+        
+        plot([i_tp(1), i_tp(end)], [1 1]*thr, '--k');
+
+        hold off
+        title(sprintf('Condition %d', i_condition));
+        
+        subplot(1, 2, 2)
+        plot([options.test.voices(condition.ref_voice).f0, options.test.voices(condition.dir_voice).f0], ...
+                [options.test.voices(condition.ref_voice).ser, options.test.voices(condition.dir_voice).ser], '--b')
+        hold on
+        plot(options.test.voices(condition.ref_voice).f0, options.test.voices(condition.ref_voice).ser, 'ob')
+        plot(options.test.voices(condition.dir_voice).f0, options.test.voices(condition.dir_voice).ser, 'sr')
+        for i_resp=1:length(results.( phase ).conditions(i_condition).att(n_attempt).responses)
+            if results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).correct
+                plot(results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.f0(2), ...
+                    results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.ser(2), 'xk')
+            else
+                plot(results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.f0(2), ...
+                    results.( phase ).conditions(i_condition).att(n_attempt).responses(i_resp).trial.ser(2), '+', 'Color', [1 1 1]*.5)
+            end
+        end
+        
+        for i_sp=1:length(options.test.voices)
+            plot(options.test.voices(i_sp).f0, options.test.voices(i_sp).ser, '+g');
+        end
+        
+        hold off
+        
+    end
+    %}
+        
+    % Save the response (should already be saved... but just to be sure...)
     save(options.res_filename, 'options', 'expe', 'results');
     
     % Report status
-    report_status(options.subject_name, phase, sum([expe.( phase ).conditions.done])+1, length([expe.( phase ).conditions.done]), options.log_file);
+    %report_status(options.subject_name, phase, sum([expe.( phase ).conditions.done])+1, length([expe.( phase ).conditions.done]), options.log_file);
     
     % Display "take a break" message if necessary
-    %{
     if options.(phase).block_size>0
         nbreak = nbreak+1;
         if nbreak>=options.(phase).block_size && mean([expe.( phase ).conditions.done])~=1
             nbreak = 0;
-            opt = char(questdlg(sprintf('Take a short break...\nThen would you like to continue or stop?'),'','Continue','Stop','Continue'));
+            hf = struct();
+            hf.screen = scrsz;
+            opt = char(questdlg2(sprintf('Take a short break...\nThen would you like to continue or stop?'), hf,'Continue','Stop','Continue'));
             switch lower(opt)
                 case 'stop'
                     break
             end
         end
     end
-    %}
     
 %     h.show_instruction();
 %     h.set_instruction(sprintf('Done!'));
@@ -286,19 +289,31 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %     %starting = true;
     
 end % end of the 'conditions' while 
+
+
+% If we're out of the loop because the phase is finished, tell the subject
+if mean([expe.( phase ).conditions.done])==1
+    %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
+%     questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
+    ready2start(phase);
+end
+
+
+    %===============================================================
+    %% nested functions for the game
     
-%     function action(s)
-%         bkg.scroll('right', 1);
-%         s.Location = s.trajectory(s.iter,1:2);
-%         s.Scale = s.trajectory(s.iter,3);
-% %         s.Angle
-%         nIter = size(s.trajectory,1);
-%         if s.iter == nIter % stop processing
-%             G.stop();
-%             s.Angle = 0;
-%         end
-%         s.iter = s.iter + 1;
-%     end
+    %     function action(s)
+    %         bkg.scroll('right', 1);
+    %         s.Location = s.trajectory(s.iter,1:2);
+    %         s.Scale = s.trajectory(s.iter,3);
+    % %         s.Angle
+    %         nIter = size(s.trajectory,1);
+    %         if s.iter == nIter % stop processing
+    %             G.stop();
+    %             s.Angle = 0;
+    %         end
+    %         s.iter = s.iter + 1;
+    %     end
     function friendsEnter(friends)
         
         bkg.scroll('right', 1);
@@ -380,7 +395,7 @@ end % end of the 'conditions' while
             s.countTurns = s.countTurns + 1;
         end
     end
-%% nested functions for the game
+
     function buttonupfcn(hObject, callbackdata)
     
         locClick = get(hObject,'CurrentPoint');
@@ -396,16 +411,8 @@ end % end of the 'conditions' while
         uiresume();
     end
 
-% If we're out of the loop because the phase is finished, tell the subject
-if mean([expe.( phase ).conditions.done])==1
-    %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
-%     questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
-    ready2start(phase);
-end
-
-
 % close(h.f);
-end
+end % End of main function
 
 %--------------------------------------------------------------------------
 function report_status(subj, phase, i, n, logFile)

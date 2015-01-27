@@ -1,5 +1,5 @@
 function [results, expe, terminate] = determineIfExit(results, expe, steps, ...
-    differences, phase, options, response_correct, n_attempt, i_condition)
+    differences, phase, options, response_correct, n_attempt, i_condition, u)
 
     nturns = sum(diff(sign(steps(steps~=0)))~=0);
     
@@ -65,5 +65,8 @@ function [results, expe, terminate] = determineIfExit(results, expe, steps, ...
 
         terminate = false;
     end
+    
+    results.( phase ).conditions(i_condition).att(n_attempt).differences = differences;
+    results.( phase ).conditions(i_condition).att(n_attempt).steps = steps;
 
 end

@@ -1,8 +1,10 @@
 function [out] = ready2start(input)
+% EG: Note that these are displayed on the experimenter's screen
+
     oldimage = get(0,'DefaultImageVisible');
     set(0, 'DefaultImageVisible','off')
     if isa(input, 'char')
-        button = questdlg(sprintf('The "%s" phase is finished. Thank you!', strrep(input, '_', ' ')),'','OK','OK');
+        button = questdlg(sprintf('The "%s" phase is finished.', strrep(input, '_', ' ')),'','OK','OK');
     else
         button = questdlg('Ready to Start?','START','Yes','No','Yes');
     end

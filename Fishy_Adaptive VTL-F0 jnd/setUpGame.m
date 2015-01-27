@@ -1,10 +1,10 @@
-function [G, bkg, bigFish, bubbles] = setUpGame
+function [G, bkg, bigFish, bubbles, scrsz] = setUpGame
 
 
     %% introduce the animation bit
     % Start a new Game
     
-    [screen1, screen2] = get_screens();
+    [screen1, screen2] = getScreens();
     
     % We put the game on screen 2
     scrsz = screen2;
