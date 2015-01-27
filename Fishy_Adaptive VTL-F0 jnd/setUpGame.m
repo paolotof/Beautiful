@@ -3,9 +3,12 @@ function [G, bkg, bigFish, bubbles] = setUpGame
 
     %% introduce the animation bit
     % Start a new Game
-    scrsz = get(0,'ScreenSize');
-%     left=scrsz(1); bottom=scrsz(2); width=scrsz(3); height=scrsz(4);
-%     scrsz = [left, bottom, width, height];
+    
+    [screen1, screen2] = get_screens();
+    
+    % We put the game on screen 2
+    scrsz = screen2;
+
     % adapt screen size to Jop image size
     if scrsz(3) > 1600
         scrsz(3) = 1600;
@@ -13,10 +16,10 @@ function [G, bkg, bigFish, bubbles] = setUpGame
     if scrsz(4) > 1200
         scrsz(4) = 1200;
     end
-    G = SpriteKit.Game.instance('Title','Fishy Game','Size',[scrsz(3) scrsz(4)], 'ShowFPS', false);
-%     G = SpriteKit.Game.instance('Title','Fishy Game','Size',[1600 1200]);
-    bkg = SpriteKit.Background('../img/fixed/BACKGROUND.png');
-    bkg.Scale = 1;
+    G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', scrsz(3:4), 'Location', scrsz(1:2), 'ShowFPS', false);
+
+    bkg = SpriteKit.Background('../img/fixed/BACKGROUND_unscaled.png');
+    bkg.Scale = scrsz(4)/1200; % EG: Let's try to change the scale here...
 
     addBorders(G);
     % Setup the SpriteS
