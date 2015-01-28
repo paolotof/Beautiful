@@ -4,21 +4,12 @@ ScreenSize = get(0, 'MonitorPositions');
 screenHeigth = ScreenSize(1, 4);
 screenWidth = ScreenSize(1, 3);
 
-% screenHeigth = 1280 ;
-% screenWidth = 960;
+% test whether it works with other dimensions than screen size
+% screenHeigth = 2000 ;
+% screenWidth = 4000;
 
 [X,map,alpha] = imread('BACKGROUND_unscaled.png');
-% 1600 	× 	1200
 [heigthPic, widthPic, ~] = size(X);
-
-% Resampled signal, returned as a vector or matrix. If x is a signal of 
-% length N and you specify p,q, then y is of length ⌈N × p/q⌉.
-
-% y = resample(X(:, :, 1), repmat(heigthPic, 1, heigthPic), ...
-%     repmat(screenHeigth, 1, heigthPic));
-% 1280 1024
-% 1280 960
-% y = resample(squeeze(X(:, :, 1)), 1, heigthPic/screenHeigth);
 
 Y = zeros(screenHeigth, widthPic, 3);
 
@@ -26,9 +17,11 @@ for heigthRGB = 1 : 3
     Y(:, :, heigthRGB) = resample(double(squeeze(X(:, :, heigthRGB))), screenHeigth, heigthPic);
 end
 
-
-ScreenRepetitions = widthPic/1600;
-LengthScreen = round(ScreenRepetitions * screenWidth);
+LengthScreen = screenWidth;
+if screenWidth < widthPic
+    ScreenRepetitions = widthPic/1600; % 1600 is the original screen Width for which pictures were drawn 
+    LengthScreen = round(ScreenRepetitions * screenWidth);
+end
 
 Y1 = zeros(LengthScreen, screenHeigth, 3);
 % Y = Y'; = transpose matrice so that the second dimension can be interpolated too;
@@ -48,9 +41,5 @@ for irgb = 1 : 3
 end
 
 % Y1 = Y1'; % transpose the matrix back to its original shape
-% Y2 = round(Y1); % image must have integer values
-Y2 = uint8(Yretransp);
-image(Y2)
-imwrite(Y2)
-image(Y2)
-imwrite(Y2,'BACKGROUND_scaled.png')
+Y2 = uint8(Yretransp); % image must have unsigned 8 bit integer values
+imwrite(Y2,'BACKGROUND_scaled.png'); % 

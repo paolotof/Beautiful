@@ -78,7 +78,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 
         friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
         % define trajectory for fishes coming in
-        speedSwim = 100; % this is inverted, high number = slow
+        speedSwim = 50; % this is inverted, high number = slow
         for ifriends = 1 : length(friends)
             friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
         end
@@ -154,7 +154,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround(:,bigFish.availableLoc(countTrials))'], [0,0], 4, .5, 90);
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
-            speedSwim = 100; % this is 10 pixels at the time
+%             speedSwim = 100; % this is 10 pixels at the time
             friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
             speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
         end

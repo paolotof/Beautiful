@@ -83,6 +83,10 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         %
         % See also ONMOUSERELEASE.
         onMousePress
+
+        % paol8 adds functionality to resize background to fit monitor size
+        %FITSCREEN should game fill monitor resolution 
+%         fitScreen
         
         %ONMOUSERELEASE Function to execute on mouse release
         % This redirects to figure's WindowButtonUpFcn.
@@ -91,9 +95,10 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         onMouseRelease
         
         %DATA STORAGE of the current trial
-        time
-        keyPushed
-        correctKey
+        % time
+        % keyPushed
+        % correctKey
+        
         
     end
     
@@ -106,7 +111,7 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         
     end
     
-    properties (Access = private)
+    properties % (Access = private)
         
         %FIGUREHANDLE Handle to figure
         FigureHandle
@@ -142,20 +147,20 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
                 'Menubar',     'none',...
                 'NumberTitle', 'off',...
                 'DockControls','off',...
-                'Resize',      'off',...
+                'Resize',      'on',... % paolo changed to on so that game size can be adapted to monitor resolution
                 'Visible',     'off',...
                 'Renderer',    'zbuffer',...
                 'CreateFcn',   'movegui center',...
                 'DeleteFcn',    @(o,e)delete(obj));
             
             % Window scaling menu
-            hmenu = uimenu('Parent',fh,...
-                'Label','Window');
-            m(1) = uimenu(hmenu,'Label','Small');
-            m(2) = uimenu(hmenu,'Label','Normal','Checked','on');
-            m(3) = uimenu(hmenu,'Label','Large');
-            SpriteKit.internal.RadioMenuGroup(m,...
-                'Callback',@(idx1,idx2)MenuCallbackManager(obj,idx1,idx2));
+%             hmenu = uimenu('Parent',fh,...
+%                 'Label','Window');
+%             m(1) = uimenu(hmenu,'Label','Small');
+%             m(2) = uimenu(hmenu,'Label','Normal','Checked','on');
+%             m(3) = uimenu(hmenu,'Label','Large');
+%             SpriteKit.internal.RadioMenuGroup(m,...
+%                 'Callback',@(idx1,idx2)MenuCallbackManager(obj,idx1,idx2));
             
             % Axes
             pos = get(fh,'Position');
@@ -254,33 +259,45 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
             val = get(obj.FigureHandle,'Name');
         end
         
-        % -----------------------------------------------------------------
-        function set.time(obj,val)        
-            set(obj.FigureHandle,'Time',val);
-        end
-        % -----------------------------------------------------------------
-        function val = get.time(obj)
-            val = get(obj.FigureHandle,'Time');
-        end
+%         % -----------------------------------------------------------------
+%         function set.fitScreen(obj,val)
+%             set(obj.FigureHandle,'fitScreen',val);
+%         end
+%         
+%         % -----------------------------------------------------------------
+%         function val = get.fitScreen(obj)
+%             val = get(obj.FigureHandle,'fitScreen');
+%         end
+        
+        
         
         % -----------------------------------------------------------------
-        function set.keyPushed(obj,val)  
-            set(obj.FigureHandle,'Key',val);
-        end
-        % -----------------------------------------------------------------
-        function val = get.keyPushed(obj)
-            val = get(obj.FigureHandle,'Key');
-        end
-        
-        % -----------------------------------------------------------------
-        function set.correctKey(obj,val)  
-            set(obj.FigureHandle,'cKey',val);
-        end
-        % -----------------------------------------------------------------
-        function val = get.correctKey(obj)
-            val = get(obj.FigureHandle,'cKey');
-        end
-        
+%         function set.time(obj,val)        
+%             set(obj.FigureHandle,'Time',val);
+%         end
+%         % -----------------------------------------------------------------
+%         function val = get.time(obj)
+%             val = get(obj.FigureHandle,'Time');
+%         end
+%         
+%         % -----------------------------------------------------------------
+%         function set.keyPushed(obj,val)  
+%             set(obj.FigureHandle,'Key',val);
+%         end
+%         % -----------------------------------------------------------------
+%         function val = get.keyPushed(obj)
+%             val = get(obj.FigureHandle,'Key');
+%         end
+%         
+%         % -----------------------------------------------------------------
+%         function set.correctKey(obj,val)  
+%             set(obj.FigureHandle,'cKey',val);
+%         end
+%         % -----------------------------------------------------------------
+%         function val = get.correctKey(obj)
+%             val = get(obj.FigureHandle,'cKey');
+%         end
+%         
         % -----------------------------------------------------------------
         function set.Location(obj,val)
             p = get(obj.FigureHandle,'Position');

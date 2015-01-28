@@ -1,25 +1,32 @@
-function [G, bkg, bigFish, bubbles, scrsz] = setUpGame
+function [G, bkg, bigFish, bubbles, screen2] = setUpGame
 
 
     %% introduce the animation bit
     % Start a new Game
     
-    [screen1, screen2] = getScreens();
-    
+%     [screen1, screen2] = getScreens();
+    [~, screen2] = getScreens();
+    screen2
     % We put the game on screen 2
-    scrsz = screen2;
+    
+    % PT removed 
+%     % adapt screen size to Jop image size
+%     if screen2(3) > 1600
+%         screen2(3) = 1600;
+%     end
+%     if screen2(4) > 1200
+%         screen2(4) = 1200;
+%     end
+    
+%     G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', screen2(3:4), 'Location', screen2(1:2), 'ShowFPS', false, 'fitScreen', true);
 
-    % adapt screen size to Jop image size
-    if scrsz(3) > 1600
-        scrsz(3) = 1600;
-    end
-    if scrsz(4) > 1200
-        scrsz(4) = 1200;
-    end
-    G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', scrsz(3:4), 'Location', scrsz(1:2), 'ShowFPS', false);
+    G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', screen2(3:4), 'Location', screen2(1:2), 'ShowFPS', false);
 
-    bkg = SpriteKit.Background('../img/fixed/BACKGROUND_unscaled.png');
-    bkg.Scale = scrsz(4)/1200; % EG: Let's try to change the scale here...
+%     bkg = SpriteKit.Background('../img/fixed/BACKGROUND_unscaled.png');
+    bkgName = resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png')
+    bkg = SpriteKit.Background(bkgName);
+
+%     bkg.Scale = screen2(4)/1200; % EG: Let's try to change the scale here...
 
     addBorders(G);
     % Setup the SpriteS
@@ -35,7 +42,7 @@ function [G, bkg, bigFish, bubbles, scrsz] = setUpGame
     bigFish.Scale = 1;
 %     bigFish.State = 'fishOne';
     bigFish.State = 'fish_1';
-    bigFish.Location = [scrsz(3)/2, scrsz(4)-450];
+    bigFish.Location = [screen2(3)/2, screen2(4)-450];
     addprop(bigFish, 'arcAround');
     nFriends = 40;
     [x, y] = getArc(5*pi/6,pi/6, bigFish.Location(1)-100, bigFish.Location(2)-100, 400, nFriends);

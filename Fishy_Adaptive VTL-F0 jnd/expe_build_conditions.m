@@ -212,6 +212,9 @@ for ir = 1:options.training.n_repeat
     end
 end
 
+% for testing purposes limit training set to 1 or 2 trials;
+% training.conditions = training.conditions(1);
+% this is useless, it won't stop if you make errors... 
 
 % Randomization of the order
 %training.conditions = training.conditions(randperm(length(training.conditions)));
