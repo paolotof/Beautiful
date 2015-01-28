@@ -111,7 +111,7 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
         
     end
     
-    properties % (Access = private)
+    properties %(Access = private) % EG: made public
         
         %FIGUREHANDLE Handle to figure
         FigureHandle
@@ -154,6 +154,7 @@ classdef Game < hgsetget & SpriteKit.internal.ChildManager
                 'DeleteFcn',    @(o,e)delete(obj));
             
             % Window scaling menu
+            
 %             hmenu = uimenu('Parent',fh,...
 %                 'Label','Window');
 %             m(1) = uimenu(hmenu,'Label','Small');
