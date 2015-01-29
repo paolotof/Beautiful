@@ -1,7 +1,7 @@
 function nameFile = resizeBackgroundToScreenSize(screenSize, bkgName)
 %function img = resizeBackgroundToScreenSize(screenSize, bkgName)
 
-    fprintf('resizing background to screen size');
+    fprintf('Resizing background to screen size...');
     screenHeigth = screenSize(4); % assuming 10 pixels are enough to cover the menu
     screenWidth = screenSize(3);
     %[X, ~, ~] = imread('BACKGROUND_unscaled.png');
@@ -45,6 +45,6 @@ function nameFile = resizeBackgroundToScreenSize(screenSize, bkgName)
     nameFile = [bkgName(1 : underscore), bkgName(underscore + 3 : end)];
     
     imwrite(img,nameFile); 
-    fprintf('resizing done!!');
+    fprintf(' resizing done!!\n');
 
 end

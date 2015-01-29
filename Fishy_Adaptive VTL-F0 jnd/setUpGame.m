@@ -6,7 +6,7 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     
 %     [screen1, screen2] = getScreens();
     [~, screen2] = getScreens();
-    screen2
+    fprintf('Experiment will displayed on: [%s]\n', sprintf('%d ',screen2));
     % We put the game on screen 2
     
     % PT removed 
