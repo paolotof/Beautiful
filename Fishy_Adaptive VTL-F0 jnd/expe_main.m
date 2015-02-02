@@ -74,8 +74,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     while true
         countTrials = countTrials + 1;
                 
-        fprintf('current number of friends: %i\n' ,length(friends));
-        
         friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
         % define trajectory for fishes coming in
         speedSwim = 50; % this is inverted, high number = slow
@@ -83,6 +81,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
         end
         G.play(@()friendsEnter(friends));
+
+        fprintf('current number of friends: %i\n' ,length(friends));
         
         fprintf('\n------------------------------------ Trial\n');
         % Prepare the stimulus
@@ -193,8 +193,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         save(options.res_filename, 'options', 'expe', 'results')
         
         if terminate
-            break;
             close(G.FigureHandle)
+            break;
         end
         
         
