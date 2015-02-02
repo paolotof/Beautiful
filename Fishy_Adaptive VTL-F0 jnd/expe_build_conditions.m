@@ -109,10 +109,12 @@ options.training.voice_pairs = [...
     1 4]; % Female -> Male GPR
 
 if test_machine
-%     options.sound_path = '../Sounds/Dutch_CV/equalized';
-%     options.tmp_path   = '../Sounds/Dutch_CV/processed';
     options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
     options.tmp_path   = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
+    if ~isempty(dir('../Sounds/Dutch_CV/equalized'))
+        options.sound_path = '../Sounds/Dutch_CV/equalized';
+        options.tmp_path   = '../Sounds/Dutch_CV/processed';
+    end
 else
     disp('-------------------------');
     disp('--- On coding machine ---');
