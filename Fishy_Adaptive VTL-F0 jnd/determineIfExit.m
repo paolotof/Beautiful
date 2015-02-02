@@ -26,6 +26,7 @@ function [results, expe, terminate] = determineIfExit(results, expe, steps, ...
         sd = std(differences(i_tp));
         results.( phase ).conditions(i_condition).att(n_attempt).sd = sd;
 
+        % u it's used here, but it's only printed to screen
         fprintf('Threshold: %f st (%f st GPR, %f st VTL) [%f st] \n', thr, thr*u(1), thr*u(2), sd);
 
         terminate = true;

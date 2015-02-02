@@ -1,12 +1,10 @@
 function [difference, differences, decision_vector, step_size, steps, swimming] = ... 
-    setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase)
+    nextTrialValues(options, difference, differences, decision_vector, step_size, steps, phase)
 
     % decision vector contains the response accuracy of the current
     % participant
-
-    if length(decision_vector) >= options.(phase).down_up(1) && ...
-            all(decision_vector(end-(options.(phase).down_up(2)-1) : end) == 1)
-        % shouldn't this second line be with a down_up(1) instead of 2?
+    c
+    if correctResponse % shouldn't this second line be with a down_up(1) instead of 2?
         
         % The last n_down responses were correct -> Reduce
         % difference by step_size, then update step_size
@@ -21,8 +19,7 @@ function [difference, differences, decision_vector, step_size, steps, swimming] 
 
         swimming = true;
         
-    elseif length(decision_vector) >= options.(phase).down_up(2) && ...
-            all(decision_vector(end-(options.(phase).down_up(2)-1) : end)==0)
+    else
         % The last n_up responses were incorrect -> Increase
         % difference by step_size.
 
@@ -36,12 +33,12 @@ function [difference, differences, decision_vector, step_size, steps, swimming] 
         decision_vector = [];
         
         swimming = false;
-    else
-        % Not going up nor down
-        fprintf('--> STABLE\n');
-        steps = [steps, 0];
-        differences = [differences, difference];
-        swimming = true;
+%     else
+%         % Not going up nor down
+%         fprintf('--> STABLE\n');
+%         steps = [steps, 0];
+%         differences = [differences, difference];
+%         swimming = true;
     end
 
     % Update step_size

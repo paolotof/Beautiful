@@ -140,10 +140,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %         fprintf('%i ', steps); % display steps completed up to now
         
         availableResponses = 1:3;
-        % we need to do something if participants click somewhere that is not
+        % we need to do something if the click somewhere that is not
         % allowed... Now we give just a wrong response
         
-        if (response.button_clicked > 0) && (response.button_clicked < 4) 
+        disp(response.button_clicked);
+        
+        if (response.button_clicked > 0  && response.button_clicked < 4 
             availableResponses(response.button_clicked) = [];
         end
         
@@ -153,15 +155,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
 %             speedSwim = 100; % this is 10 pixels at the time
-            if (response.button_clicked > 0) && (response.button_clicked < 4)
-                friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
-                % update speed swim so that other fishes have half of the time
-                % to swim away. We should also clear the fishes
-                speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
-            else
-                friends{availableResponses(3)} = swim(friends{availableResponses(3)}, speedSwim, 'out', G.Size(1));
-                speedSwim = ceil(size(friends{availableResponses(3)}.trajectory,1) / 2);
-            end
+            friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
+            speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
         end
         % these guys start a bit later (i.e., half animation of the clicked friends)
         % This insures subjects knows what they clicked on!
@@ -173,13 +168,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             bigFish.countTurns = 1;
             play(G, @()celebrate(bigFish));
         else
-            if (response.button_clicked > 0) && (response.button_clicked < 4)
-                play(G, @()wrongAnswer(friends{response.button_clicked}, friends{availableResponses(1)}, friends{availableResponses(2)}));
-            else
-                play(G, @()wrongAnswer(friends{availableResponses(3)}, friends{availableResponses(1)}, friends{availableResponses(2)}));
-
-            end
+            play(G, @()wrongAnswer(friends{response.button_clicked}, friends{availableResponses(1)}, friends{availableResponses(2)}));
         end
+        
         % PT: response is a structure used only to store temporary values. It
         % seems useless 
         
