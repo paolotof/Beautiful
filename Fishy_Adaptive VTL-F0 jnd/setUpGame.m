@@ -60,6 +60,8 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     for k=1:4
         spritename = sprintf('bubbles_%d',k);
         pngFile = ['../img/fixed/' spritename '.png'];
+%         pngFile = ['/home/paolot/gitStuff/bubblesAnimation/' spritename
+%         '.png'];  PT: these are the old bubbles, they work better
         bubbles.initState(spritename, pngFile, true);
     end
     bubbles.State = 'noBubbles';
