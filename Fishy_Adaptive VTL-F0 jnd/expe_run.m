@@ -16,7 +16,7 @@ options.subject_name  = subject;
 %-------------------------------------------------
 % Set appropriate path
 
-current_dir = fileparts(mfilename('fullpath'));
+% current_dir = fileparts(mfilename('fullpath'));
 added_path  = {};
 
 added_path{end+1} = '../lib/SpriteKit';

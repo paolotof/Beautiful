@@ -23,8 +23,9 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', screen2(3:4), 'Location', screen2(1:2), 'ShowFPS', false);
 
 %     bkg = SpriteKit.Background('../img/fixed/BACKGROUND_unscaled.png');
-    bkgName = resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png')
-    bkg = SpriteKit.Background(bkgName);
+%     bkgName = resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png');
+%     bkg = SpriteKit.Background(bkgName);
+    bkg = SpriteKit.Background(resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png'));
 
 %     bkg.Scale = screen2(4)/1200; % EG: Let's try to change the scale here...
 

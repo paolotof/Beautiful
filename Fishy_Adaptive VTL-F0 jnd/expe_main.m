@@ -50,7 +50,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     difference = options.(phase).starting_difference;
     step_size  = options.(phase).initial_step_size;
     
-    response_correct = [];
+    response_accuracy = [];
     decision_vector  = [];
     steps = [];
     differences = [difference];
@@ -69,7 +69,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     end
     
     friendsID = friendNames;
-%     friendsID = {'blowfish', 'clownfish', 'crab', 'octopus', 'seahorse', 'starfish'};
     countTrials = 0;
 %     G.play(@action);
     newFriend = {};
@@ -103,7 +102,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
         response.correct = (response.button_clicked == response.button_correct);
         
-        response_correct = [response_correct, response.correct]; % these are used for the plotting in DEBUG
+        response_accuracy = [response_accuracy, response.correct]; % these are used for the plotting in DEBUG
         decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG
         response.condition = condition;
         response.condition.u = u;
@@ -114,23 +113,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         fprintf('Response time : %d ms\n', round(response.response_time*1000));
         fprintf('Time since beginning of run    : %s\n', datestr(response.timestamp - beginning_of_run, 'HH:MM:SS.FFF'));
         fprintf('Time since beginning of session: %s\n', datestr(response.timestamp - beginning_of_session, 'HH:MM:SS.FFF'));
-
-%         % Visual feedback
-%         if condition.visual_feedback == 1
-%             if response.correct
-%                 feedback_color = h.button_right_color;
-%             else
-%                 feedback_color = h.button_wrong_color;
-%             end
-%             for k=1:3
-%                 pause(.1);
-%                 set(h.patch(response.button_correct), 'FaceColor', feedback_color);
-%                 drawnow();
-%                 pause(.1);
-%                 set(h.patch(response.button_correct), 'FaceColor', h.button_face_color);
-%                 drawnow();
-%             end
-%         end
 
         % Add the response to the results structure
         n_attempt = expe.( phase ).conditions(i_condition).attempts + 1;
@@ -146,6 +128,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         [difference, differences, decision_vector, step_size, steps] = ...
             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
+        
+%         fprintf('%i ', steps); % display steps completed up to now
         
         availableResponses = 1:3;
         availableResponses(response.button_clicked) = [];
@@ -174,7 +158,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
 
         [results, expe, terminate] = ...
-            determineIfExit(results, expe, steps, differences, phase, options, response_correct, n_attempt, i_condition, u);
+            determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
         
         % Save the response
         save(options.res_filename, 'options', 'expe', 'results')
@@ -183,33 +167,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             break;
         end
         
-        % DEBUG
-        %{
-        if DEBUG
-            figure(98)
-            set(gcf, 'Position', [50, 350, 500, 500]);
-            x = 1:length(differences)-1;
-            y = differences(1:end-1);
-            plot(x, y, '-b')
-            hold on
-            plot(length(differences)+[-1 0], differences(end-1:end), '--b')
-            plot(x(response_correct==1), y(response_correct==1), 'ob')
-            plot(x(response_correct==0), y(response_correct==0), 'xb')
-            
-            hold off
-        end
-        %}
         
     end
-    %---------- End of adaptive loop
-    
-    % Find indices of turning-points
-    %{
-    i_nz = find(steps~=0);
-    i_d  = find(diff(sign(steps(i_nz)))~=0);
-    i_tp = i_nz(i_d)+1;
-    %}
-    
     
     
     
@@ -225,8 +184,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         plot(x, y, '-b')
         hold on
         plot(length(differences)+[-1 0], differences(end-1:end), '--b')
-        plot(x(response_correct==1), y(response_correct==1), 'ob')
-        plot(x(response_correct==0), y(response_correct==0), 'xb')
+        plot(x(response_accuracy==1), y(response_accuracy==1), 'ob')
+        plot(x(response_accuracy==0), y(response_accuracy==0), 'xb')
         
         plot(i_tp, differences(i_tp), 'sr')
         
@@ -267,7 +226,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     %report_status(options.subject_name, phase, sum([expe.( phase ).conditions.done])+1, length([expe.( phase ).conditions.done]), options.log_file);
     
     % Display "take a break" message if necessary
-    if options.(phase).block_size>0
+    % PT this is commented in the original VTL version, but maybe we'll use
+    % it later?
+    if isfield(options.(phase),'block_size') && options.(phase).block_size>0
         nbreak = nbreak+1;
         if nbreak>=options.(phase).block_size && mean([expe.( phase ).conditions.done])~=1
             nbreak = 0;
@@ -280,6 +241,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             end
         end
     end
+    
     
 %     h.show_instruction();
 %     h.set_instruction(sprintf('Done!'));
