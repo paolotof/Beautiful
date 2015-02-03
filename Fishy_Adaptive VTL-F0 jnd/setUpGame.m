@@ -44,12 +44,18 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
 %     bigFish.State = 'fishOne';
     bigFish.State = 'fish_1';
     bigFish.Location = [screen2(3)/2, screen2(4)-450];
-    addprop(bigFish, 'arcAround');
+    addprop(bigFish, 'arcAround1');
+    addprop(bigFish, 'arcAround2');
     nFriends = 40;
-    [x, y] = getArc(5*pi/6,pi/6, bigFish.Location(1)-100, bigFish.Location(2)-100, 400, nFriends);
-    bigFish.arcAround = [x;y];
-    addprop(bigFish, 'availableLoc');
-    bigFish.availableLoc = randperm(nFriends);
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1)-100, bigFish.Location(2)-100, 400, nFriends);
+    bigFish.arcAround1 = [x;y];
+    addprop(bigFish, 'availableLocArc1');
+    bigFish.availableLocArc1 = randperm(nFriends);
+    nFriends = 60;
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1)-200, bigFish.Location(2)-200, 600, nFriends);
+    bigFish.arcAround2 = [x;y];
+    addprop(bigFish, 'availableLocArc2');
+    bigFish.availableLocArc2 = randperm(nFriends);
     addprop(bigFish, 'iter')
     bigFish.iter = 1;
     addprop(bigFish, 'countTurns');

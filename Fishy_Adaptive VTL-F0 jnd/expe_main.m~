@@ -134,10 +134,10 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 results.( phase ).conditions(i_condition).att(n_attempt).responses(end+1) = orderfields( response );
             end
         end
-        [difference, differences, decision_vector, step_size, steps] = ...
-            setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
 %         [difference, differences, decision_vector, step_size, steps] = ...
-%             nextTrialValues(options, difference, differences, decision_vector, step_size, steps, phase);
+%             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
+        [difference, differences, decision_vector, step_size, steps] = ...
+            nextTrialValues(options, difference, differences, decision_vector, step_size, steps, phase);
         
 %         fprintf('%i ', steps); % display steps completed up to now
         
@@ -149,19 +149,16 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             availableResponses(response.button_clicked) = [];
         end
         
-        correctTrials = sum(response_accuracy == 1);
         use2ndArc = 0;
-        if correctTrials >= length(bigFish.availableLocArc1)
+        if isempty(bigFish.arcAround(:,bigFish.availableLoc(countTrials))')
             use2ndArc = 1;
         end
         
         if response.correct
             newFriend{end + 1} = friends{response.button_clicked};
             if use2ndArc
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40)))'], [0,0], 4, .5, 90);
             else
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))'], [0,0], 4, .5, 90);
-            end
+            newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround(:,bigFish.availableLoc(countTrials))'], [0,0], 4, .5, 90);
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
 %             speedSwim = 100; % this is 10 pixels at the time
