@@ -17,7 +17,6 @@ clear tmp
 nbreak = 0;
 starting = 1;
 
-
 beginning_of_session = now();
 
 %=============================================================== MAIN LOOP
@@ -61,12 +60,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     %% Game STUFF
     [G, bkg, bigFish, bubbles, scrsz] = setUpGame();
     G.onMouseRelease = @buttonupfcn;
-    
     %% continue with the experiment
     % test subjects willingness to continue
-    if ~ ready2start(G);
-        return;
-    end
+    % PT: replaced by START sign in the game
+%     if ~ ready2start(G);
+%         return;
+%     end
     
     friendsID = friendNames;
     countTrials = 0;
@@ -360,6 +359,13 @@ end
                     (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
                 response.button_clicked = i;
             end
+        end
+        
+        if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
+                (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
+            gameCommands.State = 'none';
+            cycleNext(gameCommands);
+%             starting = 1;
         end
         uiresume();
     end

@@ -1,7 +1,5 @@
 function [G, bkg, bigFish, bubbles, screen2] = setUpGame
 
-    % to test
-    % addpath('../lib/SpriteKit');
 
     %% introduce the animation bit
     % Start a new Game
@@ -11,9 +9,25 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     fprintf('Experiment will displayed on: [%s]\n', sprintf('%d ',screen2));
     % We put the game on screen 2
     
+    % PT removed 
+%     % adapt screen size to Jop image size
+%     if screen2(3) > 1600
+%         screen2(3) = 1600;
+%     end
+%     if screen2(4) > 1200
+%         screen2(4) = 1200;
+%     end
+    
+%     G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', screen2(3:4), 'Location', screen2(1:2), 'ShowFPS', false, 'fitScreen', true);
+
     G = SpriteKit.Game.instance('Title','Fishy Game', 'Size', screen2(3:4), 'Location', screen2(1:2), 'ShowFPS', false);
 
+%     bkg = SpriteKit.Background('../img/fixed/BACKGROUND_unscaled.png');
+%     bkgName = resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png');
+%     bkg = SpriteKit.Background(bkgName);
     bkg = SpriteKit.Background(resizeBackgroundToScreenSize(screen2, '../img/fixed/BACKGROUND_unscaled.png'));
+
+%     bkg.Scale = screen2(4)/1200; % EG: Let's try to change the scale here...
 
     addBorders(G);
     % Setup the SpriteS
@@ -28,6 +42,7 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     end
     
     bigFish.Scale = 1;
+%     bigFish.State = 'fishOne';
     bigFish.State = 'fish_1';
     bigFish.Location = [screen2(3)/2, screen2(4)-450];
     addprop(bigFish, 'arcAround1');
@@ -60,24 +75,7 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
     %% Setup KeyPressFcn and others
 %     G.onKeyPress = @keypressfcn;
 %     G.onMouseRelease = @buttonupfcn;
-    
-    gameCommands = SpriteKit.Sprite('controls');
-    initState(gameCommands, 'begin','../img/fixed/start.png' , true);
-    initState(gameCommands, 'finish','../img/fixed/finish.png' , true);
-    gameCommands.State = 'begin';
-    gameCommands.Location = [screen2(3)/2, screen2(4)/2 + 40];
-    gameCommands.Scale = 1.5; % make it bigger to cover fishy
-    % define clicking areas
-    clickArea = size(imread('../img/fixed/start.png'));
-    addprop(gameCommands, 'clickL');
-    addprop(gameCommands, 'clickR');
-    addprop(gameCommands, 'clickD');
-    addprop(gameCommands, 'clickU');
-    gameCommands.clickL = round(gameCommands.Location(1) - round(clickArea(1)/2));
-    gameCommands.clickR = round(gameCommands.Location(1) + round(clickArea(1)/2));
-    gameCommands.clickD = round(gameCommands.Location(2) - round(clickArea(2)/2));
-    gameCommands.clickU = round(gameCommands.Location(2) + round(clickArea(2)/2));
-    clear clickArea 
+        
     %% ------   start the GAME
 %     iter = 0;
 %     G.play(@()action(argin));
