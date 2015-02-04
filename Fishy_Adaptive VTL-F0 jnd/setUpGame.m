@@ -27,7 +27,7 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
         initState(bigFish, ['fish_' int2str(k)] , pngFile, true);
     end
     
-    bigFish.Scale = 1;
+%     bigFish.Scale = 1;
 %     bigFish.State = 'fish_1';
 %     bigFish.State = 'none'; PT: this is the initial state, no need to
 %     initialize another, unless we want the fish to stay there
