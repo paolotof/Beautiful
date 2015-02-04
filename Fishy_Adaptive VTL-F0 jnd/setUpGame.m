@@ -28,7 +28,9 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
     end
     
     bigFish.Scale = 1;
-    bigFish.State = 'fish_1';
+%     bigFish.State = 'fish_1';
+%     bigFish.State = 'none'; PT: this is the initial state, no need to
+%     initialize another, unless we want the fish to stay there
     bigFish.Location = [screen2(3)/2, screen2(4)-450];
     addprop(bigFish, 'arcAround1');
     addprop(bigFish, 'arcAround2');
@@ -56,7 +58,8 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
 %         '.png'];  PT: these are the old bubbles, they work better
         bubbles.initState(spritename, pngFile, true);
     end
-    bubbles.State = 'noBubbles';
+%     bubbles.State = 'noBubbles'; PT: initial state as 'none' is actually
+%     perfect
     %% Setup KeyPressFcn and others
 %     G.onKeyPress = @keypressfcn;
 %     G.onMouseRelease = @buttonupfcn;

@@ -60,15 +60,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     %% Game STUFF
     [G, bkg, bigFish, bubbles, scrsz, gameCommands] = setUpGame();
     G.onMouseRelease = @buttonupfcn;
-    %% continue with the experiment
+    %% start the game
     while starting == 0
         uiwait();
     end
-    % test subjects willingness to continue
-    % PT: replaced by START sign in the game
-%     if ~ ready2start(G);
-%         return;
-%     end
+    
+    G.play(@()bigFishEnters(bigFish));
     
     friendsID = friendNames;
     countTrials = 0;
@@ -194,17 +191,16 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 
             end
         end
-        % PT: response is a structure used only to store temporary values. It
-        % seems useless 
         
-
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
         
         
         if terminate
+            gameCommands.State = 'finish';
             results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
-            save(options.res_filename, 'options', 'expe', 'results')
+            save(options.res_filename, 'options', 'expe', 'results');
+            pause(5);
             close(G.FigureHandle)
             break;
         end
@@ -237,14 +233,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             end
         end
     end
-    
-    
-%     h.show_instruction();
-%     h.set_instruction(sprintf('Done!'));
-%     
-%     % Wait a bit before going to the next condition
-%     pause(1);
-%     %starting = true;
     
 end % end of the 'conditions' while 
 

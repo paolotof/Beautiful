@@ -34,7 +34,7 @@ options.test.n_repeat = 1; % Number of repetition per condition
 options.test.step_size_modifier = 1/sqrt(2);
 options.test.change_step_size_condition = 2; % When difference leq than this times step-size, decrease step-size
 options.test.change_step_size_n_trials = 15; % Change step-size every...
-options.test.initial_step_size  = 4; % Semitones
+options.test.initial_step_size  = 2; % Semitones
 options.test.starting_difference = 12; % Semitones
 options.test.down_up = [2, 1]; % 2-down, 1-up => 70.7%
 options.test.terminate_on_nturns = 8;
@@ -91,18 +91,20 @@ options.training.voices = options.test.voices;
 %--- Voice pairs
 % [ref_voice, dir_voice]
 options.test.voice_pairs = [...
-    1 2;  % Female -> Male
-    1 4;  % Female -> Male GPR
-    1 5;  % Female -> Male VTL
-    1 3;  % Female -> Child
-    1 6;  % Female -> Child GPR
-    1 7;  % Female -> Child VTL
-    2 1;  % Male   -> Female
-    2 4;  % Male   -> Male GPR (is Female VTL)
-    2 5;  % Male   -> Male VTL (is Female GPR)
-    3 1;  % Child  -> Female
-    3 6;  % Child  -> Child GPR (is Female VTL)
-    3 7;]; % Child  -> Child VTL (is Female GPR)
+%     1 2;  % Female -> Male
+    1 4;  % Female -> Male GPR % only these two
+    1 5;  % Female -> Male VTL % only these two
+%     1 3;  % Female -> Child
+%     1 6;  % Female -> Child GPR
+%     1 7;  % Female -> Child VTL
+%     2 1;  % Male   -> Female
+%     2 4;  % Male   -> Male GPR (is Female VTL)
+%     2 5;  % Male   -> Male VTL (is Female GPR)
+%     3 1;  % Child  -> Female
+%     3 6;  % Child  -> Child GPR (is Female VTL)
+%     3 7; % Child  -> Child VTL (is Female GPR)
+
+];
 
 options.training.voice_pairs = [...
     1 5;  % Female -> Male VTL

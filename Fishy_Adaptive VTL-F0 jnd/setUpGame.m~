@@ -28,7 +28,8 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
     end
     
     bigFish.Scale = 1;
-    bigFish.State = 'fish_1';
+%     bigFish.State = 'fish_1';
+%     bigFish.State = 'none'; 
     bigFish.Location = [screen2(3)/2, screen2(4)-450];
     addprop(bigFish, 'arcAround1');
     addprop(bigFish, 'arcAround2');
@@ -56,7 +57,7 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
 %         '.png'];  PT: these are the old bubbles, they work better
         bubbles.initState(spritename, pngFile, true);
     end
-    bubbles.State = 'noBubbles';
+%     bubbles.State = 'noBubbles';
     %% Setup KeyPressFcn and others
 %     G.onKeyPress = @keypressfcn;
 %     G.onMouseRelease = @buttonupfcn;
@@ -65,7 +66,7 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
 %     initState(gameCommands, 'none', zeros(2,2,3), true);
     initState(gameCommands, 'begin','../img/fixed/start.png' , true);
     initState(gameCommands, 'finish','../img/fixed/finish.png' , true);
-    initState(gameCommands, 'empty', ones(1,1,3), true');
+    initState(gameCommands, 'empty', ones(1,1,3), true); % to replace the images, 'none' will give an annoying warning
     gameCommands.State = 'begin';
     gameCommands.Location = [screen2(3)/2, screen2(4)/2 + 40];
     gameCommands.Scale = 1.5; % make it bigger to cover fishy
