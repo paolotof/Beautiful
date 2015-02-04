@@ -58,9 +58,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-    [G, bkg, bigFish, bubbles, scrsz] = setUpGame();
+    [G, bkg, bigFish, bubbles, scrsz, gameCommands] = setUpGame();
     G.onMouseRelease = @buttonupfcn;
     %% continue with the experiment
+    while starting == 0
+        uiwait();
+    end
     % test subjects willingness to continue
     % PT: replaced by START sign in the game
 %     if ~ ready2start(G);
@@ -198,13 +201,16 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         [results, expe, terminate] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
         
-        % Save the response
-        save(options.res_filename, 'options', 'expe', 'results')
         
         if terminate
+            results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
+            save(options.res_filename, 'options', 'expe', 'results')
             close(G.FigureHandle)
             break;
         end
+        
+        % Save the response
+        save(options.res_filename, 'options', 'expe', 'results')
         
         
     end
@@ -351,21 +357,22 @@ end
     function buttonupfcn(hObject, callbackdata)
     
         locClick = get(hObject,'CurrentPoint');
-        response.timestamp = now();
-        response.response_time = toc();
-        response.button_clicked = 0; % default in case they click somewhere else
-        for i=1:3
-            if (locClick(1) >= friends{i}.clickL) && (locClick(1) <= friends{i}.clickR) && ...
-                    (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
-                response.button_clicked = i;
+        if starting == 1
+            response.timestamp = now();
+            response.response_time = toc();
+            response.button_clicked = 0; % default in case they click somewhere else
+            for i=1:3
+                if (locClick(1) >= friends{i}.clickL) && (locClick(1) <= friends{i}.clickR) && ...
+                        (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
+                    response.button_clicked = i;
+                end
             end
-        end
-        
-        if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
-                (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
-            gameCommands.State = 'none';
-            cycleNext(gameCommands);
-%             starting = 1;
+        else
+            if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
+                    (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
+                gameCommands.State = 'none';
+                starting = 1;
+            end
         end
         uiresume();
     end

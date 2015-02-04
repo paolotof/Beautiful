@@ -7,6 +7,9 @@ function friendsID = friendNames
     files = files(cellfun('isempty', strfind({files.name}, 'FISHY')));
     files = files(cellfun('isempty', strfind({files.name}, 'bubbles')));
     files = files(cellfun('isempty', strfind({files.name}, 'hourglass')));
+    files = files(cellfun('isempty', strfind({files.name}, 'start')));
+    files = files(cellfun('isempty', strfind({files.name}, 'finish')));
+    
     % crab is not swimming yet, so remove it:
 %     files = files(cellfun('isempty', strfind({files.name}, 'crab')));
     

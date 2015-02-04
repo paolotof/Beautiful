@@ -1,4 +1,4 @@
-function [G, bkg, bigFish, bubbles, screen2] = setUpGame
+function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
 
     % to test
     % addpath('../lib/SpriteKit');
@@ -62,6 +62,7 @@ function [G, bkg, bigFish, bubbles, screen2] = setUpGame
 %     G.onMouseRelease = @buttonupfcn;
     
     gameCommands = SpriteKit.Sprite('controls');
+%     initState(gameCommands, 'none', zeros(2,2,3), true);
     initState(gameCommands, 'begin','../img/fixed/start.png' , true);
     initState(gameCommands, 'finish','../img/fixed/finish.png' , true);
     gameCommands.State = 'begin';

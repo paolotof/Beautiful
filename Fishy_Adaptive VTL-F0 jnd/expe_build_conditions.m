@@ -34,7 +34,7 @@ options.test.n_repeat = 1; % Number of repetition per condition
 options.test.step_size_modifier = 1/sqrt(2);
 options.test.change_step_size_condition = 2; % When difference leq than this times step-size, decrease step-size
 options.test.change_step_size_n_trials = 15; % Change step-size every...
-options.test.initial_step_size  = 2; % Semitones
+options.test.initial_step_size  = 4; % Semitones
 options.test.starting_difference = 12; % Semitones
 options.test.down_up = [2, 1]; % 2-down, 1-up => 70.7%
 options.test.terminate_on_nturns = 8;
