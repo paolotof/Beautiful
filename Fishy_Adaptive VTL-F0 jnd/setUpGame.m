@@ -1,4 +1,4 @@
-function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
+function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGame(maxTurns)
 
     % to test
     % addpath('../lib/SpriteKit');
@@ -58,6 +58,23 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands] = setUpGame
 %         '.png'];  PT: these are the old bubbles, they work better
         bubbles.initState(spritename, pngFile, true);
     end
+    
+    hourglass = SpriteKit.Sprite ('hourglass');
+    hourglass.Location = [screen2(3)/1.10, screen2(4)/1.5];
+    hourglass.Scale = 0.6*(screen2(3)/1366);
+    counter = 0;
+    nHourGlasses = 18;
+    %maxTurns = ??? 
+    nturns = floor(nHourGlasses / maxTurns);
+    for k = 0:nturns:17 
+     %for k = 0:17 
+        hourglassname = sprintf ('hourglass_%d', counter); 
+        pngFile = sprintf('../img/fixed/hourglass_min_%d.png', k);
+        hourglass.initState (hourglassname, pngFile, true);
+        counter = counter + 1;
+    end 
+    hourglass.State = 'hourglass_0';
+    
 %     bubbles.State = 'noBubbles'; PT: initial state as 'none' is actually
 %     perfect
     %% Setup KeyPressFcn and others

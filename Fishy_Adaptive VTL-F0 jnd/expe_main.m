@@ -58,7 +58,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-    [G, bkg, bigFish, bubbles, scrsz, gameCommands] = setUpGame();
+    [G, bkg, bigFish, bubbles, scrsz, gameCommands, hourglass] = setUpGame(options.(phase).terminate_on_nturns);
     G.onMouseRelease = @buttonupfcn;
     %% start the game
     while starting == 0
@@ -192,7 +192,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             end
         end
         
-        [results, expe, terminate] = ...
+        [results, expe, terminate, nturns] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
         
         
@@ -204,6 +204,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             close(G.FigureHandle)
             break;
         end
+        
+        hourglass.State = sprintf ('hourglass_min_%d', nturns); 
         
         % Save the response
         save(options.res_filename, 'options', 'expe', 'results')
