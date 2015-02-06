@@ -35,12 +35,12 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     addprop(bigFish, 'arcAround1');
     addprop(bigFish, 'arcAround2');
     nFriends = 40;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1)-100, bigFish.Location(2)-100, 400, nFriends);
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(2)-100, bigFish.Location(1)-100, 400, nFriends);
     bigFish.arcAround1 = [x;y];
     addprop(bigFish, 'availableLocArc1');
     bigFish.availableLocArc1 = randperm(nFriends);
     nFriends = 60;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1)-200, bigFish.Location(2)-200, 600, nFriends);
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(2)-200, bigFish.Location(1)-200, 600, nFriends);
     bigFish.arcAround2 = [x;y];
     addprop(bigFish, 'availableLocArc2');
     bigFish.availableLocArc2 = randperm(nFriends);

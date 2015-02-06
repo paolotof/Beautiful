@@ -17,10 +17,18 @@ clear tmp
 nbreak = 0;
 starting = 1;
 
+fs = 44100;
+buzz = (1:(44100 * .5)) / 44100;
+buzz = sin(2 * pi * 500 * buzz);
+if ~isempty('')
+    [buzz, fs] = audioread('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav');
+end
+buzzer = audioplayer(buzz, fs);
+
 beginning_of_session = now();
 
 %=============================================================== MAIN LOOP
-
+simulate = strncmp(options.subject_name, 'simulation', 8);
 while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are some conditions to do
     
 
@@ -30,6 +38,18 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %     end
     
     starting = 0;
+    
+    if simulate
+        simulResp = randi([0,1],151,1);
+        % less correct answers
+        simulResp = repmat([0 0 1], 1, 50);
+        simulResp = simulResp(randperm(length(simulResp)));
+        % more correct answers
+        simulResp = repmat([0 1 1 1 1 1], 1, 25);
+        simulResp = simulResp(randperm(length(simulResp)));
+
+    end
+    
     
     % Find first condition not done
     i_condition = find([expe.( phase ).conditions.done]==0, 1);
@@ -61,11 +81,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     [G, bkg, bigFish, bubbles, scrsz, gameCommands, hourglass] = setUpGame(options.(phase).terminate_on_nturns);
     G.onMouseRelease = @buttonupfcn;
     %% start the game
-    while starting == 0
-        uiwait();
+    if ~simulate
+        while starting == 0
+            uiwait();
+        end
     end
-    
-    G.play(@()bigFishEnters(bigFish));
+%     G.play(@()bigFishEnters(bigFish));
     
     friendsID = friendNames;
     countTrials = 0;
@@ -98,8 +119,20 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         tic();
         % Collect the response
-        uiwait();
-    
+        if ~simulate
+            uiwait();
+        else
+            if simulResp(countTrials)
+                response.button_clicked = response.button_correct;
+            else
+                availAnswers = 1:3;
+                availAnswers(response.button_correct) = [];
+                response.button_clicked = availAnswers(1);
+            end
+            [response.response_time, response.timestamp]= deal(1);
+
+        end
+        
         response.correct = (response.button_clicked == response.button_correct);
         
         response_accuracy = [response_accuracy, response.correct]; % these are used for the plotting in DEBUG
@@ -157,9 +190,13 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         if response.correct
             newFriend{end + 1} = friends{response.button_clicked};
             if use2ndArc
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40)))'], [0,0], 4, .5, 90);
+                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
+                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40) + 1))'], [0,0], 4, .5, 90);
             else
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))'], [0,0], 4, .5, 90);
+                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
+                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
+                newFriend{end} = getTrajectory(newFriend{end}, tmp, [0,0], 4, .5, 90);
             end
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
@@ -348,6 +385,8 @@ end
     
         locClick = get(hObject,'CurrentPoint');
         if starting == 1
+            validResponse = false;
+            
             response.timestamp = now();
             response.response_time = toc();
             response.button_clicked = 0; % default in case they click somewhere else
@@ -357,14 +396,31 @@ end
                     response.button_clicked = i;
                 end
             end
+            if response.button_clicked ~= 0
+                validResponse = true;
+                uiresume();
+            else
+                rotations = [-10 0 10 0];
+                icounter = 1;
+                play(buzzer);
+                while isplaying(buzzer)
+                    bigFish.Angle = rotations(mod(icounter, 4) + 1);
+                    icounter = icounter + 1;
+                    pause(.05);
+                end
+                bigFish.Angle = 0;
+                
+            end
         else
             if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
                     (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
                 gameCommands.State = 'empty';
+                bigFish.State = 'fish_1';
                 starting = 1;
+                uiresume();
             end
         end
-        uiresume();
+        
     end
 
 % close(h.f);

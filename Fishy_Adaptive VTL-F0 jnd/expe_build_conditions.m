@@ -38,7 +38,7 @@ options.test.initial_step_size  = 2; % Semitones
 options.test.starting_difference = 12; % Semitones
 options.test.down_up = [2, 1]; % 2-down, 1-up => 70.7%
 options.test.terminate_on_nturns = 8;
-options.test.terminate_on_ntrials = 150;
+options.test.terminate_on_ntrials = 100; % PT, changed to 100, was 150
 options.test.retry = 1; % Number of retry if measure failed
 options.test.threshold_on_last_n_trials = 6;
 

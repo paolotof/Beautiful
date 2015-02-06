@@ -3,8 +3,8 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
 
     friends = {};
 
-    for i=1:3
-        el = SpriteKit.Sprite(sprintf('friend%d', i));
+    for iFriend = 1 : 3
+        el = SpriteKit.Sprite(sprintf('friend%d', iFriend));
         
         el.initState('talk1', ['../img/fixed/' friend '_talk_a.png'], true);
         el.initState('talk2', ['../img/fixed/' friend '_talk_b.png'], true);
@@ -20,7 +20,7 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
         el.width = round(clickArea(1)/2);
         addprop(el, 'heigth');
         el.heigth = round(clickArea(2)/2);
-        el.Location = [round(gameWidth * (i+1)/5 - el.width)  el.heigth + (scrsz4 - 750)];
+        el.Location = [round(gameWidth * (iFriend+1)/5) - el.width,  el.heigth + (scrsz4 - 750)];
         addprop(el, 'clickL');
         addprop(el, 'clickR');
         addprop(el, 'clickD');
@@ -44,7 +44,7 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
         addprop(el, 'iter');
         el.iter = 1;
         addprop(el, 'key');
-        el.key = i;
+        el.key = iFriend;
         
         friends{end+1} = el;
         
