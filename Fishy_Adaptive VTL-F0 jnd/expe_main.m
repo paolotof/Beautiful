@@ -65,7 +65,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         uiwait();
     end
     
-    G.play(@()bigFishEnters(bigFish));
+%     G.play(@()bigFishEnters(bigFish));
     
     friendsID = friendNames;
     countTrials = 0;
