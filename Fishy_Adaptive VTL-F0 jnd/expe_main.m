@@ -359,6 +359,7 @@ end
             if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
                     (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
                 gameCommands.State = 'empty';
+                bigFish.State = 'fish_1';
                 starting = 1;
             end
         end
