@@ -115,7 +115,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 availAnswers(response.button_correct) = [];
                 response.button_clicked = availAnswers(1);
             end
-            [response.response_time, response.timestamp]= deal(1);
+            [response.response_time, response.timestamp]= deal(randi(132,1,1));
 
         end
         
@@ -176,12 +176,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         if response.correct
             newFriend{end + 1} = friends{response.button_clicked};
             if use2ndArc
-                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
-                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40) + 1))'], [0,0], 4, .5, 90);
+                
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40)))'], [0,0], 4, .5, 90);
             else
-                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
-                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
+                tmp = [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))'];
+                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.widthwidthhalfHeigthFig];
                 newFriend{end} = getTrajectory(newFriend{end}, tmp, [0,0], 4, .5, 90);
             end
             speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
