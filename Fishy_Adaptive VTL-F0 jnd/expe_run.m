@@ -35,7 +35,7 @@ end
 res_filename = fullfile(options.result_path, sprintf('%s%s.mat', options.result_prefix, subject));
 options.res_filename = res_filename;
 
-if ~strcmp(options.subject_name, 'simulation')    
+if ~strncmp(options.subject_name, 'simulation',8)    
     if ~exist(res_filename, 'file')
         opt = char(questdlg(sprintf('The subject "%s" doesn''t exist. Create it?', subject),'JVO','OK','Cancel','OK'));
         switch lower(opt)

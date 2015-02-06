@@ -17,10 +17,18 @@ clear tmp
 nbreak = 0;
 starting = 1;
 
+fs = 44100;
+buzz = (1:(44100 * .5)) / 44100;
+buzz = sin(2 * pi * 500 * buzz);
+if ~isempty('')
+    [buzz, fs] = audioread('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav');
+end
+buzzer = audioplayer(buzz, fs);
+
 beginning_of_session = now();
 
 %=============================================================== MAIN LOOP
-
+simulate = strncmp(options.subject_name, 'simulation', 8);
 while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are some conditions to do
     
 
@@ -31,9 +39,15 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     starting = 0;
     
-    if strcmp(options.subject_name, 'simulation')
-        simulResp = randi(2,1,151);
-        simulResp(simulResp == 2) = 0;
+    if simulate
+        simulResp = randi([0,1],151,1);
+        % less correct answers
+        simulResp = repmat([0 0 1], 1, 50);
+        simulResp = simulResp(randperm(length(simulResp)));
+        % more correct answers
+        simulResp = repmat([0 1 1 1 1 1], 1, 25);
+        simulResp = simulResp(randperm(length(simulResp)));
+
     end
     
     
@@ -67,7 +81,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     [G, bkg, bigFish, bubbles, scrsz, gameCommands] = setUpGame();
     G.onMouseRelease = @buttonupfcn;
     %% start the game
-    if ~strcmp(options.subject_name, 'simulation')
+    if ~simulate
         while starting == 0
             uiwait();
         end
@@ -105,7 +119,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         tic();
         % Collect the response
-        if ~strcmp(options.subject_name, 'simulation')
+        if ~simulate
             uiwait();
         else
             if simulResp(countTrials)
@@ -369,6 +383,8 @@ end
     
         locClick = get(hObject,'CurrentPoint');
         if starting == 1
+            validResponse = false;
+            
             response.timestamp = now();
             response.response_time = toc();
             response.button_clicked = 0; % default in case they click somewhere else
@@ -378,15 +394,31 @@ end
                     response.button_clicked = i;
                 end
             end
+            if response.button_clicked ~= 0
+                validResponse = true;
+                uiresume();
+            else
+                rotations = [-10 0 10 0];
+                icounter = 1;
+                play(buzzer);
+                while isplaying(buzzer)
+                    bigFish.Angle = rotations(mod(icounter, 4) + 1);
+                    icounter = icounter + 1;
+                    pause(.05);
+                end
+                bigFish.Angle = 0;
+                
+            end
         else
             if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
                     (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
                 gameCommands.State = 'empty';
                 bigFish.State = 'fish_1';
                 starting = 1;
+                uiresume();
             end
         end
-        uiresume();
+        
     end
 
 % close(h.f);
