@@ -243,7 +243,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             break;
         end
         
+<<<<<<< HEAD
+        hourglass.State = sprintf ('hourglass_min_%d', nturns); 
+=======
         hourglass.State = sprintf('hourglass_%d', nturns);
+>>>>>>> upstream/master
         
         % Save the response
         save(options.res_filename, 'options', 'expe', 'results')
