@@ -81,6 +81,24 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
 %     G.onKeyPress = @keypressfcn;
 %     G.onMouseRelease = @buttonupfcn;
     
+    hourglass = SpriteKit.Sprite ('hourglass');
+    hourglass.Location = [screen2(3)/1.10, screen2(4)/1.5];
+    ratioscreen = 0.3 * screen2(4);
+    [HeightHourglass, ~] = size(imread ('../img/fixed/hourglass_min_0.png'));
+    hourglass.Scale = ratioscreen/HeightHourglass;
+    counter = 0;
+    nHourGlasses = 18;
+    %maxTurns = ??? 
+    nturns = floor(nHourGlasses / maxTurns);
+    for k = 0:nturns:17 
+     %for k = 0:17 
+        hourglassname = sprintf ('hourglass_%d', counter); 
+        pngFile = sprintf('../img/fixed/hourglass_min_%d.png', k);
+        hourglass.initState (hourglassname, pngFile, true);
+        counter = counter + 1;
+    end 
+    hourglass.State = 'hourglass_0';
+
     gameCommands = SpriteKit.Sprite('controls');
 %     initState(gameCommands, 'none', zeros(2,2,3), true);
     initState(gameCommands, 'begin','../img/fixed/start.png' , true);

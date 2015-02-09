@@ -12,6 +12,7 @@ expe = tmp.expe;
 if isfield(tmp, 'results')
     results = tmp.results;
 end
+
 clear tmp
 
 nbreak = 0;
@@ -242,7 +243,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             break;
         end
         
+<<<<<<< HEAD
         hourglass.State = sprintf ('hourglass_min_%d', nturns); 
+=======
+        hourglass.State = sprintf('hourglass_%d', nturns);
+>>>>>>> upstream/master
         
         % Save the response
         save(options.res_filename, 'options', 'expe', 'results')
@@ -412,8 +417,9 @@ end
                 
             end
         else
-            if (locClick(1) >= G.Children{7}.clickL) && (locClick(1) <= G.Children{7}.clickR) && ...
-                    (locClick(2) >= G.Children{7}.clickD) && (locClick(2) <= G.Children{7}.clickU)
+%             'controls' is number 8
+            if (locClick(1) >= G.Children{8}.clickL) && (locClick(1) <= G.Children{8}.clickR) && ...
+                    (locClick(2) >= G.Children{8}.clickD) && (locClick(2) <= G.Children{8}.clickU)
                 gameCommands.State = 'empty';
                 bigFish.State = 'fish_1';
                 starting = 1;
