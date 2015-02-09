@@ -61,13 +61,13 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     
     hourglass = SpriteKit.Sprite ('hourglass');
     hourglass.Location = [screen2(3)/1.10, screen2(4)/1.5];
-    hourglass.Scale = 0.6*(screen2(3)/1366);
+    ratioscreen = 0.3 * screen2(4)
+    pictureheight = 395 %nr of pixels of hourglass image 
+    hourglass.Scale = ratioscreen/pictureheight 
     counter = 0;
     nHourGlasses = 18;
-    %maxTurns = ??? 
     nturns = floor(nHourGlasses / maxTurns);
-    for k = 0:nturns:17 
-     %for k = 0:17 
+    for k = 0:nturns:17  
         hourglassname = sprintf ('hourglass_%d', counter); 
         pngFile = sprintf('../img/fixed/hourglass_min_%d.png', k);
         hourglass.initState (hourglassname, pngFile, true);
