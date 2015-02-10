@@ -18,11 +18,13 @@ clear tmp
 nbreak = 0;
 starting = 1;
 
-fs = 44100;
-buzz = (1:(44100 * .5)) / 44100;
-buzz = sin(2 * pi * 500 * buzz);
-if ~isempty('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav')
-    [buzz, fs] = audioread('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav');
+if isempty('../Sounds/buzz.wav')
+    fs = 44100;
+    buzz = (1:(44100 * .5)) / 44100;
+    buzz = sin(2 * pi * 500 * buzz);
+else
+    
+    [buzz, fs] = audioread('../Sounds/buzz.wav');
 end
 buzzer = audioplayer(buzz, fs);
 
@@ -94,6 +96,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     friendsID = friendNames;
     countTrials = 0;
     newFriend = {};
+    
+    % Add the response to the results structure
+    expe.( phase ).conditions(i_condition).attempts = expe.( phase ).conditions(i_condition).attempts + 1;
+    n_attempt = expe.( phase ).conditions(i_condition).attempts;
+       
     while true
         countTrials = countTrials + 1;
                 
@@ -150,8 +157,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         fprintf('Time since beginning of run    : %s\n', datestr(response.timestamp - beginning_of_run, 'HH:MM:SS.FFF'));
         fprintf('Time since beginning of session: %s\n', datestr(response.timestamp - beginning_of_session, 'HH:MM:SS.FFF'));
 
-        % Add the response to the results structure
-        n_attempt = expe.( phase ).conditions(i_condition).attempts + 1;
         % add fields to the structure
         if ~isfield(results, phase) || ...
                 i_condition==length(results.( phase ).conditions)+1
@@ -191,9 +196,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         if response.correct
             newFriend{end + 1} = friends{response.button_clicked};
             if use2ndArc
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))'], [0,0], 4, .5, speedSwim);
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials, 40) + 1))'], [0,0], 4, .5, speedSwim);
             else
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))']+[0, randi([-5, 5], 1)], ...
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))']+[0, randi([-15, 15], 1)], ...
                     [0,0], 4, .5, speedSwim);
             end
         else
@@ -224,7 +229,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         if terminate
             gameCommands.State = 'finish';
-            results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
+            
             save(options.res_filename, 'options', 'expe', 'results');
             pause(5);
             close(G.FigureHandle)
@@ -234,6 +239,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         hourglass.State = sprintf('hourglass_%d', nturns);
         
         % Save the response
+        results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
         save(options.res_filename, 'options', 'expe', 'results')
         
         

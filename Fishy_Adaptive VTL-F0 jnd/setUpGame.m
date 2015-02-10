@@ -3,10 +3,17 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     % to test
     % addpath('../lib/SpriteKit');
 
+    % PT: check if there are games already opened and close them
+    fig = get(groot,'CurrentFigure');
+    if ~isempty(fig)
+        close fig
+    end
+    clear fig
     %% introduce the animation bit
     % Start a new Game
     
 %     [screen1, screen2] = getScreens();
+%     screen2 = screen1;
     [~, screen2] = getScreens();
     fprintf('Experiment will displayed on: [%s]\n', sprintf('%d ',screen2));
     % We put the game on screen 2
@@ -41,14 +48,16 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     addprop(bigFish, 'arcAround1');
     addprop(bigFish, 'arcAround2');
     nFriends = 40;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1), bigFish.Location(2), 300, nFriends);
-    [bigFish.Location(1), bigFish.Location(2)]
+%     [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1), bigFish.Location(2), 300, nFriends);
+%     [x, y] = getArc(-1*pi/6, 7*pi/6, bigFish.Location(1), bigFish.Location(2), 200, nFriends);
+    [x, y] = getArc(0, pi, bigFish.Location(1), bigFish.Location(2), 300, nFriends);
+%     [bigFish.Location(1), bigFish.Location(2)]
     %[x, y] = getArc(5*pi/6, pi/6, 10, 512, 300, nFriends);
     bigFish.arcAround1 = round([x;y]);
     addprop(bigFish, 'availableLocArc1');
     bigFish.availableLocArc1 = randperm(nFriends);
     nFriends = 60;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1), bigFish.Location(2), 600, nFriends);
+    [x, y] = getArc(0, pi, bigFish.Location(1), bigFish.Location(2), 400, nFriends);
     bigFish.arcAround2 = [x;y];
     addprop(bigFish, 'availableLocArc2');
     bigFish.availableLocArc2 = randperm(nFriends);

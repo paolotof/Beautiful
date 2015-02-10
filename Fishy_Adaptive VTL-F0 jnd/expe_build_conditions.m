@@ -18,11 +18,9 @@ options.instructions.training = ['You are going to hear three triplets of differ
 
 options.instructions.test = options.instructions.training;
 
-test_machine = is_test_machine();
-
 %----------- Signal options
 options.fs = 44100;
-if test_machine
+if is_test_machine
     options.attenuation_dB = 3;  % General attenuation
 else
     options.attenuation_dB = 27; % General attenuation
@@ -110,19 +108,21 @@ options.training.voice_pairs = [...
     1 5;  % Female -> Male VTL
     1 4]; % Female -> Male GPR
 
-if test_machine
+if is_test_machine
+    options.sound_path = '~/Sounds/Dutch_CV/equalized';
+    options.tmp_path   = '~/Sounds/Dutch_CV/processed';
+else
+    disp('-------------------------');
+    disp('--- On coding machine ---');
+    disp('-------------------------');
     options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
     options.tmp_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
     if ~isempty(dir('../Sounds/Dutch_CV/equalized'))
         options.sound_path = '../Sounds/Dutch_CV/equalized';
         options.tmp_path = '../Sounds/Dutch_CV/processed';
     end
-else
-    disp('-------------------------');
-    disp('--- On coding machine ---');
-    disp('-------------------------');
-    options.sound_path = '~/Sounds/Dutch_CV/equalized';
-    options.tmp_path   = '~/Sounds/Dutch_CV/processed';
+
+    
 end
 
 if isempty(dir(options.sound_path))

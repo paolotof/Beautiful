@@ -35,25 +35,21 @@ end
 res_filename = fullfile(options.result_path, sprintf('%s%s.mat', options.result_prefix, subject));
 options.res_filename = res_filename;
 
-if ~strncmp(options.subject_name, 'simulation',8)    
-    if ~exist(res_filename, 'file')
-        opt = char(questdlg(sprintf('The subject "%s" doesn''t exist. Create it?', subject),'JVO','OK','Cancel','OK'));
-        switch lower(opt)
-            case 'ok',
-                expe_build_conditions(options);
-            case 'cancel'
-                return
-            otherwise
-                error('Unknown option: %s',opt)
-        end
-    else
-        opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','OK'));
-        if strcmpi(opt, 'Cancel')
+if ~exist(res_filename, 'file')
+    opt = char(questdlg(sprintf('The subject "%s" doesn''t exist. Create it?', subject),'JVO','OK','Cancel','OK'));
+    switch lower(opt)
+        case 'ok',
+            expe_build_conditions(options);
+        case 'cancel'
             return
-        end
+        otherwise
+            error('Unknown option: %s',opt)
     end
 else
-     expe_build_conditions(options);
+    opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','OK'));
+    if strcmpi(opt, 'Cancel')
+        return
+    end
 end
 
 expe_main(options, phase);
