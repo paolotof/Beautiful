@@ -17,9 +17,9 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
         % define clicking areas
         clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
         addprop(el, 'width');
-        el.width = round(clickArea(1)/2);
+        el.width = round(clickArea(2)/2);
         addprop(el, 'heigth');
-        el.heigth = round(clickArea(2)/2);
+        el.heigth = round(clickArea(1)/2);
         el.Location = [round(gameWidth * (iFriend+1)/5) - el.width,  el.heigth + (scrsz4 - 750)];
         addprop(el, 'clickL');
         addprop(el, 'clickR');

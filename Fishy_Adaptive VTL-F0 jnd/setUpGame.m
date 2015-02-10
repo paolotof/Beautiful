@@ -32,15 +32,23 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
 %     bigFish.State = 'none'; PT: this is the initial state, no need to
 %     initialize another, unless we want the fish to stay there
     bigFish.Location = [screen2(3)/2, screen2(4)-450];
+%     addprop(bigFish, 'width');
+%     addprop(bigFish, 'heigth');
+%     tmp = imread('../img/fixed/FISHY_TURN_1.png');
+%     bigFish.heigth = round(size(tmp,1)/2);
+%     bigFish.width = round(size(tmp,2)/2);
+%     clear tmp
     addprop(bigFish, 'arcAround1');
     addprop(bigFish, 'arcAround2');
     nFriends = 40;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(2)-100, bigFish.Location(1)-100, 400, nFriends);
-    bigFish.arcAround1 = [x;y];
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1), bigFish.Location(2), 300, nFriends);
+    [bigFish.Location(1), bigFish.Location(2)]
+    %[x, y] = getArc(5*pi/6, pi/6, 10, 512, 300, nFriends);
+    bigFish.arcAround1 = round([x;y]);
     addprop(bigFish, 'availableLocArc1');
     bigFish.availableLocArc1 = randperm(nFriends);
     nFriends = 60;
-    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(2)-200, bigFish.Location(1)-200, 600, nFriends);
+    [x, y] = getArc(5*pi/6, pi/6, bigFish.Location(1), bigFish.Location(2), 600, nFriends);
     bigFish.arcAround2 = [x;y];
     addprop(bigFish, 'availableLocArc2');
     bigFish.availableLocArc2 = randperm(nFriends);
@@ -54,15 +62,8 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     for k=1:4
         spritename = sprintf('bubbles_%d',k);
         pngFile = ['../img/fixed/' spritename '.png'];
-%         pngFile = ['/home/paolot/gitStuff/bubblesAnimation/' spritename
-%         '.png'];  PT: these are the old bubbles, they work better
         bubbles.initState(spritename, pngFile, true);
     end
-%     bubbles.State = 'noBubbles'; PT: initial state as 'none' is actually
-%     perfect
-    %% Setup KeyPressFcn and others
-%     G.onKeyPress = @keypressfcn;
-%     G.onMouseRelease = @buttonupfcn;
     
     hourglass = SpriteKit.Sprite ('hourglass');
     hourglass.Location = [screen2(3)/1.10, screen2(4)/1.5];
@@ -71,10 +72,8 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     hourglass.Scale = ratioscreen/HeightHourglass;
     counter = 0;
     nHourGlasses = 18;
-    %maxTurns = ??? 
     nturns = floor(nHourGlasses / maxTurns);
     for k = 0:nturns:17 
-     %for k = 0:17 
         hourglassname = sprintf ('hourglass_%d', counter); 
         pngFile = sprintf('../img/fixed/hourglass_min_%d.png', k);
         hourglass.initState (hourglassname, pngFile, true);

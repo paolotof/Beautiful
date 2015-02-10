@@ -21,7 +21,7 @@ starting = 1;
 fs = 44100;
 buzz = (1:(44100 * .5)) / 44100;
 buzz = sin(2 * pi * 500 * buzz);
-if ~isempty('')
+if ~isempty('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav')
     [buzz, fs] = audioread('/home/paolot/gitStuff/Beautiful/Sounds/buzz.wav');
 end
 buzzer = audioplayer(buzz, fs);
@@ -46,7 +46,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         simulResp = repmat([0 0 1], 1, 50);
         simulResp = simulResp(randperm(length(simulResp)));
         % more correct answers
-        simulResp = repmat([0 1 1 1 1 1], 1, 25);
+        simulResp = repmat([0 1 1 1 1 1 1 1], 1, 25);
         simulResp = simulResp(randperm(length(simulResp)));
 
     end
@@ -86,6 +86,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         while starting == 0
             uiwait();
         end
+    else
+        gameCommands.State = 'empty';
     end
 %     G.play(@()bigFishEnters(bigFish));
     
@@ -97,7 +99,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 
         friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
         % define trajectory for fishes coming in
-        speedSwim = 50; % this is inverted, high number = slow
+        speedSwim = 5; % this is inverted, high number = slow
         for ifriends = 1 : length(friends)
             friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
         end
@@ -178,9 +180,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         % we need to do something if participants click somewhere that is not
         % allowed... Now we give just a wrong response
         
-        if (response.button_clicked > 0) && (response.button_clicked < 4) 
-            availableResponses(response.button_clicked) = [];
-        end
+        availableResponses(response.button_clicked) = [];
         
         correctTrials = sum(response_accuracy == 1);
         use2ndArc = 0;
@@ -191,27 +191,15 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         if response.correct
             newFriend{end + 1} = friends{response.button_clicked};
             if use2ndArc
-                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
-                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
-                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround2(:,bigFish.availableLocArc2(mod(correctTrials,40) + 1))'], [0,0], 4, .5, 90);
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))'], [0,0], 4, .5, speedSwim);
             else
-                tmp = bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))';
-                tmp = [tmp(1) - newFriend{end}.width, tmp(2) - newFriend{end}.heigth];
-                newFriend{end} = getTrajectory(newFriend{end}, tmp, [0,0], 4, .5, 90);
+                newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))']+[0, randi([-5, 5], 1)], ...
+                    [0,0], 4, .5, speedSwim);
             end
-            speedSwim = ceil(size(newFriend{end}.trajectory,1) / 2);
         else
-%             speedSwim = 100; % this is 10 pixels at the time
-            if (response.button_clicked > 0) && (response.button_clicked < 4)
-                friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
-                % update speed swim so that other fishes have half of the time
-                % to swim away. We should also clear the fishes
-                speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
-            else
-                friends{availableResponses(3)} = swim(friends{availableResponses(3)}, speedSwim, 'out', G.Size(1));
-                speedSwim = ceil(size(friends{availableResponses(3)}.trajectory,1) / 2);
-            end
+            friends{response.button_clicked} = swim(friends{response.button_clicked}, speedSwim, 'out', G.Size(1));
         end
+        speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
         % these guys start a bit later (i.e., half animation of the clicked friends)
         % This insures subjects knows what they clicked on!
         friends{availableResponses(1)} = swim(friends{availableResponses(1)}, speedSwim, 'out', G.Size(1));
@@ -312,7 +300,7 @@ end
         end
         
         nIter = size(friends{1}.trajectory,1);
-        if friends{1}.iter == nIter % stop processing
+        if friends{1}.iter > nIter % stop processing
             G.stop();
             friends{1}.Angle = 0;
         end
@@ -323,7 +311,7 @@ end
     function wrongAnswer(s, friend1, friend2)
         bkg.scroll('right', 1);
         s.Location = s.trajectory(s.iter,1:2);
-        halfIter = size(s.trajectory,1) / 2;
+        halfIter = floor(size(s.trajectory,1) / 2);
         if s.iter > halfIter
             friend1.Location = friend1.trajectory(friend1.iter, 1:2);
             friend2.Location = friend2.trajectory(friend2.iter, 1:2);
@@ -346,8 +334,9 @@ end
         bkg.scroll('right', 1);
         s.Location = s.trajectory(s.iter,1:2);
         s.Scale = s.trajectory(s.iter,3);
-        halfIter = size(s.trajectory,1) / 2;
-        if s.iter >= halfIter
+        halfIter = floor(size(s.trajectory,1) / 2);
+        
+        if s.iter > halfIter
             friend1.Location = friend1.trajectory(friend1.iter, 1:2);
             friend2.Location = friend2.trajectory(friend2.iter, 1:2);
             friend1.iter = friend1.iter + 1;
@@ -386,7 +375,6 @@ end
     
         locClick = get(hObject,'CurrentPoint');
         if starting == 1
-            validResponse = false;
             
             response.timestamp = now();
             response.response_time = toc();
@@ -398,7 +386,6 @@ end
                 end
             end
             if response.button_clicked ~= 0
-                validResponse = true;
                 uiresume();
             else
                 rotations = [-10 0 10 0];
