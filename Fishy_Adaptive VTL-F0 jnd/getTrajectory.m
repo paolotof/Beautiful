@@ -5,6 +5,8 @@ function [spriteObject] = getTrajectory(spriteObject, p1, d1, a, targetScale, nS
 %     p1 = [20, 20];
 %     d1 = -[-1, -2]*0;
 
+    p1 = p1 - [spriteObject.width, spriteObject.heigth] .* targetScale;
+    
 %     nStep = 50;
     t = (0:nStep)/nStep;
     nRep = length(t);

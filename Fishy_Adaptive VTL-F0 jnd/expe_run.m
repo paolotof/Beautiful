@@ -52,6 +52,8 @@ if ~strncmp(options.subject_name, 'simulation',8)
             return
         end
     end
+else
+     expe_build_conditions(options);
 end
 
 expe_main(options, phase);

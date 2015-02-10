@@ -1,4 +1,4 @@
-function [spriteObject] = swimwOut(spriteObject, speedSwim, direction, gameWidth)
+function [spriteObject] = swim(spriteObject, speedSwim, direction, gameWidth)
 % Use linspace to create a line the friends will follow to swim out of the
 % Game
 
@@ -9,7 +9,7 @@ function [spriteObject] = swimwOut(spriteObject, speedSwim, direction, gameWidth
 
     switch direction
         case 'out'
-            trajectory = linspace(spriteObject.Location(1), -(spriteObject.width + 5), speedSwim);
+            trajectory = linspace(spriteObject.Location(1), -(spriteObject.width + 50), speedSwim);
             scale = linspace(1, 0.2, speedSwim);
         case 'in'
             trajectory = linspace(gameWidth + spriteObject.width, spriteObject.Location(1), speedSwim);
