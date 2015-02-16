@@ -6,7 +6,7 @@ function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGam
     % PT: check if there are games already opened and close them
     fig = get(groot,'CurrentFigure');
     if ~isempty(fig)
-        close fig
+        close(fig)
     end
     clear fig
     %% introduce the animation bit

@@ -37,24 +37,18 @@ simulate = strncmp(options.subject_name, 'simulation', 8);
 while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are some conditions to do
     
 
-%     instr = strrep(options.instructions.(phase), '\n', sprintf('\n'));
-%     if ~isempty(instr) && starting
-%         startMessages(options);
-%     end
-    
     starting = 0;
     
     if simulate
         simulResp = randi([0,1],151,1);
         % less correct answers
-        simulResp = repmat([0 0 1], 1, 50);
-        simulResp = simulResp(randperm(length(simulResp)));
-        % more correct answers
-        simulResp = repmat([0 1 1 1 1 1 1 1], 1, 25);
-        simulResp = simulResp(randperm(length(simulResp)));
+%         simulResp = repmat([0 0 1], 1, 50);
+%         simulResp = simulResp(randperm(length(simulResp)));
+%         % more correct answers
+%         simulResp = repmat([0 1 1 1 1 1 1 1], 1, 25);
+%         simulResp = simulResp(randperm(length(simulResp)));
 
     end
-    
     
     % Find first condition not done
     i_condition = find([expe.( phase ).conditions.done]==0, 1);
@@ -79,7 +73,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     decision_vector  = [];
     steps = [];
     differences = [difference];
-    
     beginning_of_run = now();
     
     %% Game STUFF
@@ -103,25 +96,30 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     expe.( phase ).conditions(i_condition).attempts = expe.( phase ).conditions(i_condition).attempts + 1;
     n_attempt = expe.( phase ).conditions(i_condition).attempts;
        
+    previousRespAcc = 1; % accuracy of the previous response
     while true
+        
+        pauseGame = false;
+                
         countTrials = countTrials + 1;
                 
-        friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
-        % define trajectory for fishes coming in
-        speedSwim = 50; % this is inverted, high number = slow
-        for ifriends = 1 : length(friends)
-            friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
+        
+        % add new friend if previous answer was correct
+        if previousRespAcc
+            
+            friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
+            speedSwim = 5; % speed fish swim in. NOTE: it's inverted, high number = slow
+            
+            for ifriends = 1 : length(friends)
+                friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
+            end
+            G.play(@()friendsEnter(friends));
         end
-        G.play(@()friendsEnter(friends));
-
-        fprintf('current number of friends: %i\n' ,length(friends));
         
         fprintf('\n------------------------------------ Trial\n');
-        % Prepare the stimulus
+        % Prepare the stimulus: PT: if we need to replay the trial now new values should be created
         [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
                        
-        % pause(.5);
-        
         %% leftEl
         playSounds(player{1}, friends{1}, bubbles)
         playSounds(isi)
@@ -146,9 +144,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         end
         
         response.correct = (response.button_clicked == response.button_correct);
-        
-        response_accuracy = [response_accuracy, response.correct]; % these are used for the plotting in DEBUG
-        decision_vector  = [decision_vector,  response.correct]; % these are used for the plotting in DEBUG: PT: do they contain the same information?
+        previousRespAcc = (response.button_clicked == response.button_correct);
+        response_accuracy = [response_accuracy, response.correct]; 
+        decision_vector  = [decision_vector,  response.correct]; % PT: do 'response_accuracy' and 'decision_vector' contain the same information?
         response.condition = condition;
         response.condition.u = u; % what is u?
         
@@ -178,16 +176,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         end
         [difference, differences, decision_vector, step_size, steps] = ...
             setNextTrial(options, difference, differences, decision_vector, step_size, steps, phase);
-%         [difference, differences, decision_vector, step_size, steps] = ...
-%             nextTrialValues(options, difference, differences, decision_vector, step_size, steps, phase);
         
-%         fprintf('%i ', steps); % display steps completed up to now
-        
-        availableResponses = 1:3;
-        % we need to do something if participants click somewhere that is not
-        % allowed... Now we give just a wrong response
-        
-        availableResponses(response.button_clicked) = [];
         
         correctTrials = sum(response_accuracy == 1);
         use2ndArc = 0;
@@ -203,7 +192,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 newFriend{end} = getTrajectory(newFriend{end}, [bigFish.arcAround1(:,bigFish.availableLocArc1(correctTrials))']+[0, randi([-15, 15], 1)], ...
                     [0,0], 4, .5, speedSwim);
             end
-        
+            
+            availableResponses = 1:3;
+            availableResponses(response.button_clicked) = [];
             speedSwim = ceil(size(friends{response.button_clicked}.trajectory,1) / 2);
             % these guys start a bit later (i.e., half animation of the clicked friends)
             % This insures subjects knows what they clicked on!
@@ -216,11 +207,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         [results, expe, terminate, nturns] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
-        
-        
+                
         if terminate
             gameCommands.State = 'finish';
-            
             save(options.res_filename, 'options', 'expe', 'results');
             pause(5);
             close(G.FigureHandle)
@@ -229,7 +218,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         hourglass.State = sprintf('hourglass_%d', nturns);
         
-        % Save the response
+        % Save the responses
         results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
         save(options.res_filename, 'options', 'expe', 'results')
         
@@ -241,23 +230,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     
     % Report status
     %report_status(options.subject_name, phase, sum([expe.( phase ).conditions.done])+1, length([expe.( phase ).conditions.done]), options.log_file);
-    
-    % Display "take a break" message if necessary
-    % PT this is commented in the original VTL version, but maybe we'll use
-    % it later?
-    if isfield(options.(phase),'block_size') && options.(phase).block_size>0
-        nbreak = nbreak+1;
-        if nbreak>=options.(phase).block_size && mean([expe.( phase ).conditions.done])~=1
-            nbreak = 0;
-            hf = struct();
-            hf.screen = scrsz;
-            opt = char(questdlg2(sprintf('Take a short break...\nThen would you like to continue or stop?'), hf,'Continue','Stop','Continue'));
-            switch lower(opt)
-                case 'stop'
-                    break
-            end
-        end
-    end
     
 end % end of the 'conditions' while 
 
@@ -273,18 +245,6 @@ end
     %===============================================================
     %% nested functions for the game
     
-    %     function action(s)
-    %         bkg.scroll('right', 1);
-    %         s.Location = s.trajectory(s.iter,1:2);
-    %         s.Scale = s.trajectory(s.iter,3);
-    % %         s.Angle
-    %         nIter = size(s.trajectory,1);
-    %         if s.iter == nIter % stop processing
-    %             G.stop();
-    %             s.Angle = 0;
-    %         end
-    %         s.iter = s.iter + 1;
-    %     end
     function friendsEnter(friends)
         
         bkg.scroll('right', 1);
@@ -301,8 +261,6 @@ end
             G.stop();
             friends{1}.Angle = 0;
         end
-       
-        
     end
 
     function correctAnswer(s, friend1, friend2)
@@ -354,11 +312,29 @@ end
             response.timestamp = now();
             response.response_time = toc();
             response.button_clicked = 0; % default in case they click somewhere else
+            
             for i=1:3
                 if (locClick(1) >= friends{i}.clickL) && (locClick(1) <= friends{i}.clickR) && ...
                         (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
                     response.button_clicked = i;
                 end
+            end
+            
+            if (response.button_clicked == 0)
+                if pauseGame
+                    pauseGame = false;
+                    % replay the previous trial
+                    playSounds(player{1}, friends{1}, bubbles)
+                    playSounds(isi)
+                    playSounds(player{2}, friends{2}, bubbles)
+                    playSounds(isi)
+                    playSounds(player{3}, friends{3}, bubbles)
+                    tic();
+                else
+                    pauseGame = true;
+                end
+            else
+                uiresume;
             end
         else
 %             'controls' is number 8
