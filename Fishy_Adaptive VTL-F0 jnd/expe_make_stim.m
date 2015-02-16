@@ -135,7 +135,9 @@ function [y, fs] = straight_process(syll, t_f0, ser, options)
         if is_test_machine()
             straight_path = '../lib/STRAIGHTV40_006b';
         else
-            straight_path = '~/Library/Matlab/STRAIGHTV40_006b';
+%             straight_path = '~/Library/Matlab/STRAIGHTV40_006b'; %PT:
+%             this is ET computer?
+            straight_path = '../lib/STRAIGHTV40_006b';
         end
         addpath(straight_path);
 
