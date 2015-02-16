@@ -334,14 +334,9 @@ end
                 else
                     pauseGame = true;
                 end
-%             else
-%                 uiresume;
+            else
+                uiresume;
             end
-            
-            if (response.button_clicked >= 1 && response.button_clicked <= 3)
-                uiresume
-            end
-            
         else
 %             'controls' is number 8
             if (locClick(1) >= G.Children{8}.clickL) && (locClick(1) <= G.Children{8}.clickR) && ...
