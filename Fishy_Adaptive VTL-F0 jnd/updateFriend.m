@@ -14,6 +14,8 @@ function friends = updateFriend(gameWidth, scrsz4, friend)
         el.initState('swim2', ['../img/fixed/' friend '_swim_b.png'], true);
         el.initState('swim3', ['../img/fixed/' friend '_swim_a.png'], true);
         el.initState('swim4', ['../img/fixed/' friend '_swim_c.png'], true);
+        el.initState('choice', ['../img/fixed/' friend '_choice.png'], true);
+        
         % define clicking areas
         clickArea = size(imread(['../img/fixed/' friend '_talk_a.png']));
         addprop(el, 'width');

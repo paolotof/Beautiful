@@ -41,11 +41,12 @@ options.test.retry = 1; % Number of retry if measure failed
 options.test.threshold_on_last_n_trials = 6;
 
 options.training.n_repeat = 1;
-options.training.step_size_modifier = 1/sqrt(2);
-options.training.change_step_size_condition = 2; % When difference <= this, decrease step-size
+% options.training.step_size_modifier = 1/sqrt(2);
+options.training.step_size_modifier = 1; % PT: speed up the adaptive procedure
+options.training.change_step_size_condition = 1; % PT: speed up the adaptive procedure% When difference <= this, decrease step-size
 options.training.change_step_size_n_trials = 15; % Change step-size every...
-options.training.initial_step_size  = 4; % Semitones
-options.training.starting_difference = 12; % Semitones
+options.training.initial_step_size  = 3;% PT: speed up the adaptive procedure% Semitones
+options.training.starting_difference = 6;% PT: speed up the adaptive procedure % Semitones
 options.training.down_up = [2, 1]; % 2-down, 1-up => 70.7%
 options.training.terminate_on_nturns = 12;
 options.training.terminate_on_ntrials = 12;

@@ -46,10 +46,15 @@ if ~exist(res_filename, 'file')
             error('Unknown option: %s',opt)
     end
 else
-    opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','OK'));
-    if strcmpi(opt, 'Cancel')
-        return
+    opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK'));
+    switch lower(opt) 
+        case 'Cancel'
+            return
+        case 'no'
+            delete(res_filename)
+            expe_build_conditions(options);
     end
+   
 end
 
 expe_main(options, phase);

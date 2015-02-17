@@ -114,6 +114,9 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));
             end
             G.play(@()friendsEnter(friends));
+        else
+            % reset friend to neutral state
+            friends{response.button_clicked}.State = 'swim1';
         end
         
         fprintf('\n------------------------------------ Trial\n');
@@ -126,7 +129,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         playSounds(player{2}, friends{2}, bubbles)
         playSounds(isi)
         playSounds(player{3}, friends{3}, bubbles)
-        
+ 
+        % show that friend are cliccable
+        for ifriend = 1 : 3
+            friends{ifriend}.State = 'choice';
+        end
+         
         tic();
         % Collect the response
         if ~simulate
@@ -141,6 +149,13 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             end
             [response.response_time, response.timestamp]= deal(1);
 
+        end
+        
+        % reset friends to previous state, besides from the clicked one
+        availableResponses = 1:3;
+        availableResponses(response.button_clicked) = [];
+        for ifriend = 1 : 2
+            friends{availableResponses(ifriend)}.State = 'swim1';
         end
         
         response.correct = (response.button_clicked == response.button_correct);
@@ -207,7 +222,12 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         
         [results, expe, terminate, nturns] = ...
             determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
-                
+        
+        if (strcmp(phase, 'training')) && (correctTrials > 1) && (~response.correct)
+            terminate = true;
+            pause(5);
+        end
+        
         if terminate
             gameCommands.State = 'finish';
             save(options.res_filename, 'options', 'expe', 'results');
