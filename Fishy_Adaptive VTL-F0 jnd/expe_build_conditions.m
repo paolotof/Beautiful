@@ -48,10 +48,10 @@ options.training.change_step_size_n_trials = 15; % Change step-size every...
 options.training.initial_step_size  = 3;% PT: speed up the adaptive procedure% Semitones
 options.training.starting_difference = 6;% PT: speed up the adaptive procedure % Semitones
 options.training.down_up = [2, 1]; % 2-down, 1-up => 70.7%
-options.training.terminate_on_nturns = 12;
-options.training.terminate_on_ntrials = 12;
+% options.training.terminate_on_nturns = 12;
+options.training.terminate_on_ntrials = 8;
 options.training.retry = 0; % Number of retry if measure failed
-options.training.threshold_on_last_n_trials = 6;
+% options.training.threshold_on_last_n_trials = 6;
 
 %----------- Stimuli options
 options.test.f0s  = [242, 121, round(242*2^(5/12))]; % 242 = average pitch of original female voice
@@ -122,8 +122,6 @@ else
         options.sound_path = '../Sounds/Dutch_CV/equalized';
         options.tmp_path = '../Sounds/Dutch_CV/processed';
     end
-
-    
 end
 
 if isempty(dir(options.sound_path))

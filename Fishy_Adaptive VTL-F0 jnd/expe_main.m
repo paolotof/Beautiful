@@ -86,9 +86,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     while true
         
         pauseGame = false;
-                
         countTrials = countTrials + 1;
-                
         
         % add new friend if previous answer was correct
         if previousRespAcc
@@ -102,6 +100,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             G.play(@()friendsEnter(friends));
         else
             % reset friend to neutral state
+            pause(1);
             friends{response.button_clicked}.State = 'swim1';
         end
         
@@ -244,7 +243,7 @@ end % end of the 'conditions' while
 if mean([expe.( phase ).conditions.done])==1
     %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
 %     questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
-    ready2start(phase);
+    ready2start(phase, expe);
 end
 
 
