@@ -1,4 +1,5 @@
-function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGame(maxTurns)
+function [G, bkg, bigFish, bubbles, gameCommands, hourglass] = setUpGame(maxTurns)
+%function [G, bkg, bigFish, bubbles, screen2, gameCommands, hourglass] = setUpGame(maxTurns)
 
     % to test
     % addpath('../lib/SpriteKit');

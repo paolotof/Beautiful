@@ -47,10 +47,10 @@ if ~exist(res_filename, 'file')
     end
 else
     opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK'));
-    switch lower(opt) 
+    switch opt 
         case 'Cancel'
             return
-        case 'no'
+        case 'No'
             delete(res_filename)
             expe_build_conditions(options);
     end

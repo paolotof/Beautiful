@@ -18,25 +18,12 @@ clear tmp
 nbreak = 0;
 starting = 1;
 
-% PT: we are removing all feedback for wrong/ungiven responses so that kids
-% aren't tempted to get the fishes to do something different
-% if isempty('../Sounds/buzz.wav')
-%     fs = 44100;
-%     buzz = (1:(44100 * .5)) / 44100;
-%     buzz = sin(2 * pi * 500 * buzz);
-% else
-%     
-%     [buzz, fs] = audioread('../Sounds/buzz.wav');
-% end
-% buzzer = audioplayer(buzz, fs);
-
 beginning_of_session = now();
 
 %=============================================================== MAIN LOOP
 simulate = strncmp(options.subject_name, 'simulation', 8);
 while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are some conditions to do
     
-
     starting = 0;
     
     if simulate
@@ -47,7 +34,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 %         % more correct answers
 %         simulResp = repmat([0 1 1 1 1 1 1 1], 1, 25);
 %         simulResp = simulResp(randperm(length(simulResp)));
-
     end
     
     % Find first condition not done
@@ -63,7 +49,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     u = u / sqrt(sum(u.^2));
     
     fprintf('----------\nUnitary vector: %s\n', num2str(u));
-    
     %---------------------------------- Adaptive Procedure
     
     difference = options.(phase).starting_difference;
@@ -76,7 +61,8 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     beginning_of_run = now();
     
     %% Game STUFF
-    [G, bkg, bigFish, bubbles, scrsz, gameCommands, hourglass] = setUpGame(options.(phase).terminate_on_nturns);
+    [G, bkg, bigFish, bubbles, gameCommands, hourglass] = setUpGame(options.(phase).terminate_on_nturns);
+    %[G, bkg, bigFish, bubbles, scrsz, gameCommands, hourglass] = setUpGame(options.(phase).terminate_on_nturns);
     G.onMouseRelease = @buttondownfcn;
     %% start the game
     if ~simulate
