@@ -92,7 +92,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         if previousRespAcc
             
             friends = updateFriend(G.Size(1), G.Size(2), friendsID{mod(countTrials, length(friendsID)) + 1});
-            speedSwim = 5; % speed fish swim in. NOTE: it's inverted, high number = slow
+            speedSwim = 40; % speed fish swim in. NOTE: it's inverted, high number = slow
             
             for ifriends = 1 : length(friends)
                 friends{ifriends} = swim(friends{ifriends}, speedSwim, 'in', G.Size(1));

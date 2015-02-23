@@ -11,6 +11,9 @@ function [expe, options] = repeatOrStop(phase, options)
     if strcmp(button, 'No')
         msgbox('OK, ciaociao')
         close(gcf);
+        expe = [];
+        options = [];
+        
     else
         uiwait(msgbox('New stimuli are generating ## New structures will be saved'))
 %         res_filename = fullfile(options.result_path, sprintf('%s%s.mat', options.result_prefix, options.subject_name));
