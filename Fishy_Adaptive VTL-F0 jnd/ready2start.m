@@ -1,4 +1,4 @@
-function [out] = ready2start(input)
+function [out] = repeatOrStop(input)
 % EG: Note that these are displayed on the experimenter's screen
 
     oldimage = get(0,'DefaultImageVisible');

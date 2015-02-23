@@ -32,7 +32,7 @@ if ~exist(options.result_path, 'dir')
     mkdir(options.result_path);
 end
 
-res_filename = fullfile(options.result_path, sprintf('%s%s.mat', options.result_prefix, subject));
+res_filename = fullfile(options.result_path, sprintf('%s%s.mat', options.result_prefix, options.subject_name));
 options.res_filename = res_filename;
 
 if ~exist(res_filename, 'file')
@@ -46,13 +46,20 @@ if ~exist(res_filename, 'file')
             error('Unknown option: %s',opt)
     end
 else
-    opt = char(questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK'));
+    opt = questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK');
     switch opt 
         case 'Cancel'
             return
         case 'No'
-            delete(res_filename)
-            expe_build_conditions(options);
+            opt = questdlg(sprintf('The result file %s will deleted!\n Are you sure?', res_filename),'Warning','Yes','No','No');
+            switch opt 
+                case 'Yes'
+                    delete(res_filename)
+                    expe_build_conditions(options);
+                case 'No'
+                    return
+            end
+
     end
    
 end

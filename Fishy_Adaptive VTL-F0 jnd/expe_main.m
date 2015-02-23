@@ -205,12 +205,23 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             play(G, @()celebrate(bigFish));
         end
         
-        [results, expe, terminate, nturns] = ...
-            determineIfExit(results, expe, steps, differences, phase, options, response_accuracy, n_attempt, i_condition, u);
         
-        if (strcmp(phase, 'training')) && (correctTrials > 1) && (~response.correct)
-            terminate = true;
-            pause(5);
+%         if (strcmp(phase, 'training')) && (correctTrials > 1) && (~response.correct)
+        if (strcmp(phase, 'training')) 
+            terminate = false;
+            if (countTrials == options.training.terminate_on_ntrials)
+                terminate = true;
+                %             expe.( phase ).conditions.done
+                expe.training.conditions(i_condition).done = 1;
+                pause(5);
+            end
+        else
+            [results, expe, terminate, nturns] = ...
+                determineIfExit(results, expe, steps, differences, phase, options, ...
+                response_accuracy, n_attempt, i_condition, u);
+
+            hourglass.State = sprintf('hourglass_%d', nturns);
+
         end
         
         if terminate
@@ -220,8 +231,6 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             close(G.FigureHandle)
             break;
         end
-        
-        hourglass.State = sprintf('hourglass_%d', nturns);
         
         % Save the responses
         results.( phase ).conditions(i_condition).att(n_attempt).duration = response.timestamp - beginning_of_run;
@@ -239,11 +248,11 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
 end % end of the 'conditions' while 
 
 
-% If we're out of the loop because the phase is finished, tell the subject
+% If we're out of the loop because the phase is finished ask the
+% experimenter if s/he wants a repetition
 if mean([expe.( phase ).conditions.done])==1
-    %msgbox(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')), '', 'warn');
-%     questdlg2(sprintf('The "%s" phase is finished. Thank you!', strrep(phase, '_', ' ')),h,'OK','OK');
-    ready2start(phase, expe);
+    [expe, options] = repeatOrStop(phase, options);
+    expe_main(options, phase);
 end
 
 

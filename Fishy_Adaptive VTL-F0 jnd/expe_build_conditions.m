@@ -48,7 +48,7 @@ options.training.change_step_size_n_trials = 15; % Change step-size every...
 options.training.initial_step_size  = 3;% PT: speed up the adaptive procedure% Semitones
 options.training.starting_difference = 6;% PT: speed up the adaptive procedure % Semitones
 options.training.down_up = [2, 1]; % 2-down, 1-up => 70.7%
-% options.training.terminate_on_nturns = 12;
+options.training.terminate_on_nturns = 0; % PT uncomment because setUpGame uses this value
 options.training.terminate_on_ntrials = 8;
 options.training.retry = 0; % Number of retry if measure failed
 % options.training.threshold_on_last_n_trials = 6;
