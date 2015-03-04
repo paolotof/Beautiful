@@ -66,6 +66,8 @@ end
 
 expe_main(options, phase);
 
+results2txt
+
 %------------------------------------------
 % Clean up the path
 

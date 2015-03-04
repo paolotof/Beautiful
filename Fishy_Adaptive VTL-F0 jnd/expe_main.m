@@ -27,10 +27,10 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
     starting = 0;
     
     if simulate
-        simulResp = randi([0,1],151,1);
+%       simulResp = randi([0,1],151,1);
         % less correct answers
-%         simulResp = repmat([0 0 1], 1, 50);
-%         simulResp = simulResp(randperm(length(simulResp)));
+         simulResp = repmat([0 0 1], 1, 50);
+         simulResp = simulResp(randperm(length(simulResp)));
 %         % more correct answers
 %         simulResp = repmat([0 1 1 1 1 1 1 1], 1, 25);
 %         simulResp = simulResp(randperm(length(simulResp)));
@@ -109,18 +109,18 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         [response.button_correct, player, isi, response.trial] = expe_make_stim(options, difference, u, condition);
                        
         %% leftEl
+        
         playSounds(player{1}, friends{1}, bubbles)
         playSounds(isi)
         playSounds(player{2}, friends{2}, bubbles)
         playSounds(isi)
         playSounds(player{3}, friends{3}, bubbles)
- 
+        tic();
         % show that friend are cliccable
         for ifriend = 1 : 3
             friends{ifriend}.State = 'choice';
         end
          
-        tic();
         % Collect the response
         if ~simulate
             uiwait();
@@ -325,34 +325,40 @@ end
             
             response.timestamp = now();
             response.response_time = toc();
-            response.button_clicked = 0; % default in case they click somewhere else
-            
+            %response.button_clicked = 0; % default in case they click somewhere else
+            resumeGame = false;
             for i=1:3
                 if (locClick(1) >= friends{i}.clickL) && (locClick(1) <= friends{i}.clickR) && ...
                         (locClick(2) >= friends{i}.clickD) && (locClick(2) <= friends{i}.clickU)
                     response.button_clicked = i;
+                    resumeGame = true;
                 end
             end
             if (locClick(1) >= hourglass.clickL) && (locClick(1) <= hourglass.clickR) && ...
                     (locClick(2) >= hourglass.clickD) && (locClick(2) <= hourglass.clickU)
-%             if (response.button_clicked == 4)
                 if pauseGame
                     pauseGame = false;
-                    % replay the previous trial
+                    %% replay the previous trial
+                    % restore friends
+                    for ifriend = 1 : 3
+                        friends{ifriend}.State = 'swim1';
+                    end
                     playSounds(player{1}, friends{1}, bubbles)
                     playSounds(isi)
                     playSounds(player{2}, friends{2}, bubbles)
                     playSounds(isi)
                     playSounds(player{3}, friends{3}, bubbles)
                     tic();
+                    % show that friend are cliccable
+                    for ifriend = 1 : 3
+                        friends{ifriend}.State = 'choice';
+                    end
                 else
                     pauseGame = true;
                 end
-%             else
-%                 uiresume;
             end
             
-            if (response.button_clicked >= 1 && response.button_clicked <= 3)
+            if resumeGame % (response.button_clicked >= 1 && response.button_clicked <= 3)
                 uiresume
             end
             

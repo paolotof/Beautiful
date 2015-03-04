@@ -146,7 +146,6 @@ function [y, fs] = straight_process(syll, t_f0, ser, options)
         if exist(mat, 'file')
             load(mat);
         else
-            %         [x, fs] = wavread(wavIn); % Warning: WAVREAD will be removed in a future release. Use AUDIOREAD instead.
             [x, fs] = audioread(wavIn);
             [f0, ap] = exstraightsource(x, fs);
             %old_f0 = f0;
