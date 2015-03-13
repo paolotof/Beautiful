@@ -11,10 +11,16 @@ function img = resizeBackgroundToScreenSize(screenSize, bkgName)
     
     underscore = strfind(bkgName, '_');
     nameFile = [bkgName(1 : underscore), bkgName(underscore + 3 : end)];
-    [img] = imread(nameFile);
-    [heigthPic, ~, ~] = size(img); % only heigth picture and height screen will match since bkg is scrolling picture width is always larger than screen length
-    
-    if heigthPic ~= screenHeigth
+    rescaleScreen = true;
+    if exist(nameFile, 'file')
+        [img] = imread(nameFile);
+        [heigthPic, ~, ~] = size(img); % only heigth picture and height screen will match since bkg is scrolling picture width is always larger than screen length
+        if heigthPic == screenHeigth
+            rescaleScreen = false;
+        end
+    end
+        
+    if rescaleScreen
         clear img
         [X] = imread(bkgName);
         [heigthPic, widthPic, ~] = size(X);

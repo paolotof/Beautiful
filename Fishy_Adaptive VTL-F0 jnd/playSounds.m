@@ -4,7 +4,6 @@ function playSounds(varargin)
     iter = 1;
     play(varargin{1})
     while true
-        if nargin >= 2
             statusCounter = mod(floor(iter/10), 4) + 1;
 %             if (mod(floor(iter/10), 4) == 0)
                 varargin{2}.State = ['talk' sprintf('%i', statusCounter)];
@@ -12,7 +11,6 @@ function playSounds(varargin)
                 varargin{3}.Location = [varargin{2}.bubblesX, varargin{2}.bubblesY];
 %             end
             iter = iter + 1;
-        end
         if ~isplaying(varargin{1})
             break;
         end
