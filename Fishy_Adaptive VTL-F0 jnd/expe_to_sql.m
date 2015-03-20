@@ -1,6 +1,6 @@
 function db_filename = expe_to_sql()
 
-%addpath('./mksqlite');
+addpath('./mksqlite');
 
 options = expe_options();
 
@@ -128,7 +128,7 @@ mksqlite(db, 'close');
 
 expe_sql_add_individual_data();
 
-%rmpath('./mksqlite');
+rmpath('./mksqlite');
 
 %==========================================================================
 function md = md5(msg)

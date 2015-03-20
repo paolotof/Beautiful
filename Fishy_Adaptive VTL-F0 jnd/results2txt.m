@@ -1,6 +1,7 @@
 fileID = fopen('summaryResults.txt','wt');
 fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tthrs\tacc\tRT \n');
-cd('/Users/dbaskent/resultsFishy/');
+% cd('/Users/dbaskent/resultsFishy/');
+cd('/home/paolot/resultsFishy/');
 files = dir('*.mat');
 nFiles = length(files);
 for ifiles = 1:nFiles

@@ -7,11 +7,10 @@ function expe_main(expe, options, phase)
 
 results = struct();
 tmp = load(options.res_filename); % options, expe, results
-
+options = tmp.options;
+expe = tmp.expe;
 if isfield(tmp, 'results')
     results = tmp.results;
-    options = tmp.options;
-    expe = tmp.expe;
 end
 
 clear tmp
