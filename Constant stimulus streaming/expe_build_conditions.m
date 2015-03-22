@@ -1,26 +1,5 @@
 function [expe, options] = expe_build_conditions(options)
 
-%--------------------------------------------------------------------------
-% Etienne Gaudrain <etienne.gaudrain@mrc-cbu.cam.ac.uk>
-% 2010-03-15, 2011-10-20
-% Medical Research Council, Cognition and Brain Sciences Unit, UK
-%--------------------------------------------------------------------------
-
-%{
-options.instructions.training = ['You are going to hear some sentences.\n\nYour job is to listen to what ‘Baron’ has to do.\n‘Baron’ is an old-fashioned name.\n'...
-    'He will be told to go to a colour and a number.\n\n'...
-    'Remember, pretend your name is ‘Baron’ and listen carefully to find out what colour and number to click on.'];
-%}
-
-options.instructions.test = ['You are going to hear a sequence of syllables.\n\n'...
-    'One syllable is repeated, and you''ll have to indicate which one.'];
-
-%options.instructions.training_2 = [options.instructions.test, ' You will get some practice first, then you will have a chance to ask questions again if you want.'];
-
-%---------- GUI options
-options.n_rows = 2;
-options.n_cols = 3;
-
 %----------- Signal options
 options.fs = 44100;
 options.attenuation_dB = 27; % General attenuation

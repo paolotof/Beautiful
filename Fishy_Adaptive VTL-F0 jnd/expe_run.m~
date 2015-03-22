@@ -1,10 +1,14 @@
 function expe_run(subject, phase, language)
 
-% expe_run('subject', 'training', 'English')
+
 % expe_run(subject, phase)
 %   phase can be: 'training', 'test'
 %   language should be 'Dutch', 'English'
 
+%--------------------------------------------------------------------------
+% Etienne Gaudrain <etienne.gaudrain@mrc-cbu.cam.ac.uk> - 2010-03-16
+% Medical Research Council, Cognition and Brain Sciences Unit, UK
+%--------------------------------------------------------------------------
 
 options = struct();
 options.language = language;
@@ -13,6 +17,7 @@ options = expe_options(options);
 options.subject_name  = subject;
 
 %-------------------------------------------------
+% Set appropriate path
 
 % current_dir = fileparts(mfilename('fullpath'));
 added_path  = {};
@@ -46,11 +51,6 @@ if ~exist(res_filename, 'file')
 else
     opt = questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK');
     switch opt 
-        case 'OK'
-            tmp = load(options.res_filename); % options, expe, results
-            results = tmp.results;
-            options = tmp.options;
-            expe = tmp.expe;
         case 'Cancel'
             return
         case 'No'

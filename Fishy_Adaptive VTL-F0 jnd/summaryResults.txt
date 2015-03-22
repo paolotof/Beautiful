@@ -1,4 +1,5 @@
 subID	phase	labelV1	f0V1	serV1	labelV2	f0V2	serV2	att	thrs	acc	RT 
+<<<<<<< HEAD
  Max	training	female	242	1.00	male-vtl	242	0.80	1	4	NaN	0.67	5.40	
  Max	training	female	242	1.00	male-vtl	242	0.80	2	4	NaN	0.67	6.61	
  pilot1	training	female	242	1.00	male-vtl	242	0.80	1	4	NaN	0.67	5.40	
@@ -63,3 +64,5 @@ jndpilot9	test	female	242	1.00	male-gpr	121	1.00	1	35	3.76	0.76	1.58
 jndpilot9	test	female	242	1.00	male-vtl	242	0.80	1	33	1.57	0.81	1.55	
 pilotS01	test	female	242	1.00	male-gpr	121	1.00	1	27	3.57	0.81	1.18	
 pilotS01	test	female	242	1.00	male-vtl	242	0.80	1	47	5.27	0.76	2.10	
+=======
+>>>>>>> 654c6782881e8734eeab18181e2533c6188865ab

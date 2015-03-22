@@ -1,6 +1,12 @@
 cd('C:\Users\Jacqueline Libert\Documents\Github\Results\Fishy\Resultfiles');
 fileID = fopen('summaryResults.txt','wt');
+<<<<<<< HEAD
 fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tnTrials\tthrs\tacc\tRT \n');
+=======
+fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tthrs\tacc\tRT \n');
+% cd('/Users/dbaskent/resultsFishy/');
+cd('/home/paolot/resultsFishy/');
+>>>>>>> 654c6782881e8734eeab18181e2533c6188865ab
 files = dir('*.mat');
 nFiles = length(files);
 for ifiles = 1:nFiles

@@ -1,6 +1,6 @@
 function options = expe_options(options)
 
-options.result_path   = '~/resultsFishy/'; %PT: changed so that the results file aren't stored on github
+options.result_path   = '~/resultsBeautiful/Fishy/'; %PT: changed so that the results file aren't stored on github
 options.result_prefix = 'jvo_';
 
 % The current status of the experiment, number of trial and phase, is
