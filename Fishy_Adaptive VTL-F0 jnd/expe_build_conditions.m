@@ -109,9 +109,9 @@ else
     disp('-------------------------');
     options.sound_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/equalized'];
     options.tmp_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/processed'];
-    if ~isempty(dir(['../Sounds/' options.language '_CV/equalized']))
-        options.sound_path = ['../Sounds/' options.language '_CV/equalized'];
-        options.tmp_path = ['../Sounds/' options.language '_CV/processed'];
+    if ~isempty(dir(['C:/Users/Jacqueline Libert/Documents/Sounds/' options.language '_CV/equalized']))
+        options.sound_path = ['C:/Users/Jacqueline Libert/Documents/Sounds/' options.language '_CV/equalized'];
+        options.tmp_path = ['C:/Users/Jacqueline Libert/Documents/Sounds/' options.language '_CV/processed'];
     end
 end
 
