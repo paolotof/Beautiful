@@ -1,10 +1,5 @@
 function expe_main(expe, options, phase)
 
-%--------------------------------------------------------------------------
-% Etienne Gaudrain <e.p.c.gaudrain@umcg.nl> - 2013-02-24
-% RuG / UMCG KNO, Groningen, NL
-%--------------------------------------------------------------------------
-
 results = struct();
 tmp = load(options.res_filename); % options, expe, results
 

@@ -1,9 +1,19 @@
-function expe_run(subject, phase, language)
+function expe_run(varargin)
 
 % expe_run('subject', 'training', 'English')
 % expe_run(subject, phase)
 %   phase can be: 'training', 'test'
 %   language should be 'Dutch', 'English'
+
+    if nargin == 0
+        subject = 'subject';
+        phase = 'training';
+        language = 'English';
+    else
+        subject = varargin{1};
+        phase = varargin{2};
+        language = varargin{3};
+    end
 
 
 options = struct();
