@@ -1,16 +1,12 @@
-function expe_main(options, phase)
-
-%--------------------------------------------------------------------------
-% Etienne Gaudrain <e.p.c.gaudrain@umcg.nl> - 2013-02-24
-% RuG / UMCG KNO, Groningen, NL
-%--------------------------------------------------------------------------
+function expe_main(expe, options, phase)
 
 results = struct();
 tmp = load(options.res_filename); % options, expe, results
-options = tmp.options;
-expe = tmp.expe;
+
 if isfield(tmp, 'results')
     results = tmp.results;
+    options = tmp.options;
+    expe = tmp.expe;
 end
 
 clear tmp
@@ -252,7 +248,7 @@ end % end of the 'conditions' while
 % experimenter if s/he wants a repetition
 if mean([expe.( phase ).conditions.done])==1
     [expe, options] = repeatOrStop(phase, options);
-    expe_main(options, phase);
+    expe_main(expe, options, phase);
 end
 
 

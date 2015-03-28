@@ -1,6 +1,8 @@
+cd('C:\Users\Jacqueline Libert\Documents\Github\Results\Fishy\Resultfiles');
 fileID = fopen('summaryResults.txt','wt');
-fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tthrs\tacc\tRT \n');
-cd('/Users/dbaskent/resultsFishy/');
+fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tnTrials\tthrs\tacc\tRT \n');
+% cd('/Users/dbaskent/resultsFishy/');
+% cd('/home/paolot/resultsFishy/');
 files = dir('*.mat');
 nFiles = length(files);
 for ifiles = 1:nFiles
@@ -14,7 +16,8 @@ for ifiles = 1:nFiles
         nCond = length(results.(phases{iphase}).conditions);
         for iCond = 1 : nCond
             nAttempts = length(results.(phases{iphase}).conditions(iCond).att);
-            for iAttempt = 1 : nAttempts                
+            for iAttempt = 1 : nAttempts
+                % ntrials = length(results.(phases{iphase}).conditions(iCond).att(iAttempt).differences);
                 fprintf(fileID,'%s\t', ppID);
                 fprintf(fileID,'%s\t', phases{iphase});
                 fprintf(fileID,'%s\t', options.(phases{iphase}).voices(options.(phases{iphase}).voice_pairs(iCond,1)).label);
@@ -24,6 +27,7 @@ for ifiles = 1:nFiles
                 fprintf(fileID,'%i\t', options.(phases{iphase}).voices(options.(phases{iphase}).voice_pairs(iCond,2)).f0);
                 fprintf(fileID,'%1.2f\t', options.(phases{iphase}).voices(options.(phases{iphase}).voice_pairs(iCond,2)).ser);
                 fprintf(fileID,'%i\t', iAttempt);
+                fprintf(fileID,'%i\t', length([results.(phases{iphase}).conditions(iCond).att(iAttempt).differences]));
                 if isempty(results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold)
                     fprintf(fileID,'NaN\t');
                 else
@@ -36,11 +40,11 @@ for ifiles = 1:nFiles
                 fprintf(fileID,'%2.2f\t', ...
                     mean([results.(phases{iphase}).conditions(iCond).att(iAttempt).responses.response_time]));
 %                 fprintf(fileID,'%2.2f ', ...
-%                     results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
+%                 results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
 %                 fprintf(fileID,'%2.2f ', ...
-%                     results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
+%                 results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
 %                 fprintf(fileID,'%2.2f ', ...
-%                     results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
+%                 results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold);
                 fprintf(fileID,'\n');
             end
         end

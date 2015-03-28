@@ -1,14 +1,5 @@
 function [expe, options] = expe_build_conditions(options)
 
-%--------------------------------------------------------------------------
-% Etienne Gaudrain <etienne.gaudrain@mrc-cbu.cam.ac.uk>
-% 2010-03-15, 2011-10-20
-% Medical Research Council, Cognition and Brain Sciences Unit, UK
-% --
-% Etienne Gaudrain <e.p.c.gaudrain@umcg.nl>
-% 2013-10-31
-% University Medical Center Groningen, NL
-%--------------------------------------------------------------------------
 
 
 options.instructions.training = ['You are going to hear three triplets of different syllables.\nOne of the triplets is said with a different voice.\n'...
@@ -110,17 +101,25 @@ options.training.voice_pairs = [...
     1 4]; % Female -> Male GPR
 
 if is_test_machine
-    options.sound_path = '~/Sounds/Dutch_CV/equalized';
-    options.tmp_path   = '~/Sounds/Dutch_CV/processed';
+    options.sound_path = ['~/Sounds/' options.language '_CV/equalized'];
+    options.tmp_path   = ['~/Sounds/' options.language '_CV/processed'];
 else
     disp('-------------------------');
     disp('--- On coding machine ---');
     disp('-------------------------');
+<<<<<<< HEAD
     options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
     options.tmp_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
     if ~isempty(dir('/Users/laptopKno/Sounds/Dutch_CV/equalized'))
         options.sound_path = '/Users/laptopKno/Sounds/Dutch_CV/equalized';
         options.tmp_path = '/Users/laptopKno/Sounds/Dutch_CV/processed';
+=======
+    options.sound_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/equalized'];
+    options.tmp_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/processed'];
+    if ~isempty(dir(['../Sounds/' options.language '_CV/equalized']))
+        options.sound_path = ['../Sounds/' options.language '_CV/equalized'];
+        options.tmp_path = ['../Sounds/' options.language '_CV/processed'];
+>>>>>>> 9158d1bae37991b29b7a7943c845bc83b8c92164
     end
 end
 

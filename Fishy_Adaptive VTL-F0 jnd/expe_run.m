@@ -1,20 +1,28 @@
-function expe_run(subject, phase)
+function expe_run(varargin)
 
+% expe_run('subject', 'training', 'English')
 % expe_run(subject, phase)
 %   phase can be: 'training', 'test'
+%   language should be 'Dutch', 'English'
 
-%--------------------------------------------------------------------------
-% Etienne Gaudrain <etienne.gaudrain@mrc-cbu.cam.ac.uk> - 2010-03-16
-% Medical Research Council, Cognition and Brain Sciences Unit, UK
-%--------------------------------------------------------------------------
+    if nargin == 0
+        subject = 'subject';
+        phase = 'training';
+        language = 'English';
+    else
+        subject = varargin{1};
+        phase = varargin{2};
+        language = varargin{3};
+    end
+
 
 options = struct();
+options.language = language;
 options = expe_options(options);
 
 options.subject_name  = subject;
 
 %-------------------------------------------------
-% Set appropriate path
 
 % current_dir = fileparts(mfilename('fullpath'));
 added_path  = {};
@@ -39,7 +47,7 @@ if ~exist(res_filename, 'file')
     opt = char(questdlg(sprintf('The subject "%s" doesn''t exist. Create it?', subject),'JVO','OK','Cancel','OK'));
     switch lower(opt)
         case 'ok',
-            expe_build_conditions(options);
+            [expe, options] = expe_build_conditions(options);
         case 'cancel'
             return
         otherwise
@@ -48,6 +56,11 @@ if ~exist(res_filename, 'file')
 else
     opt = questdlg(sprintf('Found "%s". Use this file?', res_filename),'JVO','OK','Cancel','No','OK');
     switch opt 
+        case 'OK'
+            tmp = load(options.res_filename); % options, expe, results
+            results = tmp.results;
+            options = tmp.options;
+            expe = tmp.expe;
         case 'Cancel'
             return
         case 'No'
@@ -55,7 +68,7 @@ else
             switch opt 
                 case 'Yes'
                     delete(res_filename)
-                    expe_build_conditions(options);
+                    [expe, options] = expe_build_conditions(options);
                 case 'No'
                     return
             end
@@ -64,7 +77,7 @@ else
    
 end
 
-expe_main(options, phase);
+expe_main(expe, options, phase);
 
 results2txt
 
