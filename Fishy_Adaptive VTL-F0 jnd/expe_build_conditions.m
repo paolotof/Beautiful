@@ -118,9 +118,9 @@ else
     disp('-------------------------');
     options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
     options.tmp_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
-    if ~isempty(dir('../Sounds/Dutch_CV/equalized'))
-        options.sound_path = '../Sounds/Dutch_CV/equalized';
-        options.tmp_path = '../Sounds/Dutch_CV/processed';
+    if ~isempty(dir('/Users/laptopKno/Sounds/Dutch_CV/equalized'))
+        options.sound_path = '/Users/laptopKno/Sounds/Dutch_CV/equalized';
+        options.tmp_path = '/Users/laptopKno/Sounds/Dutch_CV/processed';
     end
 end
 
