@@ -1,6 +1,7 @@
 cd('C:\Users\Jacqueline Libert\Documents\Github\Results\Fishy\Resultfiles');
+% cd('/home/paolot/resultsBeautiful/Fishy');
 fileID = fopen('summaryResults.txt','wt');
-fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tnTrials\tthrs\tacc\tRT \n');
+fprintf(fileID,'subID\tphase\tlabelV1\tf0V1\tserV1\tlabelV2\tf0V2\tserV2\tatt\tduration\tnTrials\tthrs\tacc\tRT \n');
 % cd('/Users/dbaskent/resultsFishy/');
 % cd('/home/paolot/resultsFishy/');
 files = dir('*.mat');
@@ -27,6 +28,7 @@ for ifiles = 1:nFiles
                 fprintf(fileID,'%i\t', options.(phases{iphase}).voices(options.(phases{iphase}).voice_pairs(iCond,2)).f0);
                 fprintf(fileID,'%1.2f\t', options.(phases{iphase}).voices(options.(phases{iphase}).voice_pairs(iCond,2)).ser);
                 fprintf(fileID,'%i\t', iAttempt);
+                fprintf(fileID,'%f\t', results.(phases{iphase}).conditions(iCond).att(iAttempt).duration);
                 fprintf(fileID,'%i\t', length([results.(phases{iphase}).conditions(iCond).att(iAttempt).differences]));
                 if isempty(results.(phases{iphase}).conditions(iCond).att(iAttempt).threshold)
                     fprintf(fileID,'NaN\t');
