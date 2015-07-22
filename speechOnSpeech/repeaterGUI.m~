@@ -24,7 +24,7 @@ function repeaterGUI
         if iTrial >1    
             set(hstart, 'String', 'CONTINUE');
         end
-        scorerGUI(VU_zinnen{rndSequence(iTrial)}, subID);
+        scorerGUIguiWithVariableNumOfButtons(VU_zinnen{rndSequence(iTrial)}, subID);
         iTrial = iTrial + 1;
     end
 
