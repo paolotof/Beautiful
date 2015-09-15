@@ -107,26 +107,24 @@ else
     disp('-------------------------');
     disp('--- On coding machine ---');
     disp('-------------------------');
-<<<<<<< HEAD
-    options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
-    options.tmp_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
-    if ~isempty(dir('/Users/laptopKno/Sounds/Dutch_CV/equalized'))
-        options.sound_path = '/Users/laptopKno/Sounds/Dutch_CV/equalized';
-        options.tmp_path = '/Users/laptopKno/Sounds/Dutch_CV/processed';
-=======
-    options.sound_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/equalized'];
-    options.tmp_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/processed'];
-<<<<<<< HEAD
-    if ~isempty(dir(['C:/Users/Jacqueline Libert/Documents/Sounds/NVA_words/' options.language '_CV/equalized']))
+   % options.sound_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/equalized';
+   % options.tmp_path = '/home/paolot/soundFiles/Sounds/Dutch_CV/processed';
+%     if ~isempty(dir('/Users/laptopKno/Sounds/Dutch_CV/equalized'))
+%         options.sound_path = '/Users/laptopKno/Sounds/Dutch_CV/equalized';
+%         options.tmp_path = '/Users/laptopKno/Sounds/Dutch_CV/processed';
+    
+        %options.sound_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/equalized'];
+    %options.tmp_path = ['/home/paolot/soundFiles/Sounds/' options.language '_CV/processed'];
+
+    %if ~isempty(dir(['C:/Users/Jacqueline Libert/Documents/Sounds/NVA_words/' options.language '_CV/equalized']))
         options.sound_path = ['C:/Users/Jacqueline Libert/Documents/Sounds/NVA_words/' options.language '_CV/equalized'];
         options.tmp_path = ['C:/Users/Jacqueline Libert/Documents/Sounds/NVA_words/' options.language '_CV/processed'];
-=======
-    if ~isempty(dir(['../Sounds/' options.language '_CV/equalized']))
-        options.sound_path = ['../Sounds/' options.language '_CV/equalized'];
-        options.tmp_path = ['../Sounds/' options.language '_CV/processed'];
->>>>>>> 9158d1bae37991b29b7a7943c845bc83b8c92164
->>>>>>> 846e48eab04529524b70f2228114ed4685af3b17
-    end
+
+%     if ~isempty(dir(['../Sounds/' options.language '_CV/equalized']))
+%         options.sound_path = ['../Sounds/' options.language '_CV/equalized'];
+%         options.tmp_path = ['../Sounds/' options.language '_CV/processed'];
+
+%     end
 end
 
 if isempty(dir(options.sound_path))

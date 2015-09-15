@@ -202,7 +202,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
         end
         
         
-%         if (strcmp(phase, 'training')) && (correctTrials > 1) && (~response.correct)
+%        if (strcmp(phase, 'training')) && (correctTrials > 1) && (~response.correct)
         if (strcmp(phase, 'training')) 
             terminate = false;
             if (countTrials == options.training.terminate_on_ntrials)
