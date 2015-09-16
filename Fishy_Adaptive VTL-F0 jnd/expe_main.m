@@ -96,7 +96,7 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
             G.play(@()friendsEnter(friends));
         else
             % reset friend to neutral state
-            pause(1);
+            pause(0.5);
             friends{response.button_clicked}.State = 'swim1';
         end
         
@@ -128,16 +128,26 @@ while mean([expe.( phase ).conditions.done])~=1 % Keep going while there are som
                 availAnswers(response.button_correct) = [];
                 response.button_clicked = availAnswers(1);
             end
+            
             [response.response_time, response.timestamp]= deal(1);
 
         end
         
         % reset friends to previous state, besides from the clicked one
-        availableResponses = 1:3;
-        availableResponses(response.button_clicked) = [];
-        for ifriend = 1 : 2
-            friends{availableResponses(ifriend)}.State = 'swim1';
-        end
+            availableResponses = 1:3;
+            if response.button_clicked ~= response.button_correct
+               friends{response.button_clicked}.State = 'error';
+               availableResponses(response.button_clicked) = [];
+               for ifriend = 1 : 2
+                   friends{availableResponses(ifriend)}.State = 'swim1';
+               end
+            else
+                availableResponses(response.button_clicked) = [];
+                for ifriend = 1 : 2
+                    friends{availableResponses(ifriend)}.State = 'swim1';
+                end
+            end
+            
         
         response.correct = (response.button_clicked == response.button_correct);
         previousRespAcc = (response.button_clicked == response.button_correct);
