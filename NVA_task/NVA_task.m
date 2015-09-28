@@ -2,6 +2,8 @@ function NVA_task(varargin)
 
     if nargin == 0
          options.subID = 'testOne'; 
+    else
+        options.subID = varargin{1};
     end 
     
     pathsToAdd = {'../lib/MatlabCommonTools/'};
@@ -116,10 +118,10 @@ function interface(stimulus, options)
             if exist(filename,'file')
                 load(filename) % this will overwrite repeated words
                 responses.(list{iList}).scores(end+1) = repeatedWords;
-                responses.(list{iList}).word(end+1) = stimulus.(list{iList}).wordsLists{iStim};
+                responses.(list{iList}).word{end+1} = stimulus.(list{iList}).wordsLists(iStim);
             else
                 responses.(list{iList}).scores = repeatedWords;
-                responses.(list{iList}).word = stimulus.(list{iList}).wordsLists{iStim};
+                responses.(list{iList}).word = stimulus.(list{iList}).wordsLists(iStim);
             end
             save(filename, 'responses');
             iStim = iStim + 1;
