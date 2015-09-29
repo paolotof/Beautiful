@@ -11,6 +11,9 @@ function NVA_task(varargin)
     
     options.wordsFolder = [options.home '/Dropbox/NVA words/NVA words/NVA individual words/'];
     options.responsesFolder = [options.home '/results/NVA/'];
+    if ~exist(options.responsesFolder, 'dir')
+        mkdir(options.responsesFolder)
+    end
     options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/NVA.mat'];
     options.lists2use = 46:60; % these are specific for kids
     nvaLists = getListWords(options);
