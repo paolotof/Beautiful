@@ -1,11 +1,7 @@
 function NVA_task(varargin)
 
-    if nargin == 0
-         options.subID = 'testOne'; 
-    else
-        options.subID = varargin{1};
-    end 
-    
+    rng('shuffle')
+
     pathsToAdd = {'../lib/MatlabCommonTools/'};
     for iPath = 1 : length(pathsToAdd)
         addpath(pathsToAdd{iPath})
@@ -16,10 +12,19 @@ function NVA_task(varargin)
     options.wordsFolder = [options.home '/Dropbox/NVA words/NVA words/NVA individual words/'];
     options.responsesFolder = [options.home '/results/NVA/'];
     options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/NVA.mat'];
-    options.lists2use = 46:60;
-    nvaList = getListWords(options);
+    options.lists2use = 46:60; % these are specific for kids
+    nvaLists = getListWords(options);
     
-    interface(nvaList, options);
+    if nargin == 0
+        options.subID = 'testOne'; 
+        if ~isempty(dir([options.responsesFolder '*' options.subID '*.mat']))
+            delete([options.responsesFolder '*' options.subID '*.mat'])
+        end
+    else
+        options.subID = varargin{1};
+    end 
+
+    interface(nvaLists, options);
     
     for iPath = 1 : length(pathsToAdd)
         rmpath(pathsToAdd{iPath})
@@ -115,10 +120,15 @@ function interface(stimulus, options)
         
         if ~isempty(repeatedWords{:})
             filename = [options.responsesFolder 'responses_' options.subID '.mat'];
-            if exist(filename,'file')
+            if exist(filename,'file') 
                 load(filename) % this will overwrite repeated words
-                responses.(list{iList}).scores(end+1) = repeatedWords;
-                responses.(list{iList}).word{end+1} = stimulus.(list{iList}).wordsLists(iStim);
+                if isfield(responses, list{iList})
+                    responses.(list{iList}).scores(end+1) = repeatedWords;
+                    responses.(list{iList}).word{end+1} = stimulus.(list{iList}).wordsLists(iStim);
+                else % this additional else is to extend the structure
+                    responses.(list{iList}).scores = repeatedWords;
+                    responses.(list{iList}).word = stimulus.(list{iList}).wordsLists(iStim);
+                end
             else
                 responses.(list{iList}).scores = repeatedWords;
                 responses.(list{iList}).word = stimulus.(list{iList}).wordsLists(iStim);
@@ -128,6 +138,8 @@ function interface(stimulus, options)
             set(Box.(repeatedWords{:}),'enable','on');
         end
         
+        Box.continue.String = sprintf('PLAY %d', iStim);
+        
         if iStim > length(stimulus.(list{iList}).wordsLists)
             if iList == length(list)
                 Box.continue.String = 'FINISHED';
@@ -136,15 +148,16 @@ function interface(stimulus, options)
             else
                 iList = iList + 1;
                 iStim = 1;
+                repeatedWords = {''};
                 Box.continue.String = sprintf('List  %d', iList);
             end
         else
-            Box.continue.String = sprintf('PLAY %d', iStim);
             [y, fs] = audioread([options.wordsFolder stimulus.(list{iList}).wordsLists{iStim} '.wav']);
             what2play = audioplayer(y, fs);
             playblocking(what2play);
             uiresume();
         end
+        
     end
 
 end
