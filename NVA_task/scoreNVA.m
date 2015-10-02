@@ -40,17 +40,28 @@ end
 
 function phonemescore = getScore(scores)
     phonemescore = 0;
-    for iscore = 1 : length(scores)
-        switch scores{iscore}
-            % case 'zero' % add nothing
-            case 'one'
-                phonemescore = phonemescore + 1 * 3;
-            case 'two'
-                phonemescore = phonemescore + 2 * 3;
-            case 'three'
-                phonemescore = phonemescore + 3 * 3;
-        end
+    %% this is for the clinic set up
+%     for iscore = 1 : length(scores)
+%         switch scores{iscore}
+%             % case 'zero' % add nothing
+%             case 'one'
+%                 phonemescore = phonemescore + 1 * 3;
+%             case 'two'
+%                 phonemescore = phonemescore + 2 * 3;
+%             case 'ALL'
+%                 phonemescore = phonemescore + 3 * 3;
+%         end
+%     end
+    %% this is for the clinic set up
+    phonemescore = cellfun('length', scores);
+    allOnes = find(phonemescore == 1);
+    % check which of the scores with one is either 'ALL' or 'zero'
+    phonemescore(allOnes(~cellfun('isempty', strfind([scores{phonemescore == 1}], 'ALL')))) = 3;
+    if ~ isempty(find(phonemescore == 1))
+        phonemescore(allOnes(~cellfun('isempty', strfind([scores{phonemescore == 1}], 'zero')))) = 0;
     end
+    phonemescore = sum(phonemescore * 3);
+    
     if phonemescore > 50
         phonemescore = phonemescore + 1;
     end

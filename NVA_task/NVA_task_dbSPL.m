@@ -30,6 +30,8 @@ function NVA_task_dbSPL(varargin)
 
     interface(nvaLists, options);
     
+    disp(scoreNVA)
+    
     for iPath = 1 : length(pathsToAdd)
         rmpath(pathsToAdd{iPath})
     end
