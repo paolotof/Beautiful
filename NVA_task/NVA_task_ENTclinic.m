@@ -1,4 +1,4 @@
-function NVA_task(varargin)
+function NVA_task_ENTclinic(varargin)
 
     rng('shuffle')
 
@@ -14,15 +14,8 @@ function NVA_task(varargin)
     if ~exist(options.responsesFolder, 'dir')
         mkdir(options.responsesFolder)
     end
-    
-    
-    fileWithWords = {'nvaList.txt'};
-    matOrText = 'text';
-    if strcmp(matOrText, 'matFile')
-        fileWithWords = {'NVA.mat'};%, 'nvaList.txt'};
-        options.lists2use = 46:60; % these are specific for kids
-    end
-    options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/' fileWithWords{:}];
+    options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/NVA.mat'];
+    options.lists2use = 46:60; % these are specific for kids
     nvaLists = getListWords(options);
     
     if nargin == 0
@@ -44,19 +37,10 @@ end
 
 function nvaLists = getListWords(options)
 	
-    if strfind(options.listsFile, '.mat')
-        load(options.listsFile);
-        %     wordsLists = NVA(options.lists2use(randi(length(options.lists2use), 1, 2)), :)
-        nLists = 2;
-        choosenLists = options.lists2use(randi(length(options.lists2use), 1, nLists));
-    else
-        fileID = fopen(options.listsFile, 'rt');
-        C = textscan(fileID,'%s %s %s %s %s');
-        fclose(fileID);
-
-        
-        
-    end
+    load(options.listsFile);
+%     wordsLists = NVA(options.lists2use(randi(length(options.lists2use), 1, 2)), :)
+    nLists = 2;
+    choosenLists = options.lists2use(randi(length(options.lists2use), 1, nLists));
     % make first letter uppercase to match the sound files.
     for iList = 1 : nLists
         nvaLists.(['list_' num2str(choosenLists(iList))]).wordsLists = ...

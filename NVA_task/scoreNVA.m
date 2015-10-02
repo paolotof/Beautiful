@@ -33,7 +33,7 @@ function phonemescore = scoreNVA
             
         end
     end
-
+    phonemescore = mean(phonemescore);
     
 end
 
