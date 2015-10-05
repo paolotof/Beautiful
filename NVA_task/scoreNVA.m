@@ -55,7 +55,8 @@ function phonemescore = getScore(scores)
     %% this is for the clinic set up
     phonemescore = cellfun('length', scores);
     allOnes = find(phonemescore == 1);
-    % check which of the scores with one is either 'ALL' or 'zero'
+    % check which of the scores with one is either 'ALL' or 'zero' since
+    % those need to be updated to 0 or 3 whereas the other can stay 1
     phonemescore(allOnes(~cellfun('isempty', strfind([scores{phonemescore == 1}], 'ALL')))) = 3;
     if ~ isempty(find(phonemescore == 1))
         phonemescore(allOnes(~cellfun('isempty', strfind([scores{phonemescore == 1}], 'zero')))) = 0;
