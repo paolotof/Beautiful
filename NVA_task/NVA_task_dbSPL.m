@@ -1,4 +1,15 @@
 function NVA_task_dbSPL(varargin)
+% Performs the NVA task according to dbSPL framework (scores which phoneme
+% subjects repeats rather the only a count of them - the count is what is
+% usually done in the clinic). It can choose between the Adults or kids
+% versions of the task. The default is to run the kids version. If one
+% desires to run the Adults version is should specify so as such:
+% 
+%   NVA_task_dbSPL('participantsID') % runs the kids version 
+% 
+%   NVA_task_dbSPL('participantsID', 'Adults')  % runs the adult version
+% 
+%
 
     rng('shuffle')
 
@@ -15,18 +26,25 @@ function NVA_task_dbSPL(varargin)
         mkdir(options.responsesFolder)
     end
     
-    options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/nvaList.txt'];
+    switch nargin 
+        case 0
+            options.subID = 'testOne';
+            options.kidsOrAdults = 'Adults';
+            if ~isempty(dir([options.responsesFolder '*' options.subID '*.mat']))
+                delete([options.responsesFolder '*' options.subID '*.mat'])
+            end
+        case 1
+            options.subID = varargin{1};
+            options.kidsOrAdults = '';
+        case 2
+            options.subID = varargin{1};
+            options.kidsOrAdults = varargin{2};
+    end 
+    
+    options.listsFile = [options.home '/Dropbox/NVA words/NVA words/Matlab/nvaList'...
+        options.kidsOrAdults '.txt'];
     options.nLists = 2;
     nvaLists = getListWords(options);
-    
-    if nargin == 0
-        options.subID = 'testOne'; 
-        if ~isempty(dir([options.responsesFolder '*' options.subID '*.mat']))
-            delete([options.responsesFolder '*' options.subID '*.mat'])
-        end
-    else
-        options.subID = varargin{1};
-    end 
 
     interface(nvaLists, options);
     
@@ -41,18 +59,34 @@ end
 function nvaLists = getListWords(options)
 	
     fileID = fopen(options.listsFile, 'rt');
-    lists = textscan(fileID,'%s %s %s %s %s');
+    adultsVersion = false;
+    if strfind(options.listsFile, 'Adults')
+        adultsVersion = true
+    end
+    if adultsVersion
+        lists = textscan(fileID,'%s ');
+        lists = reshape(lists{:}, 45, 12)';
+    else
+        lists = textscan(fileID,'%s %s %s %s %s');
+    end
     fclose(fileID);
+    
     choosenLists = randperm(size(lists, 2));
     choosenLists = choosenLists(1 : options.nLists);
     
-    % make first letter uppercase to match the sound files.
+    % make word letters displayable and consistent with sound file names.
     for iList = 1 : options.nLists
-        words = regexprep(lists{choosenLists(iList)}, '#','');
         listName = ['list_' num2str(choosenLists(iList))];
+        if adultsVersion
+            words = regexprep(lists(:, choosenLists(iList)), '#','');
+            nvaLists.(listName).words2Display = lists(:, choosenLists(iList)); % keep # to split word
+        else
+            words = regexprep(lists{choosenLists(iList)}, '#','');
+            nvaLists.(listName).words2Display = lists{choosenLists(iList)}; % keep # to split word
+        end
+        % capitalize first letter to make variable sound-file name compatible'
         nvaLists.(listName).wordsLists = ...
             regexprep(words, '(\<[a-z])','${upper($1)}');
-        nvaLists.(listName).words2Display = lists{choosenLists(iList)};
         % randomize the word list but the first one
         randomList = randperm(length(words) - 1) + 1;
         nvaLists.(listName).wordsLists( 2:end )  = nvaLists.(listName).wordsLists(randomList);
@@ -232,9 +266,10 @@ function interface(stimulus, options)
         %% independent of whether phonemes have been clicked or not
         if iStim > length(stimulus.(list{iList}).wordsLists)
             if iList == length(list)
-                Box.continue.String = 'FINISHED';
-                pause(2);
-                close(f)
+%                 Box.continue.String = 'FINISHED';
+%                 pause(2);
+%                 close(f)
+                fprintf('The experiment is finished\n Ciao Ciao \n');
             else
                 iList = iList + 1;
                 iStim = 1;
@@ -247,7 +282,9 @@ function interface(stimulus, options)
                 set(Box.(buttonName{iButton}), 'enable', 'off');
             end
             [y, fs] = audioread([options.wordsFolder stimulus.(list{iList}).wordsLists{iStim} '.wav']);
-            what2play = audioplayer(y, fs);
+%             what2play = audioplayer(y, fs);
+            % make the sound stereo
+            what2play = audioplayer([y(:, 1) y(:, 1)], fs);
             playblocking(what2play);
             uiresume();
             iStim = iStim + 1;
