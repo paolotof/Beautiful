@@ -15,19 +15,19 @@ function phonemescore = scoreNVA
     end
     
     options.home = getHome;
-    options.responsesFolder = [options.home '/results/NVA/'];
+    options.responsesFolder = [options.home '\results\NVA\'];
     files = dir([options.responsesFolder '*.mat']);
     phonemescore = zeros(1, length(files));
     for ifile = 1 : length(files)
-        load([options.responsesFolder files(ifile).name])
+        load([options.responsesFolder files(ifile).name]) % put . between responsesFolder files
         lists = fieldnames(responses);
         for iList = 1 : length(lists)
             % exclude first word
             responses.(lists{iList}).scores(1) = [];
-            responses.(lists{iList}).word(1) = [];
+            responses.(lists{iList}).word{1} = [];
             % 
             scores = [responses.(lists{iList}).scores(:)];
-            words  = [responses.(lists{iList}).word{:}];
+            words  = [responses.(lists{iList}).word{:}]; 
             
             phonemescore(iList) = getScore(scores);
             
